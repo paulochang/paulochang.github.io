@@ -5,10 +5,10 @@ main {
 	color: #333;
 }
 
-.icons-social a {
+.web-profile a {
 	color: #4B5658;
 }
 
-.icons-social a svg path{
+.web-profile a svg path{
 	fill: #4B5658;
 }
