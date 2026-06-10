@@ -16,6 +16,19 @@ const STRINGS = {
     from:           'von',
     to:             'bis',
     errorPrefix:    'Fehler: ',
+    splashTitle:       'BSR Straßenreinigung Berlin',
+    splashAbout:       'Der offizielle BSR-Reinigungsplan für alle Berliner Straßen, visualisiert. Jede Straße ist farblich nach ihrer Reinigungsklasse (RKL) kodiert und zeigt, wie oft sie gereinigt wird.',
+    splashClassesTitle:'Reinigungsklassen',
+    splashHowTitle:    'Bedienung',
+    splashHow: [
+      'Auf eine Straße tippen – Details zur Reinigungsklasse',
+      'Legende öffnen, um Klassen ein- oder auszublenden',
+      'Adresse eingeben, um zu einem Ort zu navigieren',
+    ],
+    splashPrivacyTitle:'Datenschutz (DSGVO)',
+    splashPrivacy:     'Kartenkacheln werden von <b>CARTO</b> geladen, Adressdaten von <b>Komoot/Photon</b>. Dabei wird Ihre IP-Adresse an diese Dienste übertragen. Es werden <b>keine Cookies</b> gesetzt. BSR-Daten werden nach dem ersten Laden lokal im Browser gespeichert (IndexedDB). Mit „Karte öffnen" stimmen Sie dieser Verarbeitung zu.',
+    splashAccept:      'Karte öffnen →',
+    splashBack:        '← Zur Startseite',
   },
   en: {
     title:          'BSR Street Cleaning Berlin',
@@ -34,6 +47,19 @@ const STRINGS = {
     from:           'from',
     to:             'to',
     errorPrefix:    'Error: ',
+    splashTitle:       'BSR Street Cleaning Berlin',
+    splashAbout:       'Berlin\'s official BSR street cleaning schedule, visualised. Each street is colour-coded by its cleaning class (Reinigungsklasse, RKL) — showing how often it is cleaned by the city.',
+    splashClassesTitle:'Cleaning Classes',
+    splashHowTitle:    'How to use',
+    splashHow: [
+      'Click any street — see its cleaning class and schedule',
+      'Open the legend to show or hide individual classes',
+      'Search for an address to navigate to a location',
+    ],
+    splashPrivacyTitle:'Data & Privacy (GDPR)',
+    splashPrivacy:     'Map tiles are loaded from <b>CARTO</b>; address search uses <b>Komoot/Photon</b>. Your IP address is transmitted to these services as part of normal browser operation. <b>No cookies</b> are set. BSR data is cached locally in your browser (IndexedDB) after first load. By clicking "Open Map" you consent to this processing.',
+    splashAccept:      'Open Map →',
+    splashBack:        '← Back to homepage',
   },
 };
 
@@ -424,4 +450,51 @@ function init() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', init);
+function showSplash() {
+  const s = STRINGS[lang];
+  document.getElementById('loading').style.display = 'none';
+
+  document.getElementById('splash-title').textContent        = s.splashTitle;
+  document.getElementById('splash-about').textContent        = s.splashAbout;
+  document.getElementById('splash-classes-title').textContent = s.splashClassesTitle;
+  document.getElementById('splash-how-title').textContent    = s.splashHowTitle;
+  document.getElementById('splash-privacy-title').textContent = s.splashPrivacyTitle;
+  document.getElementById('splash-privacy-text').innerHTML   = s.splashPrivacy;
+  document.getElementById('splash-back').textContent         = s.splashBack;
+  document.getElementById('splash-accept').textContent       = s.splashAccept;
+
+  const classesEl = document.getElementById('splash-classes');
+  classesEl.innerHTML = '';
+  for (const cls of ORDER) {
+    const info = RKL_INFO[cls];
+    const div = document.createElement('div');
+    div.className = 'splash-cls';
+    div.innerHTML = `<div class="splash-cls-swatch" style="background:${info.color}"></div><span>${info[lang].label}</span>`;
+    classesEl.appendChild(div);
+  }
+
+  const howEl = document.getElementById('splash-how-list');
+  howEl.innerHTML = '';
+  for (const item of s.splashHow) {
+    const li = document.createElement('li');
+    li.textContent = item;
+    howEl.appendChild(li);
+  }
+
+  document.getElementById('splash').style.display = 'flex';
+
+  document.getElementById('splash-accept').addEventListener('click', () => {
+    localStorage.setItem('bsr-consent', '1');
+    document.getElementById('splash').style.display = 'none';
+    document.getElementById('loading').style.display = 'flex';
+    init();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('bsr-consent')) {
+    init();
+  } else {
+    showSplash();
+  }
+});
