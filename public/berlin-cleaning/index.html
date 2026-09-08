@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BSR Reinigungsklassen Berlin</title>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css"/>
+<link rel="stylesheet" href="map.css"/>
+</head>
+<body>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <div id="loading-text">Daten werden geladen…</div>
+</div>
+
+<header>
+  <div class="title-block">
+    <h1>BSR Straßenreinigung Berlin</h1>
+    <div class="subtitle">Reinigungsklassen · Klick zum Ein-/Ausblenden</div>
+  </div>
+  <div class="header-controls">
+    <div id="search-wrap">
+      <input id="search-input" type="text" placeholder="Adresse suchen…" autocomplete="off"/>
+      <button id="search-clear" aria-label="Suche löschen">✕</button>
+      <div id="search-results"></div>
+    </div>
+    <div class="btn-group" role="group" aria-label="Sprache / Language">
+      <button id="lang-de" class="seg-btn">DE</button>
+      <button id="lang-en" class="seg-btn">EN</button>
+    </div>
+    <button id="theme-btn" title="Zum hellen Thema wechseln">☀</button>
+  </div>
+</header>
+
+<div id="splash">
+  <div id="splash-card">
+    <div id="splash-scroll">
+      <h2 id="splash-title"></h2>
+      <p id="splash-about"></p>
+
+      <h3 id="splash-classes-title"></h3>
+      <div id="splash-classes"></div>
+
+      <h3 id="splash-how-title"></h3>
+      <ul id="splash-how-list"></ul>
+
+      <div id="splash-gdpr">
+        <h3 id="splash-privacy-title"></h3>
+        <p id="splash-privacy-text"></p>
+      </div>
+    </div>
+    <div id="splash-actions">
+      <a id="splash-back" href="../index.html"></a>
+      <button id="splash-accept"></button>
+    </div>
+  </div>
+</div>
+
+<div id="map"></div>
+
+<div id="legend-panel">
+  <div id="legend-body"></div>
+  <div id="legend-toggle">
+    <span class="toggle-arrow">▲</span>
+    <span id="legend-label">Legende</span>
+    <span id="stats"></span>
+  </div>
+  <div id="legend-progress"></div>
+</div>
+
+<script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+<script src="map.js"></script>
+</body>
+</html>

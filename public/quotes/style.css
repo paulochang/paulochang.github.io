@@ -1,0 +1,152 @@
+:root {
+    --background: #fafaf8;
+    --text-primary: #1a1a1a;
+    --text-secondary: #666666;
+    --accent: #2a2a2a;
+    --transition: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--background);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6vh 5vw;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8vh;
+}
+
+.poem-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4vh;
+    width: 100%;
+    opacity: 0;
+    animation: fadeIn 1.2s var(--transition) forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.poem {
+    font-size: clamp(1.125rem, 3vw, 1.5rem);
+    font-weight: 300;
+    line-height: 1.65;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    text-align: left;
+    max-width: 600px;
+    margin: 0 auto;
+    white-space: pre-line;
+    position: relative;
+    transition: opacity 0.6s var(--transition);
+}
+
+.author {
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-align: center;
+    font-style: normal;
+    transition: opacity 0.6s var(--transition);
+}
+
+.new-poem {
+    background: none;
+    border: 1.5px solid var(--accent);
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s var(--transition);
+    color: var(--accent);
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.new-poem:hover {
+    background-color: var(--accent);
+    color: var(--background);
+    transform: rotate(180deg);
+}
+
+.new-poem:active {
+    transform: scale(0.95) rotate(180deg);
+}
+
+.new-poem svg {
+    transition: transform 0.3s var(--transition);
+}
+
+.fade-out {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+/* Tablet and larger screens */
+@media (min-width: 768px) {
+    body {
+        padding: 8vh 8vw;
+    }
+    
+    .quote {
+        line-height: 1.5;
+    }
+    
+    .new-quote {
+        width: 64px;
+        height: 64px;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    body {
+        padding: 10vh 12vw;
+    }
+    
+    .container {
+        max-width: 900px;
+    }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
