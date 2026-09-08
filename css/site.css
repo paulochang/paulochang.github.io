@@ -37,7 +37,6 @@ body {
   line-height: 1.75;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  padding-top: var(--nav-height);
 }
 
 /* Skip link */
@@ -86,10 +85,8 @@ a:focus-visible {
 /* Persistent nav bar: always visible while scrolling */
 
 nav[aria-label="Sections"] {
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
   z-index: 10;
   display: flex;
   flex-wrap: wrap;
