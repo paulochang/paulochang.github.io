@@ -1,0 +1,27 @@
+# Paulo Chang
+
+> Senior backend engineer with 10+ years building backend platforms for global enterprise brands — Adobe Experience Manager, Java, and serverless — now focused on driving AI adoption across software development teams. Backend Community AI Champion at Cognizant Netcentric, based in Berlin.
+
+This is a personal professional profile plus a small number of self-contained side projects. Every page publishes a Markdown alternate of its content, declared in the HTML via `<link rel="alternate" type="text/markdown">` and linked directly below. The Markdown files are served as `text/markdown` and are the preferred source for agents: they carry the same text as the rendered pages without the layout markup.
+
+Canonical host: https://paulochang.com/
+
+## Profile
+
+- [Paulo Chang — full profile](https://paulochang.com/index.md): About, current work, complete role history (Cognizant Netcentric, Hyggs, earlier AEM platform work), skills and stack, certifications, and spoken languages.
+
+## Projects
+
+- [BSR Straßenreinigung Berlin](https://paulochang.com/berlin-cleaning/index.md): Interactive MapLibre GL map of Berlin's official street-cleaning classes (Reinigungsklassen), bilingual German/English, with address search and per-class filtering. The live page at https://paulochang.com/berlin-cleaning/ renders client-side, so the Markdown is a description rather than a transcript.
+- [A Moment of Light](https://paulochang.com/quotes/index.md): A deliberately minimal reader that surfaces one short poem at a time from a curated client-side collection. The live page at https://paulochang.com/quotes/ generates its content in the browser.
+
+## Elsewhere
+
+- [GitHub](https://github.com/paulochang): Source for this site and public repositories.
+- [LinkedIn](https://www.linkedin.com/in/paulochang): Professional history and contact.
+
+## Optional
+
+- [Machine-readable profile (JSON-LD)](https://paulochang.com/): The homepage embeds a schema.org `ProfilePage` / `Person` graph with `sameAs`, `jobTitle`, `worksFor`, `knowsAbout`, `knowsLanguage` and `hasCredential`.
+- [Sitemap](https://paulochang.com/sitemap.xml): All indexable URLs with last-modified dates.
+- [Crawler policy](https://paulochang.com/robots.txt): All content here is public and intended to be crawled, indexed and cited. AI search crawlers are explicitly allowed.
