@@ -1,0 +1,42 @@
+# https://paulochang.github.io/robots.txt
+# Everything here is public and intended to be crawled, indexed and cited.
+
+User-agent: *
+Allow: /
+
+# --- AI answer engines -------------------------------------------------------
+# OpenAI and Perplexity both document that a site must explicitly allow their
+# search crawler to be surfaced in their products, so they are named here even
+# though the wildcard rule above already permits them.
+# https://developers.openai.com/api/docs/bots
+# https://docs.perplexity.ai/docs/resources/perplexity-crawlers
+# https://support.claude.com/en/articles/8896518
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://paulochang.github.io/sitemap.xml

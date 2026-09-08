@@ -19,7 +19,7 @@
         links.forEach(function (link) {
           link.removeAttribute("aria-current");
         });
-        current.setAttribute("aria-current", "true");
+        current.setAttribute("aria-current", "location");
       });
     },
     { rootMargin: "-96px 0px -80% 0px" }

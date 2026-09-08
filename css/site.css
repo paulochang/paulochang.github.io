@@ -51,12 +51,16 @@ a:focus-visible,
   outline-offset: 3px;
 }
 
+main:focus {
+  outline: none;
+}
+
 /* Links: monochrome, underline carries the affordance since there is no accent color */
 
 a {
   color: var(--ink);
   text-decoration: underline;
-  text-decoration-color: #c9c9c4;
+  text-decoration-color: #8a8a84;
   text-underline-offset: 0.15em;
 }
 
@@ -92,11 +96,11 @@ nav[aria-label="Sections"] a {
 
 nav[aria-label="Sections"] a:hover,
 nav[aria-label="Sections"] a:focus-visible,
-nav[aria-label="Sections"] a[aria-current="true"] {
+nav[aria-label="Sections"] a[aria-current] {
   color: var(--ink);
 }
 
-nav[aria-label="Sections"] a[aria-current="true"] {
+nav[aria-label="Sections"] a[aria-current] {
   text-decoration: underline;
   text-decoration-color: currentColor;
 }
@@ -113,7 +117,7 @@ nav[aria-label="Sections"] ul {
 header {
   position: relative;
   max-width: 46rem;
-  min-height: 100vh;
+  min-height: 100svh;
   margin: 0 auto;
   padding: 6vw;
   display: flex;
@@ -123,13 +127,25 @@ header {
   scroll-snap-align: start;
 }
 
-/* Full-cover, invisible link: any click/tap on the presentation (outside the
-   real GitHub/LinkedIn links) advances to the first section, no JS needed */
+/* Visible, self-describing cue to the first section, anchored to the bottom of
+   the full-height hero */
 
 header .hero-advance {
   position: absolute;
-  inset: 0;
-  z-index: 0;
+  left: 50%;
+  bottom: 6vh;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+header .hero-advance:hover,
+header .hero-advance:focus-visible {
+  color: var(--ink);
 }
 
 header h1 {
@@ -154,8 +170,6 @@ header #lede {
 }
 
 header #hero-links {
-  position: relative;
-  z-index: 1;
   margin-top: 2.5em;
   font-size: 0.9rem;
 }
@@ -188,6 +202,10 @@ h2 {
 
 h2:focus-visible {
   outline: none;
+  text-decoration: underline;
+  text-decoration-color: var(--ink-soft);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.35em;
 }
 
 h3 {
@@ -210,19 +228,6 @@ p {
 
 p:last-child {
   margin-bottom: 0;
-}
-
-/* Justified, hyphenated prose reads like a set page rather than a web paragraph —
-   reserved for body copy wide enough to avoid rivers of whitespace */
-
-@media (min-width: 600px) {
-  section p,
-  article p,
-  article li {
-    text-align: justify;
-    hyphens: auto;
-    -webkit-hyphens: auto;
-  }
 }
 
 /* Experience */
@@ -324,6 +329,7 @@ footer p + p {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+    scroll-snap-type: none;
   }
 
   * {
