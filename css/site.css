@@ -4,6 +4,19 @@
   --ink-soft: #6e6e6e;
   --serif: Didot, "Big Caslon", "Iowan Old Style", Georgia, "Times New Roman", serif;
   --serif-text: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, "Times New Roman", serif;
+  --nav-height: 6rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 * {
@@ -112,6 +125,97 @@ nav[aria-label="Sections"] ul {
   gap: 0.5em 1.25em;
 }
 
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-toggle-icon,
+.nav-toggle-icon::before,
+.nav-toggle-icon::after {
+  display: block;
+  width: 1.4rem;
+  height: 2px;
+  background: var(--ink);
+}
+
+.nav-toggle-icon {
+  position: relative;
+}
+
+.nav-toggle-icon::before,
+.nav-toggle-icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.nav-toggle-icon::before {
+  top: -0.4rem;
+}
+
+.nav-toggle-icon::after {
+  top: 0.4rem;
+}
+
+/* Mobile navigation: collapse the section links into a toggleable dropdown so
+   the persistent bar stays a single compact row and never grows tall enough
+   to cover the heading a link scrolls to. */
+
+@media (max-width: 640px) {
+  html {
+    scroll-snap-type: none;
+  }
+
+  header,
+  .first-section {
+    scroll-snap-align: none;
+  }
+
+  nav[aria-label="Sections"] {
+    flex-wrap: nowrap;
+    padding: 0.85em 5vw;
+    position: relative;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+  }
+
+  nav[aria-label="Sections"] ul {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 0;
+    background: var(--bg);
+    border-bottom: 1px solid #e3e3de;
+    padding: 0.5em 5vw 1em;
+  }
+
+  nav[aria-label="Sections"].is-open ul {
+    display: flex;
+  }
+
+  nav[aria-label="Sections"] ul li {
+    width: 100%;
+  }
+
+  nav[aria-label="Sections"] ul a {
+    display: block;
+    padding: 0.6em 0;
+  }
+}
+
 /* Header: large, centered, declarative — mirrors lovefrom.com's wordmark + statement */
 
 header {
@@ -188,7 +292,7 @@ section + section {
 
 .first-section {
   scroll-snap-align: start;
-  scroll-margin-top: 6rem;
+  scroll-margin-top: var(--nav-height);
 }
 
 h2 {
@@ -197,7 +301,7 @@ h2 {
   font-size: clamp(1.6rem, 4vw, 2.1rem);
   text-align: center;
   margin-bottom: 2.5rem;
-  scroll-margin-top: 6rem;
+  scroll-margin-top: var(--nav-height);
 }
 
 h2:focus-visible {

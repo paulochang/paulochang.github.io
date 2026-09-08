@@ -96,7 +96,11 @@
 
   <nav aria-label="Sections">
     <a href="./">Paulo Chang</a>
-    <ul>
+    <button type="button" id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-controls="nav-links">
+      <span class="sr-only">Menu</span>
+      <span class="nav-toggle-icon" aria-hidden="true"></span>
+    </button>
+    <ul id="nav-links">
       <li><a href="#about-heading">About</a></li>
       <li><a href="#now-heading">Now</a></li>
       <li><a href="#experience-heading">Experience</a></li>
