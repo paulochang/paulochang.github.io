@@ -1,0 +1,334 @@
+:root {
+  --bg: #f7f7f5;
+  --ink: #111111;
+  --ink-soft: #6e6e6e;
+  --serif: Didot, "Big Caslon", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --serif-text: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, "Times New Roman", serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif-text);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Skip link */
+
+#skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+}
+
+#skip-link:focus {
+  position: static;
+  display: inline-block;
+  margin: 1em;
+  padding: 0.5em 1em;
+  background: var(--ink);
+  color: var(--bg);
+}
+
+/* Focus visibility */
+
+a:focus-visible,
+#skip-link:focus {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* Links: monochrome, underline carries the affordance since there is no accent color */
+
+a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: #c9c9c4;
+  text-underline-offset: 0.15em;
+}
+
+a:hover,
+a:focus-visible {
+  text-decoration-color: currentColor;
+}
+
+/* Persistent nav bar: always visible while scrolling */
+
+nav[aria-label="Sections"] {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5em 1.5em;
+  background: var(--bg);
+  border-bottom: 1px solid #e3e3de;
+  padding: 1em 6vw;
+}
+
+nav[aria-label="Sections"] a {
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+nav[aria-label="Sections"] a:hover,
+nav[aria-label="Sections"] a:focus-visible,
+nav[aria-label="Sections"] a[aria-current="true"] {
+  color: var(--ink);
+}
+
+nav[aria-label="Sections"] a[aria-current="true"] {
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+}
+
+nav[aria-label="Sections"] ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em 1.25em;
+}
+
+/* Header: large, centered, declarative — mirrors lovefrom.com's wordmark + statement */
+
+header {
+  position: relative;
+  max-width: 46rem;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 6vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  scroll-snap-align: start;
+}
+
+/* Full-cover, invisible link: any click/tap on the presentation (outside the
+   real GitHub/LinkedIn links) advances to the first section, no JS needed */
+
+header .hero-advance {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+header h1 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(3rem, 11vw, 6rem);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+header #role {
+  font-family: var(--serif-text);
+  font-size: clamp(1.3rem, 3vw, 1.75rem);
+  margin-top: 1.25em;
+}
+
+header #lede {
+  font-size: 1.15rem;
+  color: var(--ink-soft);
+  max-width: 38em;
+  margin: 1.5em auto 0;
+}
+
+header #hero-links {
+  position: relative;
+  z-index: 1;
+  margin-top: 2.5em;
+  font-size: 0.9rem;
+}
+
+/* Main content: composed as a centered column, but text itself reads left-aligned */
+
+main {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 0 6vw 14vh;
+}
+
+section + section {
+  margin-top: 10rem;
+}
+
+.first-section {
+  scroll-snap-align: start;
+  scroll-margin-top: 6rem;
+}
+
+h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  text-align: center;
+  margin-bottom: 2.5rem;
+  scroll-margin-top: 6rem;
+}
+
+h2:focus-visible {
+  outline: none;
+}
+
+h3 {
+  font-family: var(--serif-text);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 1.3rem;
+  margin: 2.5rem 0 0.75rem;
+}
+
+h3:first-of-type,
+article > h3 {
+  margin-top: 0;
+}
+
+p {
+  font-size: 1.1rem;
+  margin-bottom: 1.25rem;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+/* Justified, hyphenated prose reads like a set page rather than a web paragraph —
+   reserved for body copy wide enough to avoid rivers of whitespace */
+
+@media (min-width: 600px) {
+  section p,
+  article p,
+  article li {
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+  }
+}
+
+/* Experience */
+
+article {
+  margin-top: 3.5rem;
+}
+
+article:first-of-type {
+  margin-top: 0;
+}
+
+article h3 {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.35rem;
+}
+
+article p {
+  color: var(--ink-soft);
+  margin-bottom: 1rem;
+}
+
+article small {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+}
+
+article ul {
+  list-style: none;
+  margin-bottom: 0;
+}
+
+article li {
+  position: relative;
+  font-size: 1.1rem;
+  padding-left: 1.1em;
+  margin-bottom: 0.6em;
+}
+
+article li::before {
+  content: "\2013";
+  position: absolute;
+  left: 0;
+  color: var(--ink-soft);
+}
+
+article li:last-child {
+  margin-bottom: 0;
+}
+
+/* Skills / certifications / languages: centered vertical lists, in the spirit of
+   lovefrom.com's "architects / artists / engineers…" roster */
+
+section > ul {
+  list-style: none;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+section > ul:last-child {
+  margin-bottom: 0;
+}
+
+section > ul > li {
+  font-family: var(--serif-text);
+  font-size: 1.2rem;
+  line-height: 2;
+}
+
+section > h3 {
+  text-align: center;
+}
+
+/* Footer */
+
+footer {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 10vh 6vw 12vh;
+  text-align: center;
+}
+
+footer p:first-child {
+  font-family: var(--serif-text);
+  font-size: 1.2rem;
+  color: var(--ink);
+  margin-bottom: 1.5rem;
+}
+
+footer p + p {
+  font-size: 0.9rem;
+}
+
+/* Reduced motion (no animation defined, kept for safety) */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
