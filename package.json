@@ -1,8 +1,0 @@
-{
-  "name": "paulochang-github-io",
-  "version": "1.0.0",
-  "private": true,
-  "devDependencies": {
-    "@11ty/eleventy": "^3.1.6"
-  }
-}
