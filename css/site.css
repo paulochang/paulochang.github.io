@@ -14,16 +14,33 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-snap-type: y proximity;
 }
 
 body {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
   background: var(--bg);
   color: var(--ink);
   font-family: var(--serif-text);
   line-height: 1.75;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Visually hidden but accessible: headings that give assistive tech
+   structure without duplicating a visible page title */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Skip link */
@@ -51,7 +68,8 @@ a:focus-visible,
   outline-offset: 3px;
 }
 
-main:focus {
+main:focus,
+header:focus {
   outline: none;
 }
 
@@ -69,9 +87,9 @@ a:focus-visible {
   text-decoration-color: currentColor;
 }
 
-/* Persistent nav bar: always visible while scrolling */
+/* Persistent nav bar: always visible while scrolling, shared across every page */
 
-nav[aria-label="Sections"] {
+nav[aria-label="Primary"] {
   position: sticky;
   top: 0;
   z-index: 10;
@@ -85,7 +103,7 @@ nav[aria-label="Sections"] {
   padding: 1em 6vw;
 }
 
-nav[aria-label="Sections"] a {
+nav[aria-label="Primary"] a {
   font-size: 0.8rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -94,37 +112,56 @@ nav[aria-label="Sections"] a {
   white-space: nowrap;
 }
 
-nav[aria-label="Sections"] a:hover,
-nav[aria-label="Sections"] a:focus-visible,
-nav[aria-label="Sections"] a[aria-current] {
+nav[aria-label="Primary"] a:hover,
+nav[aria-label="Primary"] a:focus-visible,
+nav[aria-label="Primary"] a[aria-current] {
   color: var(--ink);
 }
 
-nav[aria-label="Sections"] a[aria-current] {
+nav[aria-label="Primary"] a[aria-current] {
   text-decoration: underline;
   text-decoration-color: currentColor;
 }
 
-nav[aria-label="Sections"] ul {
+nav[aria-label="Primary"] ul {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
   gap: 0.5em 1.25em;
 }
 
-/* Header: large, centered, declarative — mirrors lovefrom.com's wordmark + statement */
+/* Header: large, centered, declarative — mirrors lovefrom.com's wordmark + statement.
+   Used full-height only on the home page. */
 
 header {
   position: relative;
-  max-width: 46rem;
-  min-height: 100svh;
+  width: 100%;
+  max-width: clamp(46rem, 18rem + 35vw, 68rem);
+  flex: 1;
+  min-height: 0;
   margin: 0 auto;
   padding: 6vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  scroll-snap-align: start;
+}
+
+/* Compact header variant for content pages (About, Projects, Resume): a page
+   title instead of a full-height hero, so content starts right below it. */
+
+header.page-header {
+  flex: none;
+  min-height: auto;
+  padding: 4rem 6vw 2rem;
+}
+
+header.page-header h1 {
+  font-size: clamp(2.2rem, 7vw, 3.2rem);
+}
+
+header.page-header #lede {
+  margin-top: 1em;
 }
 
 /* Visible, self-describing cue to the first section, anchored to the bottom of
@@ -169,6 +206,10 @@ header #lede {
   margin: 1.5em auto 0;
 }
 
+header #lede-2 {
+  margin-top: 1em;
+}
+
 header #hero-links {
   margin-top: 2.5em;
   font-size: 0.9rem;
@@ -177,18 +218,13 @@ header #hero-links {
 /* Main content: composed as a centered column, but text itself reads left-aligned */
 
 main {
-  max-width: 48rem;
+  max-width: clamp(48rem, 20rem + 35vw, 70rem);
   margin: 0 auto;
   padding: 0 6vw 14vh;
 }
 
 section + section {
   margin-top: 10rem;
-}
-
-.first-section {
-  scroll-snap-align: start;
-  scroll-margin-top: 6rem;
 }
 
 h2 {
@@ -304,10 +340,36 @@ section > h3 {
   text-align: center;
 }
 
+/* Projects listing: each project reuses the article/h3 rhythm already used
+   for experience entries, just without the small role/date line */
+
+.project-card p {
+  color: var(--ink-soft);
+}
+
+/* Resume print affordance */
+
+.print-button {
+  display: inline-block;
+  margin-top: 2rem;
+  font-family: var(--serif-text);
+  font-size: 0.9rem;
+  background: none;
+  border: 1px solid var(--ink-soft);
+  color: var(--ink);
+  padding: 0.6em 1.4em;
+  cursor: pointer;
+}
+
+.print-button:hover,
+.print-button:focus-visible {
+  border-color: var(--ink);
+}
+
 /* Footer */
 
 footer {
-  max-width: 48rem;
+  max-width: clamp(48rem, 20rem + 35vw, 70rem);
   margin: 0 auto;
   padding: 10vh 6vw 12vh;
   text-align: center;
@@ -329,12 +391,56 @@ footer p + p {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-    scroll-snap-type: none;
   }
 
   * {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print: the resume page renders as an actual printable/PDF-able document —
+   no chrome, tighter spacing, dark text on white regardless of scheme */
+
+@media print {
+  nav[aria-label="Primary"],
+  footer,
+  .print-button,
+  #skip-link {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  header.page-header {
+    padding: 0 0 1rem;
+    text-align: left;
+  }
+
+  header.page-header #lede {
+    margin: 0.5em 0 0;
+  }
+
+  main {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  section + section {
+    margin-top: 2.5rem;
+  }
+
+  article {
+    margin-top: 1.5rem;
+    break-inside: avoid;
+  }
+
+  a {
+    color: #000;
+    text-decoration: none;
   }
 }

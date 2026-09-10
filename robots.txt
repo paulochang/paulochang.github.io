@@ -3,6 +3,8 @@
 
 User-agent: *
 Allow: /
+# Eleventy build output; a stale duplicate of the canonical pages above.
+Disallow: /public/
 
 # --- AI answer engines -------------------------------------------------------
 # OpenAI and Perplexity both document that a site must explicitly allow their
@@ -14,29 +16,38 @@ Allow: /
 
 User-agent: OAI-SearchBot
 Allow: /
+Disallow: /public/
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /public/
 
 User-agent: GPTBot
 Allow: /
+Disallow: /public/
 
 User-agent: Claude-SearchBot
 Allow: /
+Disallow: /public/
 
 User-agent: Claude-User
 Allow: /
+Disallow: /public/
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /public/
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /public/
 
 User-agent: Perplexity-User
 Allow: /
+Disallow: /public/
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /public/
 
 Sitemap: https://paulochang.com/sitemap.xml

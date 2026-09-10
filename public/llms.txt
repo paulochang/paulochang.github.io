@@ -8,10 +8,13 @@ Canonical host: https://paulochang.com/
 
 ## Profile
 
-- [Paulo Chang — full profile](https://paulochang.com/index.md): About, current work, complete role history (Cognizant Netcentric, Hyggs, earlier AEM platform work), skills and stack, certifications, and spoken languages.
+- [Home](https://paulochang.com/index.md): name, role, and links.
+- [About](https://paulochang.com/about/index.md): background and current focus areas.
+- [Resume](https://paulochang.com/resume/index.md): complete role history (Cognizant Netcentric, Hyggs, earlier AEM platform work), skills and stack, certifications, and spoken languages.
 
 ## Projects
 
+- [Projects index](https://paulochang.com/projects/index.md): listing page linking to the tools below.
 - [BSR Straßenreinigung Berlin](https://paulochang.com/berlin-cleaning/index.md): Interactive MapLibre GL map of Berlin's official street-cleaning classes (Reinigungsklassen), bilingual German/English, with address search and per-class filtering. The live page at https://paulochang.com/berlin-cleaning/ renders client-side, so the Markdown is a description rather than a transcript.
 - [A Moment of Light](https://paulochang.com/quotes/index.md): A deliberately minimal reader that surfaces one short poem at a time from a curated client-side collection. The live page at https://paulochang.com/quotes/ generates its content in the browser.
 
@@ -22,6 +25,6 @@ Canonical host: https://paulochang.com/
 
 ## Optional
 
-- [Machine-readable profile (JSON-LD)](https://paulochang.com/): The homepage embeds a schema.org `ProfilePage` / `Person` graph with `sameAs`, `jobTitle`, `worksFor`, `knowsAbout`, `knowsLanguage` and `hasCredential`.
+- [Machine-readable profile (JSON-LD)](https://paulochang.com/resume/): The resume page embeds the full schema.org `Person` graph with `sameAs`, `jobTitle`, `worksFor`, `knowsAbout`, `knowsLanguage` and `hasCredential`; the homepage embeds a lighter `ProfilePage` / `Person` summary.
 - [Sitemap](https://paulochang.com/sitemap.xml): All indexable URLs with last-modified dates.
 - [Crawler policy](https://paulochang.com/robots.txt): All content here is public and intended to be crawled, indexed and cited. AI search crawlers are explicitly allowed.
