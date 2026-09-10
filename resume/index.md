@@ -31,6 +31,20 @@ Senior backend engineer & Backend Community AI champion
 - Fixed authentication and webhook logging issues on a CRM platform's third-party identity integration.
 - Maintained AEM server environments — dependency versions, memory tuning, ACS Commons — across several brand server repositories.
 
+## Education
+
+### Máster Universitario en Tecnologías de la Computación Aplicadas al Sector Financiero
+
+**Universidad Carlos III de Madrid** — *2017 – 2018*
+
+### Master of Business Administration (MBA)
+
+**Universidad Francisco Marroquín** — *2016 – 2017*
+
+### Bachelor of Science, Mathematics and Computer Science
+
+**Universidad del Valle de Guatemala** — *2011 – 2014*
+
 ## Skills & stack
 
 ### Languages & frameworks

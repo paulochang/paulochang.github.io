@@ -17,6 +17,9 @@ html {
 }
 
 body {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
   background: var(--bg);
   color: var(--ink);
   font-family: var(--serif-text);
@@ -132,8 +135,10 @@ nav[aria-label="Primary"] ul {
 
 header {
   position: relative;
-  max-width: 46rem;
-  min-height: 100svh;
+  width: 100%;
+  max-width: clamp(46rem, 18rem + 35vw, 68rem);
+  flex: 1;
+  min-height: 0;
   margin: 0 auto;
   padding: 6vw;
   display: flex;
@@ -146,6 +151,7 @@ header {
    title instead of a full-height hero, so content starts right below it. */
 
 header.page-header {
+  flex: none;
   min-height: auto;
   padding: 4rem 6vw 2rem;
 }
@@ -200,6 +206,10 @@ header #lede {
   margin: 1.5em auto 0;
 }
 
+header #lede-2 {
+  margin-top: 1em;
+}
+
 header #hero-links {
   margin-top: 2.5em;
   font-size: 0.9rem;
@@ -208,7 +218,7 @@ header #hero-links {
 /* Main content: composed as a centered column, but text itself reads left-aligned */
 
 main {
-  max-width: 48rem;
+  max-width: clamp(48rem, 20rem + 35vw, 70rem);
   margin: 0 auto;
   padding: 0 6vw 14vh;
 }
@@ -359,7 +369,7 @@ section > h3 {
 /* Footer */
 
 footer {
-  max-width: 48rem;
+  max-width: clamp(48rem, 20rem + 35vw, 70rem);
   margin: 0 auto;
   padding: 10vh 6vw 12vh;
   text-align: center;
