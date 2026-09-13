@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geometric Wall Design Tool</title>
+<style>
+  body {
+    font-family: sans-serif;
+    background: #f2f2f2;
+    text-align: center;
+    padding: 20px;
+  }
+  #controls {
+    margin-bottom: 20px;
+  }
+  canvas {
+    border: 2px solid #333;
+    background: white;
+  }
+</style>
+</head>
+<body>
+
+<h1>Geometric Wall Painting Designer</h1>
+<p>Pick up to 3 colors and click "Generate Pattern"</p>
+
+<div id="controls">
+  <label>Color 1: <input type="color" id="color1" value="#d8a7b1"></label>
+  <label>Color 2: <input type="color" id="color2" value="#aaaaaa"></label>
+  <label>Color 3: <input type="color" id="color3" value="#333333"></label>
+  <button onclick="generatePattern()">Generate Pattern</button>
+</div>
+
+<canvas id="patternCanvas" width="800" height="500"></canvas>
+
+<script>
+function generatePattern() {
+  const canvas = document.getElementById("patternCanvas");
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const colors = [
+    document.getElementById("color1").value,
+    document.getElementById("color2").value,
+    document.getElementById("color3").value
+  ];
+
+  const cellSize = 100; // Size of each grid square
+  const rows = Math.ceil(canvas.height / cellSize);
+  const cols = Math.ceil(canvas.width / cellSize);
+
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      const shapeType = Math.floor(Math.random() * 3); // 0 = square, 1 = triangle, 2 = diagonal split
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const startX = x * cellSize;
+      const startY = y * cellSize;
+
+      ctx.beginPath();
+      ctx.fillStyle = color;
+
+      if (shapeType === 0) {
+        // Full square
+        ctx.fillRect(startX, startY, cellSize, cellSize);
+      } 
+      else if (shapeType === 1) {
+        // Triangle
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(startX + cellSize, startY);
+        ctx.lineTo(startX, startY + cellSize);
+        ctx.closePath();
+        ctx.fill();
+      } 
+      else if (shapeType === 2) {
+        // Diagonal split into two triangles
+        const secondColor = colors[Math.floor(Math.random() * colors.length)];
+        // First triangle
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(startX + cellSize, startY);
+        ctx.lineTo(startX, startY + cellSize);
+        ctx.closePath();
+        ctx.fill();
+
+        // Second triangle
+        ctx.beginPath();
+        ctx.fillStyle = secondColor;
+        ctx.moveTo(startX + cellSize, startY);
+        ctx.lineTo(startX + cellSize, startY + cellSize);
+        ctx.lineTo(startX, startY + cellSize);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+  }
+}
+generatePattern();
+</script>
+
+</body>
+</html>

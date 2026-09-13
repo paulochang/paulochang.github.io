@@ -5,14 +5,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Projects &mdash; Paulo Chang</title>
-  <meta name="description" content="Interactive side projects by Paulo Chang: a Berlin street-cleaning schedule map and a minimal one-poem-at-a-time reader.">
+  <meta name="description" content="Interactive side projects by Paulo Chang: a Berlin street-cleaning schedule map, a one-poem-at-a-time reader, a syntax-aware diff tool, a JSONata query workbench, a procedural wall-paint designer, and an offline exam study guide.">
   <meta name="author" content="Paulo Chang">
   <link rel="canonical" href="https://paulochang.com/projects/">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Paulo Chang">
   <meta property="og:title" content="Projects &mdash; Paulo Chang">
-  <meta property="og:description" content="Interactive side projects by Paulo Chang: a Berlin street-cleaning schedule map and a minimal one-poem-at-a-time reader.">
+  <meta property="og:description" content="Interactive side projects by Paulo Chang: a Berlin street-cleaning schedule map, a one-poem-at-a-time reader, a syntax-aware diff tool, a JSONata query workbench, a procedural wall-paint designer, and an offline exam study guide.">
   <meta property="og:url" content="https://paulochang.com/projects/">
   <meta property="og:locale" content="en_US">
   <meta property="og:image" content="https://paulochang.com/img/og.png">
@@ -21,7 +21,7 @@
   <meta property="og:image:alt" content="Paulo Chang — senior backend engineer and AI-driven development champion">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Projects &mdash; Paulo Chang">
-  <meta name="twitter:description" content="Interactive side projects by Paulo Chang: a Berlin street-cleaning schedule map and a minimal one-poem-at-a-time reader.">
+  <meta name="twitter:description" content="Interactive side projects by Paulo Chang: a Berlin street-cleaning schedule map, a one-poem-at-a-time reader, a syntax-aware diff tool, a JSONata query workbench, a procedural wall-paint designer, and an offline exam study guide.">
   <meta name="twitter:image" content="https://paulochang.com/img/og.png">
   <meta name="twitter:image:alt" content="Paulo Chang — senior backend engineer and AI-driven development champion">
 
@@ -36,7 +36,7 @@
     "url": "https://paulochang.com/projects/",
     "name": "Projects — Paulo Chang",
     "inLanguage": "en",
-    "dateModified": "2026-09-10",
+    "dateModified": "2026-09-13",
     "author": { "@id": "https://paulochang.com/#paulo-chang" },
     "hasPart": [
       {
@@ -62,6 +62,54 @@
         "isAccessibleForFree": true,
         "author": { "@id": "https://paulochang.com/#paulo-chang" },
         "description": "A deliberately minimal reader that surfaces one short poem at a time from a curated client-side collection."
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://paulochang.com/diff/#app",
+        "name": "Syntax-Aware Diff Tool",
+        "url": "https://paulochang.com/diff/",
+        "applicationCategory": "DeveloperApplication",
+        "browserRequirements": "Requires JavaScript",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "author": { "@id": "https://paulochang.com/#paulo-chang" },
+        "description": "Browser-based syntax-aware diff tool using the Monaco diff editor, with side-by-side and inline views, drag-and-drop input, and live change metrics."
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://paulochang.com/json/#app",
+        "name": "JSON Query Tool (JSONata)",
+        "url": "https://paulochang.com/json/",
+        "applicationCategory": "DeveloperApplication",
+        "browserRequirements": "Requires JavaScript",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "author": { "@id": "https://paulochang.com/#paulo-chang" },
+        "description": "Three-panel workbench for exploring JSON: raw input, a structure explorer tree, and a JSONata query box with autocomplete and live results."
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://paulochang.com/paint/#app",
+        "name": "Geometric Wall Designer",
+        "url": "https://paulochang.com/paint/",
+        "applicationCategory": "DesignApplication",
+        "browserRequirements": "Requires JavaScript",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "author": { "@id": "https://paulochang.com/#paulo-chang" },
+        "description": "Procedurally generates wall-paint patterns constrained to be paintable with masking tape: straight lines only, a maximum of 3 colors, with PNG export."
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://paulochang.com/study-guide/#app",
+        "name": "CCAR-F Study Guide",
+        "url": "https://paulochang.com/study-guide/",
+        "applicationCategory": "EducationApplication",
+        "browserRequirements": "Requires JavaScript",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "author": { "@id": "https://paulochang.com/#paulo-chang" },
+        "description": "A self-contained offline reader turning a 25-document markdown corpus into one zero-dependency HTML file with collapsible navigation and light/dark theming."
       }
     ]
   }
@@ -106,6 +154,38 @@
         <p>
           A deliberately minimal reader that surfaces one short poem at a time from a curated
           client-side collection.
+        </p>
+      </article>
+
+      <article class="project-card" aria-labelledby="proj-diff">
+        <h3 id="proj-diff"><a href="../diff/">Syntax-Aware Diff Tool</a></h3>
+        <p>
+          A single self-contained page built around the Monaco diff editor &mdash; side-by-side or
+          inline views, drag-and-drop input, and live added/removed/modified metrics.
+        </p>
+      </article>
+
+      <article class="project-card" aria-labelledby="proj-json">
+        <h3 id="proj-json"><a href="../json/">JSON Query Tool (JSONata)</a></h3>
+        <p>
+          A three-panel workbench for exploring JSON: paste input, browse the structure in an
+          expandable tree, and query it live with JSONata and autocomplete.
+        </p>
+      </article>
+
+      <article class="project-card" aria-labelledby="proj-paint">
+        <h3 id="proj-paint"><a href="../paint/">Geometric Wall Designer</a></h3>
+        <p>
+          Procedurally generates wall-paint patterns constrained to be paintable with masking
+          tape &mdash; straight lines only, a maximum of three colors, with PNG export.
+        </p>
+      </article>
+
+      <article class="project-card" aria-labelledby="proj-study-guide">
+        <h3 id="proj-study-guide"><a href="../study-guide/">CCAR-F Study Guide</a></h3>
+        <p>
+          A 25-document markdown corpus compiled into a single offline-readable HTML file with
+          collapsible navigation and light/dark theming &mdash; zero runtime dependencies.
         </p>
       </article>
     </section>

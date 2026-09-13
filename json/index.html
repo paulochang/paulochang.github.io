@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive JSON query tool powered by JSONata and Monaco Editor">
+    <meta name="author" content="Paulo Chang">
+    <link rel="canonical" href="https://paulochang.com/json/">
+    <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+    <link rel="alternate" type="text/markdown" href="index.md">
+    <title>JSON Query Tool - JSONata &mdash; Paulo Chang</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Paulo Chang">
+    <meta property="og:title" content="JSON Query Tool (JSONata) &mdash; Paulo Chang">
+    <meta property="og:description" content="Three-panel workbench for exploring JSON — input, structure explorer, and JSONata query with live results and autocomplete.">
+    <meta property="og:url" content="https://paulochang.com/json/">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image" content="https://paulochang.com/img/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Paulo Chang — senior backend engineer and AI-driven development champion">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="JSON Query Tool (JSONata) &mdash; Paulo Chang">
+    <meta name="twitter:description" content="Three-panel workbench for exploring JSON — input, structure explorer, and JSONata query with live results and autocomplete.">
+    <meta name="twitter:image" content="https://paulochang.com/img/og.png">
+    <meta name="twitter:image:alt" content="Paulo Chang — senior backend engineer and AI-driven development champion">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "@id": "https://paulochang.com/json/#app",
+      "name": "JSON Query Tool (JSONata)",
+      "url": "https://paulochang.com/json/",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any (web browser)",
+      "browserRequirements": "Requires JavaScript",
+      "isAccessibleForFree": true,
+      "dateModified": "2026-09-13",
+      "description": "Three-panel workbench for exploring JSON: raw input, a structure explorer tree, and a JSONata query box with autocomplete and live results.",
+      "author": { "@id": "https://paulochang.com/#paulo-chang" },
+      "isPartOf": { "@type": "WebSite", "url": "https://paulochang.com/", "name": "Paulo Chang" }
+    }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JSON Query Tool</h1>
+            <p class="subtitle">Paste JSON, explore structure, query with JSONata</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Left Panel: JSON Input -->
+            <div class="panel json-input-panel">
+                <div class="panel-header">
+                    <h2>JSON Input</h2>
+                    <div class="header-actions">
+                        <button id="sortKeysBtn" class="btn btn-small">Sort Keys</button>
+                        <button id="formatBtn" class="btn btn-small">Format</button>
+                        <button id="parseBtn" class="btn btn-primary">Parse JSON</button>
+                    </div>
+                </div>
+                <div id="jsonEditor" class="editor"></div>
+                <div id="parseError" class="error-message" role="alert" aria-live="assertive"></div>
+            </div>
+
+            <!-- Middle Panel: Tree View -->
+            <div class="panel tree-panel">
+                <div class="panel-header">
+                    <h2>Structure Explorer</h2>
+                    <div class="tree-controls">
+                        <button id="expandAllBtn" class="btn btn-small">Expand All</button>
+                        <button id="collapseAllBtn" class="btn btn-small">Collapse All</button>
+                    </div>
+                </div>
+                <div id="treeView" class="tree-view" role="tree" aria-label="JSON structure">
+                    <div class="empty-state">Paste JSON and click "Parse JSON" to see structure</div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Query & Results -->
+            <div class="panel query-panel">
+                <div class="panel-header">
+                    <h2>JSONata Query</h2>
+                    <button id="executeBtn" class="btn btn-primary">Execute Query</button>
+                </div>
+                <div class="query-input-wrapper">
+                    <label for="queryInput" class="sr-only">JSONata query expression</label>
+                    <input type="text" id="queryInput" class="query-input" placeholder="$.*{&quot;title&quot;: title, &quot;price&quot;: price}" value="$">
+                    <div class="query-help">
+                        <span class="help-icon" tabindex="0" role="button" aria-label="JSONata help">?</span>
+                        <div class="help-tooltip">
+                            <strong>JSONata Examples:</strong><br>
+                            $ - Root object<br>
+                            store.book - Books array<br>
+                            store.book[price < 10] - Filter<br>
+                            store.book.title - All titles<br>
+                            store.book{title: title, author: author} - Transform<br>
+                            $count(store.book) - Count function
+                        </div>
+                    </div>
+                </div>
+                <!-- Sample Queries -->
+                <div class="samples-section">
+                    <button class="samples-toggle" id="samplesToggle" aria-expanded="false" aria-controls="samplesPanel">
+                        <span id="samplesToggleIcon">▶</span>
+                        Sample Queries
+                        <a href="https://docs.jsonata.org/overview" target="_blank" rel="noopener noreferrer" class="docs-link" onclick="event.stopPropagation()">Full Documentation ↗</a>
+                    </button>
+                    <div class="samples-panel" id="samplesPanel">
+                        <div class="sample-query" data-query="store.book">
+                            <span class="sample-label">All books</span>
+                            <code>store.book</code>
+                        </div>
+                        <div class="sample-query" data-query="store.book.title">
+                            <span class="sample-label">All titles</span>
+                            <code>store.book.title</code>
+                        </div>
+                        <div class="sample-query" data-query="store.book[price < 10]">
+                            <span class="sample-label">Books under $10</span>
+                            <code>store.book[price &lt; 10]</code>
+                        </div>
+                        <div class="sample-query" data-query='store.book[category = "fiction"]'>
+                            <span class="sample-label">Fiction only</span>
+                            <code>store.book[category = "fiction"]</code>
+                        </div>
+                        <div class="sample-query" data-query="store.book{title: price}">
+                            <span class="sample-label">Title → price map</span>
+                            <code>store.book{title: price}</code>
+                        </div>
+                        <div class="sample-query" data-query="store.book^(price)">
+                            <span class="sample-label">Sort by price</span>
+                            <code>store.book^(price)</code>
+                        </div>
+                        <div class="sample-query" data-query="$count(store.book)">
+                            <span class="sample-label">Count books</span>
+                            <code>$count(store.book)</code>
+                        </div>
+                        <div class="sample-query" data-query="$sum(store.book.price)">
+                            <span class="sample-label">Total price</span>
+                            <code>$sum(store.book.price)</code>
+                        </div>
+                        <div class="sample-query" data-query="$max(store.book.price)">
+                            <span class="sample-label">Most expensive</span>
+                            <code>$max(store.book.price)</code>
+                        </div>
+                        <div class="sample-query" data-query='store.book.isbn ?? "no ISBN"'>
+                            <span class="sample-label">ISBN or "no ISBN" if missing</span>
+                            <code>store.book.isbn ?? "no ISBN"</code>
+                        </div>
+                        <div class="sample-query" data-query='store.book.(edition ?: "1st")'>
+                            <span class="sample-label">Edition or "1st" if not set</span>
+                            <code>store.book.(edition ?: "1st")</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-section">
+                    <div class="results-header">
+                        <h3>Results</h3>
+                        <div class="results-actions">
+                            <button id="copyResultsBtn" class="btn btn-small">Copy</button>
+                            <span id="resultCount" class="result-count" role="status" aria-live="polite"></span>
+                        </div>
+                    </div>
+                    <div id="resultsEditor" class="editor editor-results"></div>
+                    <div id="queryError" class="error-message" role="alert" aria-live="assertive"></div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <span>Using <a href="https://jsonata.org/" target="_blank" rel="noopener noreferrer">JSONata 2.1.0</a> &amp; <a href="https://microsoft.github.io/monaco-editor/" target="_blank" rel="noopener noreferrer">Monaco Editor 0.55.1</a></span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Load JSONata -->
+    <script src="https://cdn.jsdelivr.net/npm/jsonata@2.1.0/jsonata.min.js"></script>
+
+    <!-- Load Monaco Editor -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/loader.min.js"></script>
+
+    <!-- Load our application script -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>

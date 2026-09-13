@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Geometric Wall Designer — 3 colors, tape-friendly</title>
+<style>
+  body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:#f6f6f6; color:#222; padding:20px; }
+  header { display:flex; align-items:center; gap:16px; justify-content:space-between; flex-wrap:wrap; }
+  h1 { margin:0; font-size:18px; }
+  #controls { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin:14px 0; }
+  label { font-size:13px; display:flex; gap:6px; align-items:center; }
+  canvas { border:1px solid #bbb; background:white; max-width:100%; height:auto; display:block; margin-top:12px; }
+  button { padding:8px 12px; border-radius:6px; border:1px solid #bbb; background:white; cursor:pointer; }
+  .small { font-size:13px; color:#666; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Geometric Wall Designer (masking-tape friendly)</h1>
+    <div class="small">Colors limited to 3 — straight lines only. Use larger grid for easier painting.</div>
+  </div>
+  <div class="small">Tip: set colors close to your living room (tone-down pink, grey, dark grey)</div>
+</header>
+
+<div id="controls">
+  <label>Color 1 <input id="c1" type="color" value="#d4a6b3"></label>
+  <label>Color 2 <input id="c2" type="color" value="#cfcfd1"></label>
+  <label>Color 3 <input id="c3" type="color" value="#4a4a4a"></label>
+
+  <label>Grid Size <input id="gridSize" type="range" min="40" max="180" value="100"></label>
+  <label>Complexity <input id="complexity" type="range" min="1" max="5" value="3"></label>
+
+  <button id="gen">Generate Pattern</button>
+  <button id="export">Export PNG</button>
+  <button id="clear">Clear Tape Guides</button>
+</div>
+
+<canvas id="canvas" width="1200" height="700"></canvas>
+
+<script>
+/*
+  Masking-tape friendly geometric designer
+  - Only straight-line polygons
+  - Supports: full cell, half-diagonals (two directions), diagonal-split, parallelogram (shifted cell),
+    multi-cell diagonal bands (creates longer diagonal rectangles), and vertical/horizontal stripes.
+  - Grid size controls painting difficulty (larger = easier)
+  - Complexity controls how many shape types get used and how often multi-cell bands appear
+*/
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d', { willReadFrequently: false });
+const c1 = document.getElementById('c1');
+const c2 = document.getElementById('c2');
+const c3 = document.getElementById('c3');
+const gridSizeEl = document.getElementById('gridSize');
+const complexityEl = document.getElementById('complexity');
+const genBtn = document.getElementById('gen');
+const exportBtn = document.getElementById('export');
+const clearBtn = document.getElementById('clear');
+
+function rnd(n) { return Math.floor(Math.random()*n); }
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+// Main generator
+function generate() {
+  const colors = [c1.value, c2.value, c3.value].filter(Boolean);
+  const gridSize = parseInt(gridSizeEl.value, 10);
+  const complexity = parseInt(complexityEl.value, 10);
+
+  // Clear canvas
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  // white background
+  ctx.fillStyle = '#fff'; ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  const cols = Math.ceil(canvas.width / gridSize);
+  const rows = Math.ceil(canvas.height / gridSize);
+
+  // helper to draw polygon
+  function drawPoly(points, fillColor, stroke=true) {
+    ctx.beginPath();
+    ctx.moveTo(points[0][0], points[0][1]);
+    for (let i=1;i<points.length;i++) ctx.lineTo(points[i][0], points[i][1]);
+    ctx.closePath();
+    ctx.fillStyle = fillColor;
+    ctx.fill();
+    if (stroke) {
+      // thin guide lines to show where to tape; use dark color for clarity
+      ctx.lineWidth = Math.max(1, Math.round(gridSize/80));
+      ctx.strokeStyle = '#222';
+      ctx.stroke();
+    }
+  }
+
+  // Occupancy map for multi-cell bands
+  const occupied = Array.from({length:rows}, ()=>Array(cols).fill(false));
+
+  // Draw some long diagonal bands first when complexity is high
+  const bandChance = 0.05 * complexity; // higher complexity -> more long bands
+  for (let attempt=0; attempt<cols*rows*0.6; attempt++) {
+    if (Math.random() > bandChance) continue;
+    // choose direction: 0 = TL-BR diagonal band, 1 = TR-BL diagonal band
+    const dir = Math.random() < 0.5 ? 0 : 1;
+    // pick start cell
+    let r = rnd(rows), c = rnd(cols);
+    // length depends on complexity
+    const length = Math.max(2, Math.round(1 + Math.random()*(complexity+2)));
+    // choose color
+    const color = pick(colors);
+
+    // build list of cells for the band
+    const cells = [];
+    for (let k=0;k<length;k++){
+      const rr = dir===0 ? r+k : r+k;
+      const cc = dir===0 ? c+k : c-k;
+      if (rr<0||rr>=rows||cc<0||cc>=cols) break;
+      if (occupied[rr][cc]) break;
+      cells.push([rr,cc]);
+    }
+    if (cells.length < 2) continue; // too short
+
+    // mark occupied
+    for (const [rr,cc] of cells) occupied[rr][cc]=true;
+
+    // compute polygon that joins cells into a long parallelogram (band)
+    // top-left and bottom-right corners depend on dir
+    // We'll make a strip by connecting the outer corners of first and last cells
+    const first = cells[0], last = cells[cells.length-1];
+    const r1=first[0], c1i=first[1], r2=last[0], c2i=last[1];
+    let poly;
+    if (dir===0) {
+      // TL-BR band: polygon from top-left of first to top-right of last then bottom-right/back to bottom-left
+      const x1 = c1i*gridSize, y1 = r1*gridSize;
+      const x2 = (c2i+1)*gridSize, y2 = (r2+1)*gridSize;
+      // give band thickness equal to gridSize
+      poly = [
+        [x1, y1],
+        [x2, y1],
+        [x2, y2],
+        [x1, y2]
+      ];
+    } else {
+      // TR-BL band: polygon from top-right of first to top-left of last then bottom-left/back to bottom-right
+      const x1 = (c1i+1)*gridSize, y1 = r1*gridSize;
+      const x2 = c2i*gridSize, y2 = (r2+1)*gridSize;
+      poly = [
+        [x1, y1],
+        [x2, y1],
+        [x2, y2],
+        [x1, y2]
+      ];
+    }
+    drawPoly(poly, color);
+  }
+
+  // Walk through grid and fill remaining cells with varied shapes
+  for (let r=0;r<rows;r++){
+    for (let c=0;c<cols;c++){
+      if (occupied[r][c]) continue;
+      // probability of a single-cell multi-shape increases with complexity
+      const choicePool = [];
+      // add basic full square
+      for (let i=0;i<4;i++) choicePool.push('square');
+      // add triangle splits
+      for (let i=0;i<3;i++) choicePool.push('diagTLBR'); // top-left to bottom-right
+      for (let i=0;i<3;i++) choicePool.push('diagTRBL'); // top-right to bottom-left
+      // add half-vertical/horizontal
+      for (let i=0;i<2;i++) { choicePool.push('halfV'); choicePool.push('halfH'); }
+      // add parallelogram (shift visual)
+      for (let i=0;i<complexity;i++) choicePool.push('parallelogram');
+
+      const shape = pick(choicePool);
+      const x = c*gridSize, y = r*gridSize;
+      const colorA = pick(colors);
+      const colorB = pick(colors);
+
+      if (shape === 'square') {
+        drawPoly([[x,y],[x+gridSize,y],[x+gridSize,y+gridSize],[x,y+gridSize]], colorA);
+      }
+      else if (shape === 'diagTLBR') {
+        // two triangles: top-left and bottom-right
+        // top-left triangle
+        drawPoly([[x,y],[x+gridSize,y],[x,y+gridSize]], colorA);
+        // bottom-right triangle
+        drawPoly([[x+gridSize,y],[x+gridSize,y+gridSize],[x,y+gridSize]], colorB);
+      }
+      else if (shape === 'diagTRBL') {
+        // two triangles: top-right and bottom-left
+        drawPoly([[x,y],[x+gridSize,y],[x+gridSize,y+gridSize]], colorA);
+        drawPoly([[x,y],[x+gridSize,y+gridSize],[x,y+gridSize]], colorB);
+      }
+      else if (shape === 'halfV') {
+        // left and right halves
+        drawPoly([[x,y],[x+gridSize/2,y],[x+gridSize/2,y+gridSize],[x,y+gridSize]], colorA);
+        drawPoly([[x+gridSize/2,y],[x+gridSize,y],[x+gridSize,y+gridSize],[x+gridSize/2,y+gridSize]], colorB);
+      }
+      else if (shape === 'halfH') {
+        // top and bottom halves
+        drawPoly([[x,y],[x+gridSize,y],[x+gridSize,y+gridSize/2],[x,y+gridSize/2]], colorA);
+        drawPoly([[x,y+gridSize/2],[x+gridSize,y+gridSize/2],[x+gridSize,y+gridSize],[x,y+gridSize]], colorB);
+      }
+      else if (shape === 'parallelogram') {
+        // shift top edge left or right by a fraction of gridSize to create parallelogram
+        const shift = (Math.random() < 0.5 ? -1 : 1) * (gridSize * (0.2 + Math.random()*0.4));
+        const p = [
+          [x + Math.max(-gridSize,shift), y],
+          [x + gridSize + Math.max(-gridSize,shift), y],
+          [x + gridSize - Math.max(-gridSize,shift), y+gridSize],
+          [x - Math.max(-gridSize,shift), y+gridSize]
+        ];
+        drawPoly(p, colorA);
+      }
+    }
+  }
+
+  // Draw optional grid lines to help transfer to wall (thin and subtle)
+  drawGridGuides(gridSize);
+}
+
+// draw thin guides (tape lines). User can remove them with "Clear Tape Guides"
+function drawGridGuides(gridSize) {
+  ctx.save();
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4,4]);
+  ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+  for (let x=0;x<=canvas.width;x+=gridSize) {
+    ctx.beginPath(); ctx.moveTo(x+0.5,0); ctx.lineTo(x+0.5,canvas.height); ctx.stroke();
+  }
+  for (let y=0;y<=canvas.height;y+=gridSize) {
+    ctx.beginPath(); ctx.moveTo(0,y+0.5); ctx.lineTo(canvas.width,y+0.5); ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// Event handlers
+genBtn.addEventListener('click', generate);
+
+exportBtn.addEventListener('click', () => {
+  // export canvas as PNG
+  const url = canvas.toDataURL('image/png');
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'wall-design.png';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+});
+
+clearBtn.addEventListener('click', () => {
+  // Remove the dotted guides by re-rendering and then painting a white rectangle over them.
+  // Simpler: regenerate but without grid guides - implement quick re-draw without guides
+  // We'll temporarily override drawGridGuides to noop while regenerating.
+  const old = drawGridGuides;
+  drawGridGuides = function() {};
+  generate();
+  drawGridGuides = old;
+});
+
+// initial draw
+generate();
+
+// Allow resizing the internal canvas to match CSS size (keeps pixel crisp for smaller screens)
+function adjustForDisplay() {
+  // keep the drawing buffer fixed at original size for consistency; optionally scale here.
+  // If you'd like to make canvas resizable to window, implement scaling with devicePixelRatio.
+}
+window.addEventListener('resize', adjustForDisplay);
+</script>
+
+</body>
+</html>

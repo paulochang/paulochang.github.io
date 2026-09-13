@@ -17,6 +17,10 @@ Canonical host: https://paulochang.com/
 - [Projects index](https://paulochang.com/projects/index.md): listing page linking to the tools below.
 - [BSR Straßenreinigung Berlin](https://paulochang.com/berlin-cleaning/index.md): Interactive MapLibre GL map of Berlin's official street-cleaning classes (Reinigungsklassen), bilingual German/English, with address search and per-class filtering. The live page at https://paulochang.com/berlin-cleaning/ renders client-side, so the Markdown is a description rather than a transcript.
 - [A Moment of Light](https://paulochang.com/quotes/index.md): A deliberately minimal reader that surfaces one short poem at a time from a curated client-side collection. The live page at https://paulochang.com/quotes/ generates its content in the browser.
+- [Syntax-Aware Diff Tool](https://paulochang.com/diff/index.md): A browser-based diff tool built around the Monaco diff editor, with side-by-side/inline views, drag-and-drop input, and live change metrics. The live page at https://paulochang.com/diff/ renders client-side, so the Markdown is a description rather than a transcript.
+- [JSON Query Tool (JSONata)](https://paulochang.com/json/index.md): A three-panel workbench for exploring JSON — input, structure explorer, and a JSONata query box with autocomplete and live results. The live page at https://paulochang.com/json/ renders client-side, so the Markdown is a description rather than a transcript.
+- [Geometric Wall Designer](https://paulochang.com/paint/index.md): Procedurally generates wall-paint patterns constrained to be paintable with masking tape — straight lines only, a maximum of three colors. The live page at https://paulochang.com/paint/ renders client-side, so the Markdown is a description rather than a transcript.
+- [CCAR-F Study Guide](https://paulochang.com/study-guide/index.md): A self-contained offline study guide for the Claude Certified Architect (Foundations) exam, compiled into one zero-dependency HTML file. The live page at https://paulochang.com/study-guide/ is a static document reader.
 
 ## Elsewhere
 

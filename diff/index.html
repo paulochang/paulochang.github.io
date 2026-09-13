@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syntax-Aware Diff Tool &mdash; Paulo Chang</title>
+    <meta name="description" content="Browser-based syntax-aware diff tool using the Monaco diff editor — side-by-side or inline, drag-and-drop input, live change metrics.">
+    <meta name="author" content="Paulo Chang">
+    <link rel="canonical" href="https://paulochang.com/diff/">
+    <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+    <link rel="alternate" type="text/markdown" href="index.md">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Paulo Chang">
+    <meta property="og:title" content="Syntax-Aware Diff Tool &mdash; Paulo Chang">
+    <meta property="og:description" content="Browser-based syntax-aware diff tool using the Monaco diff editor — side-by-side or inline, drag-and-drop input, live change metrics.">
+    <meta property="og:url" content="https://paulochang.com/diff/">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image" content="https://paulochang.com/img/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Paulo Chang — senior backend engineer and AI-driven development champion">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Syntax-Aware Diff Tool &mdash; Paulo Chang">
+    <meta name="twitter:description" content="Browser-based syntax-aware diff tool using the Monaco diff editor — side-by-side or inline, drag-and-drop input, live change metrics.">
+    <meta name="twitter:image" content="https://paulochang.com/img/og.png">
+    <meta name="twitter:image:alt" content="Paulo Chang — senior backend engineer and AI-driven development champion">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "@id": "https://paulochang.com/diff/#app",
+      "name": "Syntax-Aware Diff Tool",
+      "url": "https://paulochang.com/diff/",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any (web browser)",
+      "browserRequirements": "Requires JavaScript",
+      "isAccessibleForFree": true,
+      "dateModified": "2026-09-13",
+      "description": "Browser-based syntax-aware diff tool using the Monaco diff editor, with side-by-side and inline views, drag-and-drop input, and live added/removed/modified metrics.",
+      "author": { "@id": "https://paulochang.com/#paulo-chang" },
+      "isPartOf": { "@type": "WebSite", "url": "https://paulochang.com/", "name": "Paulo Chang" }
+    }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.0/min/vs/loader.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #1e1e1e;
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .header {
+            background: #2d2d30;
+            padding: 12px 20px;
+            border-bottom: 1px solid #3e3e42;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .version-badge {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #9d9d9d;
+            background: #3e3e42;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .language-select {
+            padding: 8px 12px;
+            background: #3c3c3c;
+            border: 1px solid #555;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 0.9rem;
+            min-width: 140px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .language-select:hover {
+            background: #4c4c4c;
+            border-color: #666;
+        }
+
+        .language-select:focus {
+            outline: none;
+            border-color: #007acc;
+            box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.3);
+        }
+
+        .button {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 36px;
+        }
+
+        .button:hover:not(:disabled) {
+            background: #1e88e5;
+            transform: translateY(-1px);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .button.secondary {
+            background: #6c757d;
+        }
+
+        .button.secondary:hover:not(:disabled) {
+            background: #5a6268;
+        }
+
+        .main-container {
+            display: flex;
+            height: calc(100vh - 120px);
+            position: relative;
+        }
+
+        .editor-section {
+            display: flex;
+            flex: 1;
+            min-height: 400px;
+            transition: all 0.3s ease;
+        }
+
+        .editor-section.collapsed {
+            flex: 0;
+            min-width: 0;
+            opacity: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .editor-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #3e3e42;
+            min-width: 300px;
+            min-height: 400px;
+            transition: all 0.3s ease;
+        }
+
+        .editor-panel.collapsed {
+            flex: 0;
+            min-width: 0;
+            opacity: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .editor-panel:last-child {
+            border-right: none;
+        }
+
+        .panel-header {
+            background: #252526;
+            padding: 10px 15px;
+            border-bottom: 1px solid #3e3e42;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 44px;
+        }
+
+        .panel-title {
+            font-weight: 600;
+            color: #ffffff;
+            font-size: 0.95rem;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .small-button {
+            background: #3c3c3c;
+            color: #cccccc;
+            border: 1px solid #555;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .small-button:hover {
+            background: #4c4c4c;
+            color: #ffffff;
+        }
+
+        .line-count {
+            font-size: 0.8rem;
+            color: #cccccc;
+            margin-left: 8px;
+            padding: 2px 6px;
+            background: #3c3c3c;
+            border-radius: 3px;
+        }
+
+        .editor-container {
+            flex: 1;
+            position: relative;
+            min-height: 350px;
+        }
+
+        .editor-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            min-height: 350px;
+        }
+
+        .file-drop-zone {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(30, 30, 30, 0.95);
+            border: 2px dashed #555;
+            color: #cccccc;
+            font-size: 1rem;
+            z-index: 10;
+            transition: all 0.2s;
+            text-align: center;
+            padding: 20px;
+            backdrop-filter: blur(2px);
+        }
+
+        .file-drop-zone.show {
+            display: flex;
+        }
+
+        .file-drop-zone.dragover {
+            border-color: #007acc;
+            background: rgba(0, 122, 204, 0.1);
+            color: #ffffff;
+        }
+
+        .drop-zone-text {
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .drop-zone-hint {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .diff-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-left: 2px solid #007acc;
+            min-width: 300px;
+            min-height: 400px;
+            transition: all 0.3s ease;
+        }
+
+        .diff-section.expanded {
+            flex: 2;
+        }
+
+        .diff-header {
+            background: #252526;
+            padding: 10px 15px;
+            border-bottom: 1px solid #3e3e42;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 44px;
+        }
+
+        .diff-title {
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .diff-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .diff-container {
+            flex: 1;
+            position: relative;
+            min-height: 350px;
+        }
+
+        .diff-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #888;
+            font-size: 0.95rem;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .diff-empty-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .stats {
+            background: #252526;
+            padding: 8px 20px;
+            border-top: 1px solid #3e3e42;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #cccccc;
+            min-height: 36px;
+        }
+
+        .stats-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .diff-stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+
+        .diff-stat.added {
+            color: #4ec9b0;
+            background: rgba(78, 201, 176, 0.15);
+        }
+
+        .diff-stat.removed {
+            color: #f48771;
+            background: rgba(244, 135, 113, 0.15);
+        }
+
+        .diff-stat.modified {
+            color: #dcdcaa;
+            background: rgba(220, 220, 170, 0.15);
+        }
+
+        .error-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #d32f2f;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 6px;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+            max-width: 400px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .error-message.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .warning-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #f57c00;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 6px;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+            max-width: 400px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .warning-message.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #555;
+            border-radius: 50%;
+            border-top-color: #007acc;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .view-toggle {
+            background: #3c3c3c;
+            border: 1px solid #555;
+            border-radius: 4px;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .view-toggle button {
+            background: transparent;
+            border: none;
+            color: #cccccc;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .view-toggle button.active {
+            background: #007acc;
+            color: white;
+        }
+
+        .view-toggle button:hover:not(.active) {
+            background: #4c4c4c;
+            color: white;
+        }
+
+        .expand-button {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+            margin-left: 8px;
+        }
+
+        .expand-button:hover {
+            background: #1e88e5;
+        }
+
+
+
+        #leftEditor,
+        #rightEditor,
+        #diffEditor {
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+        }
+
+        @media (max-width: 1200px) {
+            .main-container.auto-inline {
+                flex-direction: column;
+            }
+
+            .editor-section.auto-inline {
+                flex-direction: column;
+                height: 60%;
+                flex: none;
+            }
+
+            .diff-section.auto-inline {
+                height: 40%;
+                border-left: none;
+                border-top: 2px solid #007acc;
+                flex: none;
+            }
+
+            .editor-panel.auto-inline {
+                border-right: none;
+                border-bottom: 1px solid #3e3e42;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .main-container {
+                flex-direction: column;
+                height: calc(100vh - 140px);
+            }
+
+            .editor-section {
+                flex-direction: column;
+                height: 60%;
+                flex: none;
+            }
+
+            .diff-section {
+                height: 40%;
+                border-left: none;
+                border-top: 2px solid #007acc;
+                flex: none;
+            }
+
+            .editor-panel {
+                border-right: none;
+                border-bottom: 1px solid #3e3e42;
+            }
+        }
+
+        .monaco-editor .margin {
+            background-color: #1e1e1e !important;
+        }
+
+        .monaco-editor .monaco-editor-background {
+            background-color: #1e1e1e !important;
+        }
+
+        /* Enhanced diff colors */
+        .monaco-diff-editor .diffViewport {
+            background-color: #1e1e1e;
+        }
+
+        .monaco-diff-editor .added {
+            background-color: rgba(78, 201, 176, 0.2) !important;
+        }
+
+        .monaco-diff-editor .removed {
+            background-color: rgba(244, 135, 113, 0.2) !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>
+            <span>🔍</span>
+            Syntax-Aware Diff Tool
+            <span id="appVersion" class="version-badge">v1.1.0</span>
+        </h1>
+        <div class="controls">
+            <select id="language" class="language-select">
+                <option value="javascript">JavaScript</option>
+                <option value="typescript">TypeScript</option>
+                <option value="java">Java</option>
+                <option value="python">Python</option>
+                <option value="markdown">Markdown</option>
+                <option value="json">JSON</option>
+                <option value="xml">XML</option>
+                <option value="css">CSS</option>
+                <option value="html">HTML</option>
+                <option value="yaml">YAML</option>
+                <option value="sql">SQL</option>
+                <option value="plaintext">Plain Text</option>
+            </select>
+            <button id="clearButton" class="button secondary">
+                <span>🗑️</span>
+                Clear All
+            </button>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="editor-section" id="editorSection">
+            <div class="editor-panel" id="leftPanel">
+                <div class="panel-header">
+                    <span class="panel-title">Original</span>
+                    <div class="panel-actions">
+                        <button class="small-button" onclick="loadFile('left')">📁 Load</button>
+                        <button class="small-button" onclick="clearEditor('left')">✕ Clear</button>
+                        <span class="line-count" id="leftLineCount">0 lines</span>
+                    </div>
+                </div>
+                <div class="editor-container">
+                    <div class="file-drop-zone" id="leftDropZone">
+                        <div class="drop-zone-text">📁 Drop file here or click to load</div>
+                        <div class="drop-zone-hint">Supports all major code formats</div>
+                    </div>
+                    <div class="editor-wrapper">
+                        <div id="leftEditor"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="editor-panel" id="rightPanel">
+                <div class="panel-header">
+                    <span class="panel-title">Modified</span>
+                    <div class="panel-actions">
+                        <button class="small-button" onclick="loadFile('right')">📁 Load</button>
+                        <button class="small-button" onclick="clearEditor('right')">✕ Clear</button>
+                        <span class="line-count" id="rightLineCount">0 lines</span>
+                    </div>
+                </div>
+                <div class="editor-container">
+                    <div class="file-drop-zone" id="rightDropZone">
+                        <div class="drop-zone-text">📁 Drop file here or click to load</div>
+                        <div class="drop-zone-hint">Changes will be highlighted automatically</div>
+                    </div>
+                    <div class="editor-wrapper">
+                        <div id="rightEditor"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="diff-section" id="diffSection">
+            <div class="diff-header">
+                <div class="diff-title">
+                    <span>📊</span>
+                    Diff View
+                </div>
+                <div class="diff-controls">
+                    <div class="view-toggle">
+                        <button id="inlineBtn" class="active" onclick="toggleDiffView('inline')">Inline</button>
+                        <button id="sideBySideBtn" onclick="toggleDiffView('sideBySide')">Side by Side</button>
+                    </div>
+                    <button id="expandButton" class="expand-button" onclick="toggleEditorPanels()"
+                        style="display: none;">
+                        📖 Expand Editors
+                    </button>
+                </div>
+            </div>
+            <div class="diff-container">
+                <div class="diff-empty" id="diffEmpty">
+                    <div class="diff-empty-icon">📝</div>
+                    <div>Add content to both editors to see differences</div>
+                </div>
+                <div id="diffEditor"></div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="stats">
+        <div class="stats-item">
+            <div class="diff-stat added" id="addedLines">
+                <span>+</span>
+                <span id="addedCount">0</span>
+                <span>added</span>
+            </div>
+            <div class="diff-stat removed" id="removedLines">
+                <span>-</span>
+                <span id="removedCount">0</span>
+                <span>removed</span>
+            </div>
+            <div class="diff-stat modified" id="modifiedLines">
+                <span>~</span>
+                <span id="modifiedCount">0</span>
+                <span>changed</span>
+            </div>
+        </div>
+        <div class="stats-item">
+            <span id="processingTime">Ready</span>
+        </div>
+    </div>
+
+    <div id="errorMessage" class="error-message"></div>
+    <div id="warningMessage" class="warning-message"></div>
+
+    <script>
+        // Global variables
+        let leftEditor, rightEditor, diffEditor;
+        let currentDiffView = 'inline';
+        let autoUpdateDiff = true;
+        let editorsCollapsed = false;
+        let forceInlineMode = false;
+        let updateController;
+
+        // Utility function to replace setTimeout with requestAnimationFrame using the provided timestamp
+        function scheduleTask(callback, delay = 0) {
+            if (delay === 0) {
+                return requestAnimationFrame(callback);
+            }
+            
+            let startTime = null;
+            function frame(timestamp) {
+                if (startTime === null) startTime = timestamp;
+                
+                if (timestamp - startTime >= delay) {
+                    callback(timestamp);
+                } else {
+                    requestAnimationFrame(frame);
+                }
+            }
+            return requestAnimationFrame(frame);
+        }
+
+        // Alternative for cases where we need to cancel the animation
+        function createCancellableTask(callback, delay = 0) {
+            let animationId = null;
+            let cancelled = false;
+            
+            if (delay === 0) {
+                animationId = requestAnimationFrame((timestamp) => {
+                    if (!cancelled) callback(timestamp);
+                });
+            } else {
+                let startTime = null;
+                function frame(timestamp) {
+                    if (cancelled) return;
+                    
+                    if (startTime === null) startTime = timestamp;
+                    
+                    if (timestamp - startTime >= delay) {
+                        callback(timestamp);
+                    } else {
+                        animationId = requestAnimationFrame(frame);
+                    }
+                }
+                animationId = requestAnimationFrame(frame);
+            }
+            
+            return {
+                cancel: () => {
+                    cancelled = true;
+                    if (animationId) cancelAnimationFrame(animationId);
+                }
+            };
+        }
+
+        // Initialize Monaco Editor
+        require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.0/min/vs' } });
+
+        require(['vs/editor/editor.main'], function () {
+            // Configure enhanced theme
+            monaco.editor.defineTheme('enhancedDark', {
+                base: 'vs-dark',
+                inherit: true,
+                rules: [
+                    { token: 'comment', foreground: '6A9955', fontStyle: 'italic' },
+                    { token: 'keyword', foreground: '569CD6', fontStyle: 'bold' },
+                    { token: 'string', foreground: 'CE9178' },
+                    { token: 'number', foreground: 'B5CEA8' },
+                    { token: 'type', foreground: '4EC9B0' },
+                    { token: 'function', foreground: 'DCDCAA' },
+                    { token: 'variable', foreground: '9CDCFE' },
+                    { token: 'constant', foreground: '4FC1FF' },
+                ],
+                colors: {
+                    'editor.background': '#1e1e1e',
+                    'editor.foreground': '#d4d4d4',
+                    'editor.lineHighlightBackground': '#2a2d2e',
+                    'editor.selectionBackground': '#264f78',
+                    'diffEditor.insertedTextBackground': '#4ec9b033',
+                    'diffEditor.removedTextBackground': '#f4877133',
+                    'diffEditor.insertedLineBackground': '#4ec9b015',
+                    'diffEditor.removedLineBackground': '#f4877115',
+                    'diffEditor.border': '#3e3e42',
+                    'diffEditor.diagonalFill': '#cccccc20',
+                }
+            });
+
+            const editorOptions = {
+                theme: 'enhancedDark',
+                minimap: { enabled: true, scale: 0.8 },
+                scrollBeyondLastLine: false,
+                fontSize: 14,
+                fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
+                lineHeight: 22,
+                renderWhitespace: 'selection',
+                renderControlCharacters: true,
+                automaticLayout: true,
+                wordWrap: 'on',
+                contextmenu: true,
+                selectOnLineNumbers: true,
+                folding: true,
+                showFoldingControls: 'always',
+                smoothScrolling: true,
+                cursorBlinking: 'smooth',
+                renderLineHighlight: 'gutter',
+                bracketPairColorization: { enabled: true },
+                guides: {
+                    bracketPairs: true,
+                    indentation: true
+                }
+            };
+
+            // Create editors
+            leftEditor = monaco.editor.create(document.getElementById('leftEditor'), {
+                ...editorOptions,
+                value: '',
+                language: 'javascript'
+            });
+
+            rightEditor = monaco.editor.create(document.getElementById('rightEditor'), {
+                ...editorOptions,
+                value: '',
+                language: 'javascript'
+            });
+
+            // Create diff editor
+            diffEditor = monaco.editor.createDiffEditor(document.getElementById('diffEditor'), {
+                theme: 'enhancedDark',
+                automaticLayout: true,
+                renderSideBySide: false,
+                ignoreTrimWhitespace: false,
+                renderIndicators: true,
+                enableSplitViewResizing: true,
+                readOnly: true,
+                scrollBeyondLastLine: false,
+                fontSize: 14,
+                fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
+                lineHeight: 22,
+                wordWrap: 'on',
+                renderOverviewRuler: true,
+                folding: false,
+                glyphMargin: false,
+                lineNumbers: 'on',
+                smoothScrolling: true,
+                useInlineViewWhenSpaceIsLimited: false
+            });
+
+            // Setup event listeners
+            setupEventListeners();
+            updateLineCounters();
+            updateDiffView();
+            checkViewportSize();
+
+            // Force layout after initialization
+            scheduleTask(() => {
+                leftEditor.layout();
+                rightEditor.layout();
+                diffEditor.layout();
+            }, 100);
+        });
+
+        function setupEventListeners() {
+            // Language selector
+            document.getElementById('language').addEventListener('change', function (e) {
+                const language = e.target.value;
+                monaco.editor.setModelLanguage(leftEditor.getModel(), language);
+                monaco.editor.setModelLanguage(rightEditor.getModel(), language);
+
+                const leftFormatted = formatContent(leftEditor.getValue(), language);
+                if (leftFormatted !== leftEditor.getValue()) leftEditor.setValue(leftFormatted);
+
+                const rightFormatted = formatContent(rightEditor.getValue(), language);
+                if (rightFormatted !== rightEditor.getValue()) rightEditor.setValue(rightFormatted);
+
+                updateLineCounters();
+                updateDiffView();
+            });
+
+            // Buttons
+            document.getElementById('clearButton').addEventListener('click', clearAllEditors);
+
+            // File drop zones
+            setupDropZone('leftDropZone', leftEditor);
+            setupDropZone('rightDropZone', rightEditor);
+
+            // Editor content change listeners with proper frame-rate independent debouncing
+            let debounceTask = null;
+            const debouncedUpdate = () => {
+                updateController?.abort();
+                updateController = new AbortController();
+
+                // Cancel previous debounce task
+                if (debounceTask) {
+                    debounceTask.cancel();
+                }
+
+                debounceTask = createCancellableTask((timestamp) => {
+                    if (!updateController.signal.aborted) {
+                        updateLineCounters();
+                        if (autoUpdateDiff) {
+                            updateDiffView();
+                        }
+                    }
+                }, 300);
+            };
+
+            leftEditor.onDidChangeModelContent(debouncedUpdate);
+            rightEditor.onDidChangeModelContent(debouncedUpdate);
+
+            // Pretty-print pasted content so a pasted minified blob doesn't
+            // land as one huge line, same as loading a file.
+            const reformatOnPaste = (editor) => {
+                const language = document.getElementById('language').value;
+                const formatted = formatContent(editor.getValue(), language);
+                if (formatted !== editor.getValue()) editor.setValue(formatted);
+            };
+            leftEditor.onDidPaste(() => reformatOnPaste(leftEditor));
+            rightEditor.onDidPaste(() => reformatOnPaste(rightEditor));
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function (e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    clearAllEditors();
+                }
+            });
+
+            // Resize listener
+            window.addEventListener('resize', handleResize);
+        }
+
+        function handleResize() {
+            scheduleTask((timestamp) => {
+                checkViewportSize();
+                if (leftEditor && rightEditor && diffEditor) {
+                    leftEditor.layout();
+                    rightEditor.layout();
+                    diffEditor.layout();
+                }
+            }, 100);
+        }
+
+        function checkViewportSize() {
+            const mainContainer = document.querySelector('.main-container');
+            const diffSection = document.getElementById('diffSection');
+            const screenWidth = window.innerWidth;
+
+            // Get actual diff section width
+            const diffSectionRect = diffSection.getBoundingClientRect();
+            const diffAvailableWidth = diffSectionRect.width;
+
+            // Auto-switch to inline mode if there's insufficient space for side-by-side
+            const needsInlineMode = screenWidth < 1200 || diffAvailableWidth < 900;
+
+            if (needsInlineMode) {
+                if (currentDiffView === 'sideBySide') {
+                    const shouldShowWarning = !forceInlineMode;
+                    forceInlineMode = true;
+                    toggleDiffView('inline');
+                    if (shouldShowWarning) {
+                        const reason = screenWidth < 1200 ? 'screen size' : 'insufficient space for diff view';
+                        showWarning(`Switched to inline view due to ${reason}`);
+                    }
+                }
+
+                // Apply responsive classes for small screens
+                if (screenWidth < 1200) {
+                    mainContainer.classList.add('auto-inline');
+                    document.getElementById('editorSection').classList.add('auto-inline');
+                    document.getElementById('diffSection').classList.add('auto-inline');
+                    document.getElementById('leftPanel').classList.add('auto-inline');
+                    document.getElementById('rightPanel').classList.add('auto-inline');
+                }
+            } else {
+                forceInlineMode = false;
+
+                // Remove responsive classes
+                mainContainer.classList.remove('auto-inline');
+                document.getElementById('editorSection').classList.remove('auto-inline');
+                document.getElementById('diffSection').classList.remove('auto-inline');
+                document.getElementById('leftPanel').classList.remove('auto-inline');
+                document.getElementById('rightPanel').classList.remove('auto-inline');
+            }
+        }
+
+        function toggleDiffView(viewType) {
+            forceInlineMode = false;
+            const previousView = currentDiffView;
+            currentDiffView = viewType;
+            const renderSideBySide = viewType === 'sideBySide';
+
+            // Update button states
+            document.getElementById('sideBySideBtn').classList.toggle('active', renderSideBySide);
+            document.getElementById('inlineBtn').classList.toggle('active', !renderSideBySide);
+
+            // Handle editor panel collapse/expand
+            if (viewType === 'sideBySide' && !editorsCollapsed) {
+                collapseEditorPanels();
+
+                // Check space after collapsing with proper async handling
+                scheduleTask((timestamp) => {
+                    const diffSection = document.getElementById('diffSection');
+                    const diffSectionRect = diffSection.getBoundingClientRect();
+                    const diffAvailableWidth = diffSectionRect.width;
+
+                    if (diffAvailableWidth < 900) {
+                        currentDiffView = 'inline';
+                        document.getElementById('sideBySideBtn').classList.remove('active');
+                        document.getElementById('inlineBtn').classList.add('active');
+                        diffEditor.updateOptions({ renderSideBySide: false });
+                        showWarning('Not enough space for side-by-side view');
+                    } else {
+                        diffEditor.updateOptions({ renderSideBySide: true });
+                    }
+
+                    // Layout after all changes are complete
+                    scheduleTask((timestamp) => {
+                        leftEditor.layout();
+                        rightEditor.layout();
+                        diffEditor.layout();
+                    }, 50);
+                }, 350);
+
+            } else if (viewType === 'inline' && editorsCollapsed) {
+                expandEditorPanels();
+            } else {
+                // Update diff editor for other cases
+                diffEditor.updateOptions({
+                    renderSideBySide: renderSideBySide
+                });
+
+                // Layout editors after view change
+                scheduleTask((timestamp) => {
+                    leftEditor.layout();
+                    rightEditor.layout();
+                    diffEditor.layout();
+                }, 100);
+            }
+        }
+
+        function collapseEditorPanels() {
+            const editorSection = document.getElementById('editorSection');
+            const diffSection = document.getElementById('diffSection');
+            const expandButton = document.getElementById('expandButton');
+
+            editorSection.classList.add('collapsed');
+            diffSection.classList.add('expanded');
+            expandButton.style.display = 'block';
+            editorsCollapsed = true;
+        }
+
+        function expandEditorPanels() {
+            const editorSection = document.getElementById('editorSection');
+            const diffSection = document.getElementById('diffSection');
+            const expandButton = document.getElementById('expandButton');
+
+            editorSection.classList.remove('collapsed');
+            diffSection.classList.remove('expanded');
+            expandButton.style.display = 'none';
+            editorsCollapsed = false;
+
+            // Layout editors after expanding
+            scheduleTask((timestamp) => {
+                leftEditor.layout();
+                rightEditor.layout();
+                diffEditor.layout();
+
+                // Check if we need to switch back to inline due to space constraints
+                checkViewportSize();
+            }, 350);
+        }
+
+        function toggleEditorPanels() {
+            if (editorsCollapsed) {
+                expandEditorPanels();
+            } else {
+                collapseEditorPanels();
+            }
+        }
+
+        function setupDropZone(dropZoneId, editor) {
+            const dropZone = document.getElementById(dropZoneId);
+            const editorContainer = dropZone.parentElement;
+
+            // Click to open file dialog
+            dropZone.addEventListener('click', () => {
+                const side = dropZoneId === 'leftDropZone' ? 'left' : 'right';
+                loadFile(side);
+            });
+
+            editorContainer.addEventListener('dragover', function (e) {
+                e.preventDefault();
+                dropZone.classList.add('show', 'dragover');
+            });
+
+            editorContainer.addEventListener('dragleave', function (e) {
+                e.preventDefault();
+                if (!editorContainer.contains(e.relatedTarget)) {
+                    dropZone.classList.remove('show', 'dragover');
+                }
+            });
+
+            editorContainer.addEventListener('drop', function (e) {
+                e.preventDefault();
+                dropZone.classList.remove('show', 'dragover');
+
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    loadFileContent(files[0], editor);
+                }
+            });
+        }
+
+        // Heuristic: content is "minified" if it's packed into a handful of
+        // very long lines rather than being already human-formatted.
+        function looksMinified(content) {
+            const lines = content.split(/\r\n|\r|\n/).filter(l => l.trim().length > 0);
+            if (lines.length === 0) return false;
+            if (lines.length > 5) return false;
+            const maxLen = Math.max(...lines.map(l => l.length));
+            return maxLen > 200;
+        }
+
+        // Best-effort, quote-aware pretty-printer for formats we don't have a
+        // real parser for. Breaks on structural characters (braces, brackets,
+        // commas, semicolons, adjacent XML/HTML tags) while never splitting
+        // inside string/attribute literals.
+        function genericPrettyPrint(content) {
+            const indentUnit = '  ';
+            let result = '';
+            let indent = 0;
+            let inString = null;
+
+            for (let i = 0; i < content.length; i++) {
+                const ch = content[i];
+                const prevChar = content[i - 1];
+
+                if (inString) {
+                    result += ch;
+                    if (ch === inString && prevChar !== '\\') inString = null;
+                    continue;
+                }
+
+                if (ch === '"' || ch === "'" || ch === '`') {
+                    inString = ch;
+                    result += ch;
+                } else if (ch === '{' || ch === '[') {
+                    indent++;
+                    result += ch + '\n' + indentUnit.repeat(indent);
+                } else if (ch === '}' || ch === ']') {
+                    indent = Math.max(0, indent - 1);
+                    result += '\n' + indentUnit.repeat(indent) + ch;
+                } else if (ch === ',' || ch === ';') {
+                    result += ch + '\n' + indentUnit.repeat(indent);
+                } else if (ch === '<' && prevChar === '>') {
+                    result += '\n' + indentUnit.repeat(indent) + ch;
+                } else if ((ch === '\n' || ch === '\r') || (ch === ' ' && /[\n\s]$/.test(result))) {
+                    continue; // drop original whitespace/newlines; we insert our own
+                } else {
+                    result += ch;
+                }
+            }
+
+            return result.split('\n')
+                .map(l => l.trimEnd())
+                .filter(l => l.length > 0)
+                .join('\n');
+        }
+
+        // Formats content appropriately for the given language. Uses a real
+        // JSON.parse/stringify round-trip for JSON, and falls back to the
+        // generic structural formatter for any other minified/unknown input
+        // so the diff never has to compare one giant line.
+        function formatContent(content, language) {
+            if (!content) return content;
+
+            if (language === 'json') {
+                try {
+                    return JSON.stringify(JSON.parse(content), null, 2);
+                } catch (e) {
+                    // Not valid JSON - fall through to the generic formatter.
+                }
+            }
+
+            if (looksMinified(content)) {
+                return genericPrettyPrint(content);
+            }
+
+            return content;
+        }
+
+        function loadFile(side) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.js,.jsx,.ts,.tsx,.java,.py,.md,.json,.xml,.css,.html,.txt,.yaml,.yml,.sql';
+            input.onchange = function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const editor = side === 'left' ? leftEditor : rightEditor;
+                    loadFileContent(file, editor);
+                }
+            };
+            input.click();
+        }
+
+        function loadFileContent(file, editor) {
+            if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                showError('File too large. Please select a file smaller than 10MB.');
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                try {
+                    const content = e.target.result;
+                    if (content === null || content === undefined) {
+                        throw new Error('File content is empty or unreadable');
+                    }
+
+                    // Auto-detect language using Map
+                    const extension = file.name.split('.').pop().toLowerCase();
+                    const languageMap = new Map([
+                        ['js', 'javascript'], ['jsx', 'javascript'], ['mjs', 'javascript'],
+                        ['ts', 'typescript'], ['tsx', 'typescript'],
+                        ['java', 'java'],
+                        ['py', 'python'], ['pyw', 'python'],
+                        ['md', 'markdown'], ['markdown', 'markdown'],
+                        ['json', 'json'],
+                        ['xml', 'xml'], ['xsl', 'xml'], ['xsd', 'xml'],
+                        ['css', 'css'], ['scss', 'css'], ['sass', 'css'], ['less', 'css'],
+                        ['html', 'html'], ['htm', 'html'],
+                        ['yaml', 'yaml'], ['yml', 'yaml'],
+                        ['sql', 'sql'],
+                        ['txt', 'plaintext']
+                    ]);
+
+                    const detectedLanguage = languageMap.get(extension) || 'plaintext';
+
+                    // Pretty-print minified content so the diff operates on
+                    // individual lines instead of one huge line.
+                    editor.setValue(formatContent(content, detectedLanguage));
+                    const languageSelect = document.getElementById('language');
+                    if (languageSelect.value !== detectedLanguage) {
+                        languageSelect.value = detectedLanguage;
+                        monaco.editor.setModelLanguage(leftEditor.getModel(), detectedLanguage);
+                        monaco.editor.setModelLanguage(rightEditor.getModel(), detectedLanguage);
+                    }
+
+                    updateLineCounters();
+                    updateDiffView();
+                } catch (error) {
+                    showError('Error processing file: ' + error.message);
+                }
+            };
+
+            reader.onerror = function () {
+                showError('Error reading file');
+            };
+
+            reader.readAsText(file);
+        }
+
+        function clearEditor(side) {
+            const editor = side === 'left' ? leftEditor : rightEditor;
+            editor.setValue('');
+        }
+
+        function clearAllEditors() {
+            leftEditor.setValue('');
+            rightEditor.setValue('');
+            resetStats();
+            updateDiffView();
+        }
+
+        function updateLineCounters() {
+            const leftLines = leftEditor.getValue().split('\n').length;
+            const rightLines = rightEditor.getValue().split('\n').length;
+
+            document.getElementById('leftLineCount').textContent = `${leftLines} lines`;
+            document.getElementById('rightLineCount').textContent = `${rightLines} lines`;
+        }
+
+        function updateDiffView() {
+            const startTime = performance.now();
+
+            try {
+                const leftContent = leftEditor.getValue();
+                const rightContent = rightEditor.getValue();
+                const diffEmpty = document.getElementById('diffEmpty');
+
+                if (!leftContent.trim() && !rightContent.trim()) {
+                    diffEmpty.style.display = 'flex';
+                    document.getElementById('diffEditor').style.display = 'none';
+                    resetStats();
+                    return;
+                }
+
+                diffEmpty.style.display = 'none';
+                document.getElementById('diffEditor').style.display = 'block';
+
+                // Get old models before creating new ones
+                const currentModel = diffEditor.getModel();
+
+                // Create new models for diff
+                const language = document.getElementById('language').value;
+                const originalModel = monaco.editor.createModel(leftContent, language);
+                const modifiedModel = monaco.editor.createModel(rightContent, language);
+
+                // Update diff editor with new models
+                diffEditor.setModel({
+                    original: originalModel,
+                    modified: modifiedModel
+                });
+
+                // Now dispose old models after setting new ones
+                currentModel?.original?.dispose();
+                currentModel?.modified?.dispose();
+
+                // Calculate and update statistics
+                calculateDiffStats(leftContent, rightContent);
+
+                const endTime = performance.now();
+                const processingTime = Math.round(endTime - startTime);
+                document.getElementById('processingTime').textContent = `Updated in ${processingTime}ms`;
+
+            } catch (error) {
+                console.error('Diff error:', error);
+                showError('Error updating diff view: ' + error.message);
+            }
+        }
+
+        function calculateDiffStats(leftContent, rightContent) {
+            try {
+                const leftLines = leftContent.split('\n');
+                const rightLines = rightContent.split('\n');
+
+                let addedCount = 0;
+                let removedCount = 0;
+                let modifiedCount = 0;
+
+                // Create a simple diff using longest common subsequence approach
+                const maxLines = Math.max(leftLines.length, rightLines.length);
+                const minLines = Math.min(leftLines.length, rightLines.length);
+
+                // Count modifications in common range
+                for (let i = 0; i < minLines; i++) {
+                    if (leftLines[i] !== rightLines[i]) {
+                        modifiedCount++;
+                    }
+                }
+
+                // Count additions and removals
+                if (rightLines.length > leftLines.length) {
+                    addedCount = rightLines.length - leftLines.length;
+                } else if (leftLines.length > rightLines.length) {
+                    removedCount = leftLines.length - rightLines.length;
+                }
+
+                // Update UI
+                document.getElementById('addedCount').textContent = addedCount;
+                document.getElementById('removedCount').textContent = removedCount;
+                document.getElementById('modifiedCount').textContent = modifiedCount;
+
+            } catch (error) {
+                console.error('Stats calculation error:', error);
+                resetStats();
+            }
+        }
+
+        function resetStats() {
+            document.getElementById('addedCount').textContent = '0';
+            document.getElementById('removedCount').textContent = '0';
+            document.getElementById('modifiedCount').textContent = '0';
+            document.getElementById('processingTime').textContent = 'Ready';
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+
+            scheduleTask((timestamp) => {
+                errorDiv.classList.remove('show');
+            }, 4000);
+        }
+
+        function showWarning(message) {
+            const warningDiv = document.getElementById('warningMessage');
+            warningDiv.textContent = message;
+            warningDiv.classList.add('show');
+
+            scheduleTask((timestamp) => {
+                warningDiv.classList.remove('show');
+            }, 3000);
+        }
+
+        // Cleanup on page unload to prevent memory leaks
+        window.addEventListener('beforeunload', () => {
+            leftEditor?.dispose();
+            rightEditor?.dispose();
+            diffEditor?.dispose();
+            updateController?.abort();
+        });
+
+        // Console shortcuts info
+        console.log('%c🔍 Enhanced Syntax-Aware Diff Tool', 'font-size: 16px; font-weight: bold; color: #007acc;');
+        console.log('Features:');
+        console.log('• Real-time syntax-aware diffing');
+        console.log('• Advanced Monaco Editor with latest features');
+        console.log('• Drag & drop file support');
+        console.log('• Multiple programming languages');
+        console.log('• Side-by-side and inline diff views');
+        console.log('• Smart responsive behavior');
+        console.log('• Collapsible editor panels');
+        console.log('• Keyboard shortcut: Ctrl/Cmd + K (Clear all)');
+        console.log('💡 Drag files directly into the editor panels!');
+    </script>
+</body>
+
+</html>

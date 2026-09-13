@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="Procedurally generated wall-paint patterns constrained to be paintable with masking tape — 3 colors max, straight lines only.">
+<meta name="author" content="Paulo Chang">
+<link rel="canonical" href="https://paulochang.com/paint/">
+<link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+<link rel="alternate" type="text/markdown" href="index.md">
+<title>Geometric Wall Designer — 3 colors, tape-friendly &mdash; Paulo Chang</title>
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Paulo Chang">
+<meta property="og:title" content="Geometric Wall Designer &mdash; Paulo Chang">
+<meta property="og:description" content="Procedurally generated wall-paint patterns constrained to be paintable with masking tape — 3 colors max, straight lines only.">
+<meta property="og:url" content="https://paulochang.com/paint/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://paulochang.com/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Paulo Chang — senior backend engineer and AI-driven development champion">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Geometric Wall Designer &mdash; Paulo Chang">
+<meta name="twitter:description" content="Procedurally generated wall-paint patterns constrained to be paintable with masking tape — 3 colors max, straight lines only.">
+<meta name="twitter:image" content="https://paulochang.com/img/og.png">
+<meta name="twitter:image:alt" content="Paulo Chang — senior backend engineer and AI-driven development champion">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "@id": "https://paulochang.com/paint/#app",
+  "name": "Geometric Wall Designer",
+  "url": "https://paulochang.com/paint/",
+  "applicationCategory": "DesignApplication",
+  "operatingSystem": "Any (web browser)",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "dateModified": "2026-09-13",
+  "description": "Procedurally generates wall-paint patterns constrained to be paintable with masking tape: straight lines only, a maximum of 3 colors, with grid-size and complexity controls and PNG export.",
+  "author": { "@id": "https://paulochang.com/#paulo-chang" },
+  "isPartOf": { "@type": "WebSite", "url": "https://paulochang.com/", "name": "Paulo Chang" }
+}
+</script>
+<style>
+  body { font-family: system-ui, sans-serif; background:#f6f6f6; padding:20px; }
+  h1 { margin:0; font-size:18px; }
+  #controls { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin:14px 0; }
+  label { font-size:13px; display:flex; gap:6px; align-items:center; }
+  canvas { border:1px solid #bbb; background:white; max-width:100%; height:auto; display:block; margin-top:12px; }
+  button { padding:8px 12px; border-radius:6px; border:1px solid #bbb; background:white; cursor:pointer; }
+  .small { font-size:13px; color:#666; }
+</style>
+</head>
+<body>
+
+<h1>Geometric Wall Designer (masking-tape friendly)</h1>
+<div class="small">3 colors max — straight lines only. Larger grid = easier painting.</div>
+
+<div id="controls">
+  <label>Color 1 <input id="c1" type="color" value="#d4a6b3"></label>
+  <label>Color 2 <input id="c2" type="color" value="#cfcfd1"></label>
+  <label>Color 3 <input id="c3" type="color" value="#4a4a4a"></label>
+
+  <label>Grid Size <input id="gridSize" type="range" min="40" max="180" value="100"></label>
+  <label>Complexity <input id="complexity" type="range" min="1" max="5" value="3"></label>
+  <label><input type="checkbox" id="snapBlocks"> Snap to Larger Blocks</label>
+
+  <button id="gen">Generate Pattern</button>
+  <button id="export">Export PNG</button>
+  <button id="clear">Clear Tape Guides</button>
+</div>
+
+<canvas id="canvas" width="1200" height="700"></canvas>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const c1 = document.getElementById('c1');
+const c2 = document.getElementById('c2');
+const c3 = document.getElementById('c3');
+const gridSizeEl = document.getElementById('gridSize');
+const complexityEl = document.getElementById('complexity');
+const snapBlocksEl = document.getElementById('snapBlocks');
+const genBtn = document.getElementById('gen');
+const exportBtn = document.getElementById('export');
+const clearBtn = document.getElementById('clear');
+
+let lastPatternImage = null; // to preserve art
+
+function rnd(n) { return Math.floor(Math.random()*n); }
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+function drawPoly(points, fillColor, stroke=true) {
+  ctx.beginPath();
+  ctx.moveTo(points[0][0], points[0][1]);
+  for (let i=1;i<points.length;i++) ctx.lineTo(points[i][0], points[i][1]);
+  ctx.closePath();
+  ctx.fillStyle = fillColor;
+  ctx.fill();
+  if (stroke) {
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#222';
+    ctx.stroke();
+  }
+}
+
+function generate() {
+  const colors = [c1.value, c2.value, c3.value].filter(Boolean);
+  const gridSize = parseInt(gridSizeEl.value, 10);
+  const complexity = parseInt(complexityEl.value, 10);
+  const snapBlocks = snapBlocksEl.checked;
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  const cols = Math.ceil(canvas.width / gridSize);
+  const rows = Math.ceil(canvas.height / gridSize);
+  const occupied = Array.from({length:rows}, ()=>Array(cols).fill(false));
+
+  for (let r=0;r<rows;r++){
+    for (let c=0;c<cols;c++){
+      if (occupied[r][c]) continue;
+
+      let blockW = 1;
+      let blockH = 1;
+
+      if (snapBlocks) {
+        blockW = rnd(2)+1; // width 1–2 cells
+        blockH = rnd(2)+1; // height 1–2 cells
+      }
+
+      if (r+blockH > rows) blockH = 1;
+      if (c+blockW > cols) blockW = 1;
+
+      const x = c*gridSize;
+      const y = r*gridSize;
+      const w = blockW*gridSize;
+      const h = blockH*gridSize;
+
+      const shapeTypes = ['square','diagTLBR','diagTRBL','halfV','halfH'];
+      const shape = pick(shapeTypes.slice(0, Math.min(shapeTypes.length, complexity+1)));
+
+      const colorA = pick(colors);
+      const colorB = pick(colors);
+
+      if (shape === 'square') {
+        drawPoly([[x,y],[x+w,y],[x+w,y+h],[x,y+h]], colorA);
+      }
+      else if (shape === 'diagTLBR') {
+        drawPoly([[x,y],[x+w,y],[x,y+h]], colorA);
+        drawPoly([[x+w,y],[x+w,y+h],[x,y+h]], colorB);
+      }
+      else if (shape === 'diagTRBL') {
+        drawPoly([[x,y],[x+w,y],[x+w,y+h]], colorA);
+        drawPoly([[x,y],[x+w,y+h],[x,y+h]], colorB);
+      }
+      else if (shape === 'halfV') {
+        drawPoly([[x,y],[x+w/2,y],[x+w/2,y+h],[x,y+h]], colorA);
+        drawPoly([[x+w/2,y],[x+w,y],[x+w,y+h],[x+w/2,y+h]], colorB);
+      }
+      else if (shape === 'halfH') {
+        drawPoly([[x,y],[x+w,y],[x+w,y+h/2],[x,y+h/2]], colorA);
+        drawPoly([[x,y+h/2],[x+w,y+h/2],[x+w,y+h],[x,y+h]], colorB);
+      }
+
+      for (let rr=r; rr<r+blockH; rr++){
+        for (let cc=c; cc<c+blockW; cc++){
+          occupied[rr][cc] = true;
+        }
+      }
+    }
+  }
+
+  drawGridGuides(gridSize);
+  // Save pattern image for restoration later
+  lastPatternImage = ctx.getImageData(0,0,canvas.width,canvas.height);
+}
+
+function drawGridGuides(gridSize) {
+  ctx.save();
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4,4]);
+  ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+  for (let x=0;x<=canvas.width;x+=gridSize) {
+    ctx.beginPath(); ctx.moveTo(x+0.5,0); ctx.lineTo(x+0.5,canvas.height); ctx.stroke();
+  }
+  for (let y=0;y<=canvas.height;y+=gridSize) {
+    ctx.beginPath(); ctx.moveTo(0,y+0.5); ctx.lineTo(canvas.width,y+0.5); ctx.stroke();
+  }
+  ctx.restore();
+}
+
+genBtn.addEventListener('click', generate);
+
+exportBtn.addEventListener('click', () => {
+  const url = canvas.toDataURL('image/png');
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'wall-design.png';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+});
+
+clearBtn.addEventListener('click', () => {
+  if (!lastPatternImage) return;
+  ctx.putImageData(lastPatternImage, 0, 0);
+  // Remove guides by painting white lines over them
+  ctx.save();
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.fillStyle = 'rgba(255,255,255,0.15)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.restore();
+});
+
+generate();
+</script>
+
+</body>
+</html>
