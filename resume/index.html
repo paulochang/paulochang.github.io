@@ -27,7 +27,251 @@
 
   <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
   <link rel="alternate" type="text/markdown" href="index.md">
-  <link rel="stylesheet" href="../css/site.css">
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --ink: #111111;
+      --ink-soft: #6e6e6e;
+      --serif: Didot, "Big Caslon", "Iowan Old Style", Georgia, "Times New Roman", serif;
+      --serif-text: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, "Times New Roman", serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--serif-text);
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    #skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+    }
+
+    nav[aria-label="Primary"] {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5em 1.5em;
+      background: var(--bg);
+      border-bottom: 1px solid #e3e3de;
+      padding: 1em 6vw;
+    }
+
+    nav[aria-label="Primary"] a {
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    nav[aria-label="Primary"] ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5em 1.25em;
+    }
+
+    header {
+      position: relative;
+      width: 100%;
+      max-width: clamp(46rem, 18rem + 35vw, 68rem);
+      flex: 1;
+      min-height: 0;
+      margin: 0 auto;
+      padding: 6vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+    }
+
+    header.page-header {
+      flex: none;
+      min-height: auto;
+      padding: 4rem 6vw 2rem;
+    }
+
+    header.page-header h1 {
+      font-size: clamp(2.2rem, 7vw, 3.2rem);
+    }
+
+    header.page-header #lede {
+      margin-top: 1em;
+    }
+
+    header h1 {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(3rem, 11vw, 6rem);
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+
+    main {
+      max-width: clamp(48rem, 20rem + 35vw, 70rem);
+      margin: 0 auto;
+      padding: 0 6vw 14vh;
+    }
+
+    section + section {
+      margin-top: 10rem;
+    }
+
+    h2 {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(1.6rem, 4vw, 2.1rem);
+      text-align: center;
+      margin-bottom: 2.5rem;
+      scroll-margin-top: 6rem;
+    }
+
+    h3 {
+      font-family: var(--serif-text);
+      font-weight: 700;
+      font-style: italic;
+      font-size: 1.3rem;
+      margin: 2.5rem 0 0.75rem;
+    }
+
+    h3:first-of-type,
+    article > h3 {
+      margin-top: 0;
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    article {
+      margin-top: 3.5rem;
+    }
+
+    article:first-of-type {
+      margin-top: 0;
+    }
+
+    article h3 {
+      font-style: normal;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.35rem;
+    }
+
+    article p {
+      color: var(--ink-soft);
+      margin-bottom: 1rem;
+    }
+
+    article small {
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.75rem;
+    }
+
+    article ul {
+      list-style: none;
+      margin-bottom: 0;
+    }
+
+    article li {
+      position: relative;
+      font-size: 1.1rem;
+      padding-left: 1.1em;
+      margin-bottom: 0.6em;
+    }
+
+    article li:last-child {
+      margin-bottom: 0;
+    }
+
+    section > ul {
+      list-style: none;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    section > ul:last-child {
+      margin-bottom: 0;
+    }
+
+    section > ul > li {
+      font-family: var(--serif-text);
+      font-size: 1.2rem;
+      line-height: 2;
+    }
+
+    section > h3 {
+      text-align: center;
+    }
+
+    .print-button {
+      display: inline-block;
+      margin-top: 2rem;
+      font-family: var(--serif-text);
+      font-size: 0.9rem;
+      background: none;
+      border: 1px solid var(--ink-soft);
+      color: var(--ink);
+      padding: 0.6em 1.4em;
+      cursor: pointer;
+    }
+
+    footer {
+      max-width: clamp(48rem, 20rem + 35vw, 70rem);
+      margin: 0 auto;
+      padding: 10vh 6vw 12vh;
+      text-align: center;
+    }
+
+    footer p:first-child {
+      font-family: var(--serif-text);
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    footer p + p {
+      font-size: 0.9rem;
+    }
+  </style>
+  <link rel="preload" href="../css/site.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="../css/site.css"></noscript>
 
   <script type="application/ld+json">
   {
