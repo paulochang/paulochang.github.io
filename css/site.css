@@ -179,7 +179,7 @@ header #role {
   margin-top: 1.25em;
 }
 
-header #lede {
+.home-hero #lede {
   font-size: 1.15rem;
   color: var(--ink-soft);
   max-width: 38em;
@@ -202,7 +202,7 @@ main.home-hero {
   flex-direction: column;
 }
 
-main {
+main:not(.home-hero) {
   max-width: clamp(48rem, 20rem + 35vw, 70rem);
   margin: 0 auto;
   padding: 0 6vw 14vh;
@@ -393,7 +393,7 @@ footer p + p {
     margin: 0.5em 0 0;
   }
 
-  main {
+  main:not(.home-hero) {
     max-width: 100%;
     padding: 0;
   }
