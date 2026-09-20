@@ -1,38 +1,60 @@
-# Dev Landing Page
+# paulochang.com
 
-Minimal landing page for developers.
+Personal site of Paulo Chang, plus a handful of self-contained browser tools.
 
-Developers don't talk much. Their code does all the talking. So here's a minimal landing page for developers.
+Live at **https://paulochang.com/**.
 
-## Why? [![start with why](https://img.shields.io/badge/start%20with-why%3F-brightgreen.svg?style=flat)](http://www.ted.com/talks/simon_sinek_how_great_leaders_inspire_action)
+## Layout
 
-I wanted a dev landing page to showcase everything I do online and I wanted it to be minimal and right to the point rather beautiful and hefty. And I think most of the devs out there would want the same.
+The site is plain static files. A page's path in this repo is its path on the
+site, so `diff/index.html` is served at `https://paulochang.com/diff/`.
 
-So I sat down one night and created this **Dev Landing Page**. Feel free to fork, clone, play around and make this your own.
+```
+index.html        Home
+about/            Background and current focus
+projects/         Index of the tools below
+resume/           Roles, skills, certifications, languages
+berlin-cleaning/  BSR street-cleaning map of Berlin
+quotes/           A Moment of Light
+diff/             Syntax-aware diff tool
+json/             JSON query tool (JSONata)
+paint/            Geometric wall designer
+study-guide/      CCAR-F study guide
+css/site.css      Shared stylesheet
+img/              Favicon, social card, icons
+```
 
-## Themes
+Project pages:
 
-Dev Landing Page comes in 9 **material themes**.
+- **BSR Straßenreinigung Berlin** (`berlin-cleaning/`): MapLibre GL map of Berlin's
+  official street-cleaning classes, bilingual German/English, with address search
+  and per-class filtering.
+- **A Moment of Light** (`quotes/`): minimal reader that surfaces one short poem at
+  a time from a curated client-side collection.
+- **Syntax-Aware Diff Tool** (`diff/`): Monaco diff editor with side-by-side and
+  inline views, drag-and-drop input, and live change metrics.
+- **JSON Query Tool** (`json/`): three-panel workbench with input, structure
+  explorer, and a JSONata query box with autocomplete and live results.
+- **Geometric Wall Designer** (`paint/`): generates wall-paint patterns that can be
+  painted with masking tape, so straight lines only and at most three colors.
+- **CCAR-F Study Guide** (`study-guide/`): offline study guide for the Claude
+  Certified Architect (Foundations) exam, in one zero-dependency HTML file.
 
-![9 Material Themes](https://image.ibb.co/jJVKCn/dev_landing_page_themes.jpg)
+## Conventions
 
-If none of these themes fit within your taste, it's quite easy to customize and create your own too. 
-
-## GitHub Pages
-
-GitHub makes it easy to create personal websites. Follow this link - [GitHub Pages](https://pages.github.com/) to know how or follow the steps below.
-
-If you already have a GitHub profile (obviously)
-
-* Create a new repo with the name `{username}.github.io`
-* Clone/Fork this repo and copy the files to your newly created repo
-* Customize your name, links and everything else for your landing page
-* `git push`
-
-Voila! Your site should be live at `https://{username}.github.io`
-
-Here's mine, but I revamped my **Dev Landing Page** with React and some magic - [Dinesh Pandiyan](https://flexdinesh.github.io)
+- **Markdown alternates.** Every page ships an `index.md` next to its `index.html`
+  carrying the same text without the layout markup, declared in the HTML with
+  `<link rel="alternate" type="text/markdown">`. Agents and AI crawlers are
+  pointed at these.
+- **Absolute URLs.** Canonical tags, `og:url`, JSON-LD, `sitemap.xml`,
+  `robots.txt` and `llms.txt` all use `https://paulochang.com/`.
+- **Hand-maintained indexes.** `llms.txt`, `sitemap.xml` and `robots.txt` are
+  written by hand. Adding or removing a page means updating all three.
+- **CSS.** The four core pages (Home, About, Projects, Resume) inline their
+  critical CSS in a `<style>` block and load `css/site.css` for the rest. The
+  inlining exists to avoid layout shift, so keep it. The project pages are
+  self-contained and do not use `css/site.css`.
 
 ## License
 
-MIT © Dinesh Pandiyan
+MIT, Copyright (c) 2022-2026 Paulo Chang. See [LICENSE](LICENSE).
