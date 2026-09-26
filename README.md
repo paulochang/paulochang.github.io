@@ -19,6 +19,7 @@ quotes/           A Moment of Light
 diff/             Syntax-aware diff tool
 json/             JSON query tool (JSONata)
 paint/            Geometric wall designer
+traffic/          Sliding-block traffic puzzle game
 study-guide/      CCAR-F study guide
 css/site.css      Shared stylesheet
 img/              Favicon, social card, icons
@@ -37,6 +38,9 @@ Project pages:
   explorer, and a JSONata query box with autocomplete and live results.
 - **Geometric Wall Designer** (`paint/`): generates wall-paint patterns that can be
   painted with masking tape, so straight lines only and at most three colors.
+- **Traffic** (`traffic/`): the 40 classic Rush Hour-style sliding-block puzzles —
+  slide vehicles to free the red car, with a move counter, timer, and offline
+  installable play as a PWA.
 - **CCAR-F Study Guide** (`study-guide/`): offline study guide for the Claude
   Certified Architect (Foundations) exam, in one zero-dependency HTML file.
 

@@ -22,6 +22,10 @@ A three-panel workbench for exploring JSON: paste input, browse the structure in
 
 Procedurally generates wall-paint patterns constrained to be paintable with masking tape — straight lines only, a maximum of three colors, with PNG export.
 
+## [Traffic](https://paulochang.com/traffic/)
+
+The 40 classic Rush Hour-style sliding-block traffic puzzles — slide vehicles out of the way to free the red car, with a move counter, timer, and offline installable play.
+
 ## [CCAR-F Study Guide](https://paulochang.com/study-guide/)
 
 A 25-document markdown corpus compiled into a single offline-readable HTML file with collapsible navigation and light/dark theming — zero runtime dependencies.

@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  VEHICLE SPRITE SHEET
+  ====================
+  Uniform grid: 4 columns x 4 rows, every cell is 530 x 220 px, no gaps, no margin.
+  Canvas: 2120 x 880. Background is transparent.
+  Cell (col, row) spans x = col*530 .. col*530+530, y = row*220 .. row*220+220.
+  Every vehicle is horizontal (front facing right) and centred in its cell,
+  so a sprite's centre is at (col*530 + 265, row*220 + 110).
+
+  Row 0: X  A  B  C      (cars, 2 units, body 300x144, wheels protrude to 164 tall, mirrors to 168)
+  Row 1: D  E  F  G
+  Row 2: H  I  J  K
+  Row 3: O  P  Q  R      (trucks, 3 units, body 490x160, wheels protrude to 180 tall)
+
+  Each vehicle is a <g> with a stable id (car-x, car-a ... truck-r) and data-* attributes.
+  Turn on the "guides" layer (display="inline") to see cell boundaries.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="2120" height="880" viewBox="0 0 2120 880">
+  <title>Vehicle sprite sheet – 12 cars and 4 trucks</title>
+
+  <defs>
+    <!-- ===== CAR PARTS (local: length 300 on x, width 144 on y, front = +x) ===== -->
+    <g id="c-wheels">
+      <ellipse cx="-95" cy="-70" rx="24" ry="12"/>
+      <ellipse cx="95"  cy="-70" rx="24" ry="12"/>
+      <ellipse cx="-95" cy="70"  rx="24" ry="12"/>
+      <ellipse cx="95"  cy="70"  rx="24" ry="12"/>
+    </g>
+    <rect id="c-body" x="-150" y="-72" width="300" height="144" rx="16"/>
+    <rect id="c-rim"  x="-142" y="-64" width="284" height="128" rx="12"/>
+    <g id="c-panel">
+      <rect x="62" y="-58" width="76" height="116" rx="10"/>
+      <rect x="-138" y="-58" width="50" height="116" rx="10"/>
+      <rect x="-62" y="-66" width="90" height="14"/>
+      <rect x="-62" y="52"  width="90" height="14"/>
+    </g>
+    <g id="c-glass">
+      <path d="M28 -48 L62 -58 L62 58 L28 48 Z"/>
+      <path d="M-62 -50 L-88 -40 L-88 40 L-62 50 Z"/>
+      <circle cx="136" cy="-48" r="7"/>
+      <circle cx="136" cy="48"  r="7"/>
+    </g>
+    <g id="c-dark">
+      <rect x="116" y="-24" width="18" height="3"/>
+      <rect x="116" y="-14" width="18" height="3"/>
+      <rect x="116" y="-4"  width="18" height="3"/>
+      <rect x="116" y="6"   width="18" height="3"/>
+      <rect x="116" y="16"  width="18" height="3"/>
+      <path d="M18 -72 L32 -72 L26 -84 Z"/>
+      <path d="M18 72 L32 72 L26 84 Z"/>
+      <path d="M90 -28 L102 -21 L90 -14 Z"/>
+      <path d="M-102 20 L-114 27 L-102 34 Z"/>
+      <circle cx="-138" cy="-48" r="5"/>
+      <circle cx="-138" cy="48"  r="5"/>
+    </g>
+
+    <!-- ===== TRUCK PARTS (local: length 490 on x, width 160 on y, front = +x) ===== -->
+    <g id="t-wheels">
+      <ellipse cx="-178" cy="-78" rx="26" ry="12"/>
+      <ellipse cx="-108" cy="-78" rx="26" ry="12"/>
+      <ellipse cx="180"  cy="-78" rx="26" ry="12"/>
+      <ellipse cx="-178" cy="78"  rx="26" ry="12"/>
+      <ellipse cx="-108" cy="78"  rx="26" ry="12"/>
+      <ellipse cx="180"  cy="78"  rx="26" ry="12"/>
+    </g>
+    <rect id="t-body" x="-245" y="-80" width="490" height="160" rx="14"/>
+    <rect id="t-rim"  x="-237" y="-72" width="474" height="144" rx="10"/>
+    <rect id="t-cab"  x="158" y="-66" width="80" height="132" rx="8"/>
+    <rect id="t-cargo" x="-232" y="-64" width="356" height="128" rx="6"/>
+    <g id="t-glass">
+      <path d="M126 -60 L158 -68 L158 68 L126 60 Z"/>
+      <circle cx="236" cy="-52" r="8"/>
+      <circle cx="236" cy="52"  r="8"/>
+    </g>
+    <g id="t-dark">
+      <rect x="214" y="-26" width="18" height="3"/>
+      <rect x="214" y="-16" width="18" height="3"/>
+      <rect x="214" y="-6"  width="18" height="3"/>
+      <rect x="214" y="4"   width="18" height="3"/>
+      <rect x="214" y="14"  width="18" height="3"/>
+      <rect x="214" y="24"  width="18" height="3"/>
+    </g>
+    <g id="t-lights3">
+      <rect x="180" y="-40" width="26" height="18" rx="4"/>
+      <rect x="180" y="-9"  width="26" height="18" rx="4"/>
+      <rect x="180" y="22"  width="26" height="18" rx="4"/>
+    </g>
+  </defs>
+
+  <!-- Optional cell guides (hidden). Set display="inline" to show. -->
+  <g id="guides" display="none" fill="none" stroke="#FF00FF" stroke-width="1">
+    <rect x="0"    y="0"   width="530" height="220"/><rect x="530"  y="0"   width="530" height="220"/><rect x="1060" y="0"   width="530" height="220"/><rect x="1590" y="0"   width="530" height="220"/>
+    <rect x="0"    y="220" width="530" height="220"/><rect x="530"  y="220" width="530" height="220"/><rect x="1060" y="220" width="530" height="220"/><rect x="1590" y="220" width="530" height="220"/>
+    <rect x="0"    y="440" width="530" height="220"/><rect x="530"  y="440" width="530" height="220"/><rect x="1060" y="440" width="530" height="220"/><rect x="1590" y="440" width="530" height="220"/>
+    <rect x="0"    y="660" width="530" height="220"/><rect x="530"  y="660" width="530" height="220"/><rect x="1060" y="660" width="530" height="220"/><rect x="1590" y="660" width="530" height="220"/>
+  </g>
+
+  <!-- ================= ROW 0 : X A B C ================= -->
+  <g id="car-x" data-name="X" data-color="red" data-length="2" data-cell="0,0" transform="translate(265 110)">
+    <use xlink:href="#c-wheels" fill="#262626"/>
+    <use xlink:href="#c-body"  fill="#E14B42" stroke="#9E2A22" stroke-width="4"/>
+    <use xlink:href="#c-rim"   fill="none" stroke="#F4A79E" stroke-width="3"/>
+    <use xlink:href="#c-panel" fill="#F08A80"/>
+    <use xlink:href="#c-glass" fill="#FBD5CF"/>
+    <use xlink:href="#c-dark"  fill="#9E2A22"/>
+  </g>
+  <g id="car-a" data-name="A" data-color="blue" data-length="2" data-cell="1,0" transform="translate(795 110)">
+    <use xlink:href="#c-wheels" fill="#262626"/>
+    <use xlink:href="#c-body"  fill="#2C6CB4" stroke="#173F78" stroke-width="4"/>
+    <use xlink:href="#c-rim"   fill="none" stroke="#8DB6E2" stroke-width="3"/>
+    <use xlink:href="#c-panel" fill="#6E9FD6"/>
+    <use xlink:href="#c-glass" fill="#D6E6F7"/>
+    <use xlink:href="#c-dark"  fill="#173F78"/>
+  </g>
+  <g id="car-b" data-name="B" data-color="purple" data-length="2" data-cell="2,0" transform="translate(1325 110)">
+    <use xlink:href="#c-wheels" fill="#262626"/>
+    <use xlink:href="#c-body"  fill="#8F5CB5" stroke="#5A3080" stroke-width="4"/>
+    <use xlink:href="#c-rim"   fill="none" stroke="#C9AEDE" stroke-width="3"/>
+    <use xlink:href="#c-panel" fill="#B995D2"/>
+    <use xlink:href="#c-glass" fill="#EADFF3"/>
+    <use xlink:href="#c-dark"  fill="#5A3080"/>
+  </g>
+  <g id="car-c" data-name="C" data-color="light-blue" data-length="2" data-cell="3,0" transform="translate(1855 110)">
+    <use xlink:href="#c-wheels" fill="#262626"/>
+    <use xlink:href="#c-body"  fill="#3BA9DC" stroke="#1D6E9A" stroke-width="4"/>
+    <use xlink:href="#c-rim"   fill="none" stroke="#A6DBF1" stroke-width="3"/>
+    <use xlink:href="#c-panel" fill="#82CBEA"/>
+    <use xlink:href="#c-glass" fill="#DDF2FB"/>
+    <use xlink:href="#c-dark"  fill="#1D6E9A"/>
+  </g>
+
+  <!-- ================= ROW 1 : D E F G ================= -->
+  <g id="car-d" data-name="D" data-color="pink" data-length="2" data-cell="0,1" transform="translate(265 330)">
+    <use xlink:href="#c-wheels" fill="#262626"/>
+    <use xlink:href="#c-body"  fill="#E38F97" stroke="#A9535E" stroke-width="4"/>
+    <use xlink:href="#c-rim"   fill="none" stroke="#F6CDD0" stroke-width="3"/>
+    <use xlink:href="#c-panel" fill="#F1BCC0"/>
+    <use xlink:href="#c-glass" fill="#FBE6E7"/>
+    <use xlink:href="#c-dark"  fill="#A9535E"/>
+  </g>
+  <g id="car-e" data-name="E" data-color="dark-purple" data-length="2" data-cell="1,1" transform="translate(795 330)">
+    <use xlink:href="#c-wheels" fill="#262626"/>
+    <use xlink:href="#c-body"  fill="#7A2C90" stroke="#481456" stroke-width="4"/>
+    <use xlink:href="#c-rim"   fill="none" stroke="#B98BC9" stroke-width="3"/>
+    <use xlink:href="#c-panel" fill="#A76BBB"/>
+    <use xlink:href="#c-glass" fill="#E4CFEB"/>
+    <use xlink:href="#c-dark"  fill="#481456"/>
+  </g>
+  <g id="car-f" data-name="F" data-color="teal" data-length="2" data-cell="2,1" transform="translate(1325 330)">
+    <use xlink:href="#c-wheels" fill="#262626"/>
+    <use xlink:href="#c-body"  fill="#1E8B80" stroke="#0D544C" stroke-width="4"/>
+    <use xlink:href="#c-rim"   fill="none" stroke="#7FC7BE" stroke-width="3"/>
+    <use xlink:href="#c-panel" fill="#62B7AD"/>
+    <use xlink:href="#c-glass" fill="#CFEBE6"/>
+    <use xlink:href="#c-dark"  fill="#0D544C"/>
+  </g>
+  <g id="car-g" data-name="G" data-color="gray" data-length="2" data-cell="3,1" transform="translate(1855 330)">
+    <use xlink:href="#c-wheels" fill="#262626"/>
+    <use xlink:href="#c-body"  fill="#7D787A" stroke="#3D393B" stroke-width="4"/>
+    <use xlink:href="#c-rim"   fill="none" stroke="#C4C0C1" stroke-width="3"/>
+    <use xlink:href="#c-panel" fill="#B0ABAD"/>
+    <use xlink:href="#c-glass" fill="#E4E1E2"/>
+    <use xlink:href="#c-dark"  fill="#3D393B"/>
+  </g>
+
+  <!-- ================= ROW 2 : H I J K ================= -->
+  <g id="car-h" data-name="H" data-color="yellow" data-length="2" data-cell="0,2" transform="translate(265 550)">
+    <use xlink:href="#c-wheels" fill="#262626"/>
+    <use xlink:href="#c-body"  fill="#E4C876" stroke="#9C7F2B" stroke-width="4"/>
+    <use xlink:href="#c-rim"   fill="none" stroke="#F6E9BD" stroke-width="3"/>
+    <use xlink:href="#c-panel" fill="#F0DFA8"/>
+    <use xlink:href="#c-glass" fill="#FAF2D8"/>
+    <use xlink:href="#c-dark"  fill="#9C7F2B"/>
+  </g>
+  <g id="car-i" data-name="I" data-color="white" data-length="2" data-cell="1,2" transform="translate(795 550)">
+    <use xlink:href="#c-wheels" fill="#262626"/>
+    <use xlink:href="#c-body"  fill="#E9E7E7" stroke="#8F8B8D" stroke-width="4"/>
+    <use xlink:href="#c-rim"   fill="none" stroke="#FFFFFF" stroke-width="3"/>
+    <use xlink:href="#c-panel" fill="#F7F6F6"/>
+    <use xlink:href="#c-glass" fill="#FFFFFF"/>
+    <use xlink:href="#c-dark"  fill="#8F8B8D"/>
+  </g>
+  <g id="car-j" data-name="J" data-color="magenta" data-length="2" data-cell="2,2" transform="translate(1325 550)">
+    <use xlink:href="#c-wheels" fill="#262626"/>
+    <use xlink:href="#c-body"  fill="#C3227C" stroke="#7E1250" stroke-width="4"/>
+    <use xlink:href="#c-rim"   fill="none" stroke="#E896C2" stroke-width="3"/>
+    <use xlink:href="#c-panel" fill="#DE79B0"/>
+    <use xlink:href="#c-glass" fill="#F5D6E7"/>
+    <use xlink:href="#c-dark"  fill="#7E1250"/>
+  </g>
+  <g id="car-k" data-name="K" data-color="green" data-length="2" data-cell="3,2" transform="translate(1855 550)">
+    <use xlink:href="#c-wheels" fill="#262626"/>
+    <use xlink:href="#c-body"  fill="#435E2F" stroke="#22361A" stroke-width="4"/>
+    <use xlink:href="#c-rim"   fill="none" stroke="#9BB486" stroke-width="3"/>
+    <use xlink:href="#c-panel" fill="#7F9A67"/>
+    <use xlink:href="#c-glass" fill="#D3DEC6"/>
+    <use xlink:href="#c-dark"  fill="#22361A"/>
+  </g>
+
+  <!-- ================= ROW 3 : O P Q R (trucks) ================= -->
+  <g id="truck-o" data-name="O" data-color="black" data-length="3" data-cell="0,3" transform="translate(265 770)">
+    <use xlink:href="#t-wheels" fill="#3A3A3A" stroke="#7A7A7A" stroke-width="2"/>
+    <use xlink:href="#t-body"  fill="#1C1C1C" stroke="#050505" stroke-width="4"/>
+    <use xlink:href="#t-rim"   fill="none" stroke="#9A9A9A" stroke-width="3"/>
+    <use xlink:href="#t-cargo" fill="#262626" stroke="#8A8A8A" stroke-width="2"/>
+    <use xlink:href="#t-cab"   fill="#333333" stroke="#8A8A8A" stroke-width="2"/>
+    <use xlink:href="#t-glass" fill="#C9C9C9"/>
+    <use xlink:href="#t-dark"  fill="#8A8A8A"/>
+    <rect x="62" y="-32" width="30" height="64" rx="4" fill="#1C1C1C" stroke="#9A9A9A" stroke-width="3"/>
+    <rect x="-225" y="-58" width="300" height="8" rx="3" fill="#3A3A3A"/>
+    <rect x="-225" y="50"  width="300" height="8" rx="3" fill="#3A3A3A"/>
+  </g>
+  <g id="truck-p" data-name="P" data-color="red" data-length="3" data-cell="1,3" transform="translate(795 770)">
+    <use xlink:href="#t-wheels" fill="#262626"/>
+    <use xlink:href="#t-body"  fill="#CC1F1F" stroke="#7A0E0E" stroke-width="4"/>
+    <use xlink:href="#t-rim"   fill="none" stroke="#F09090" stroke-width="3"/>
+    <use xlink:href="#t-cargo" fill="#D62A2A" stroke="#A31515" stroke-width="2"/>
+    <use xlink:href="#t-cab"   fill="#E04040" stroke="#7A0E0E" stroke-width="2"/>
+    <use xlink:href="#t-glass" fill="#F8D6D6"/>
+    <use xlink:href="#t-dark"  fill="#7A0E0E"/>
+    <use xlink:href="#t-lights3" fill="#F5B5B5" stroke="#7A0E0E" stroke-width="2"/>
+    <rect x="-222" y="-54" width="180" height="30" rx="4" fill="#E05050" stroke="#7A0E0E" stroke-width="2"/>
+    <rect x="-38" y="-54" width="60" height="30" rx="4" fill="#E05050" stroke="#7A0E0E" stroke-width="2"/>
+    <rect x="-222" y="14" width="200" height="40" rx="3" fill="none" stroke="#F5B5B5" stroke-width="5"/>
+    <path fill="none" stroke="#F5B5B5" stroke-width="4"
+          d="M-200 14 V54 M-178 14 V54 M-156 14 V54 M-134 14 V54 M-112 14 V54 M-90 14 V54 M-68 14 V54 M-46 14 V54"/>
+    <rect x="-80" y="-18" width="10" height="34" rx="2" fill="#F5B5B5" stroke="#7A0E0E" stroke-width="1.5"/>
+    <rect x="-84" y="-26" width="18" height="10" rx="2" fill="#F5B5B5" stroke="#7A0E0E" stroke-width="1.5"/>
+    <circle cx="-2" cy="52" r="11" fill="#E05050" stroke="#7A0E0E" stroke-width="2"/>
+    <circle cx="-2" cy="52" r="4" fill="#7A0E0E"/>
+  </g>
+  <g id="truck-q" data-name="Q" data-color="white" data-length="3" data-cell="2,3" transform="translate(1325 770)">
+    <use xlink:href="#t-wheels" fill="#262626"/>
+    <use xlink:href="#t-body"  fill="#DCD8D6" stroke="#8E8A88" stroke-width="4"/>
+    <use xlink:href="#t-rim"   fill="none" stroke="#FFFFFF" stroke-width="3"/>
+    <use xlink:href="#t-cargo" fill="#E8E5E3" stroke="#A9A5A3" stroke-width="2"/>
+    <use xlink:href="#t-cab"   fill="#F0EEED" stroke="#8E8A88" stroke-width="2"/>
+    <use xlink:href="#t-glass" fill="#FFFFFF"/>
+    <use xlink:href="#t-dark"  fill="#8E8A88"/>
+    <use xlink:href="#t-lights3" fill="#FFFFFF" stroke="#8E8A88" stroke-width="2"/>
+    <g fill="#F7F5F4" stroke="#8E8A88" stroke-width="3">
+      <rect x="-218" y="-56" width="46" height="46" rx="3"/>
+      <rect x="-150" y="-56" width="46" height="46" rx="3"/>
+      <rect x="-82"  y="-56" width="46" height="46" rx="3"/>
+      <rect x="-14"  y="-56" width="46" height="46" rx="3"/>
+      <rect x="-218" y="10"  width="46" height="46" rx="3"/>
+      <rect x="-150" y="10"  width="46" height="46" rx="3"/>
+      <rect x="-82"  y="10"  width="46" height="46" rx="3"/>
+      <rect x="-14"  y="10"  width="46" height="46" rx="3"/>
+    </g>
+  </g>
+  <g id="truck-r" data-name="R" data-color="blue" data-length="3" data-cell="3,3" transform="translate(1855 770)">
+    <use xlink:href="#t-wheels" fill="#262626"/>
+    <use xlink:href="#t-body"  fill="#1F4FA3" stroke="#0F2C66" stroke-width="4"/>
+    <use xlink:href="#t-rim"   fill="none" stroke="#7FB0EA" stroke-width="3"/>
+    <use xlink:href="#t-cargo" fill="#2A5CB4" stroke="#0F2C66" stroke-width="2"/>
+    <use xlink:href="#t-cab"   fill="#3B6EC4" stroke="#0F2C66" stroke-width="2"/>
+    <use xlink:href="#t-glass" fill="#D3E4F8"/>
+    <use xlink:href="#t-dark"  fill="#0F2C66"/>
+    <use xlink:href="#t-lights3" fill="#9CC2F0" stroke="#0F2C66" stroke-width="2"/>
+    <g fill="#6F9FDF" stroke="#0F2C66" stroke-width="3">
+      <rect x="-222" y="-30" width="44" height="60" rx="4"/>
+      <rect x="-160" y="-30" width="44" height="60" rx="4"/>
+      <rect x="-98"  y="-30" width="44" height="60" rx="4"/>
+      <rect x="-36"  y="-30" width="44" height="60" rx="4"/>
+      <rect x="58"   y="-30" width="44" height="60" rx="4"/>
+    </g>
+    <rect x="-225" y="-60" width="345" height="10" rx="3" fill="#6F9FDF"/>
+    <rect x="-225" y="50"  width="345" height="10" rx="3" fill="#6F9FDF"/>
+  </g>
+</svg>
