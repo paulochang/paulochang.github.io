@@ -3,8 +3,8 @@
 // the very first, online, load — not just after a second visit) and a VERSION derived from a
 // content hash of those files (so a new build always gets a fresh cache and drops the old one).
 // Don't hand-edit these; they're overwritten by every build.
-const VERSION = "traffic-play-be6bcee41a71";
-const PRECACHE = ["apple-touch-icon.png","assets/index-CdtyFjgl.js","icon-192.png","icon-512.png","icon.svg","./","manifest.webmanifest","vehicles-sprites.svg"];
+const VERSION = "traffic-play-2e9d39e18098";
+const PRECACHE = ["apple-touch-icon.png","assets/index-CFH3ng4D.js","icon-192.png","icon-512.png","icon.svg","./","manifest.webmanifest","vehicles-sprites.svg"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(VERSION).then((c) => c.addAll(PRECACHE)));
