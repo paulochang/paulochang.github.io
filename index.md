@@ -1,10 +1,10 @@
 # Paulo Chang
 
-Senior backend engineer & AI-driven development champion
+Senior backend engineer in Berlin
 
-10+ years building backend platforms for global enterprise brands — now focused on driving AI adoption across software development teams.
+I've spent more than ten years building backends for big brands, mostly with Adobe Experience Manager and Java. Lately a lot of my time goes into helping other developers get real use out of AI tools.
 
-Open to leadership roles focused on driving AI adoption in software development.
+I'm looking for a leadership role where that's the main job.
 
 [GitHub](https://github.com/paulochang) · [LinkedIn](https://www.linkedin.com/in/paulochang)
 

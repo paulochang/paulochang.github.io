@@ -2,23 +2,23 @@
 
 ## Background
 
-Experienced backend developer with 10+ years in the field, now focused on driving AI adoption in software development teams. As Backend Community AI Champion at Cognizant Netcentric, I built and maintain an internal AI tooling marketplace for backend engineers, and I design and deliver the training sessions that get teams actually using it. I do this alongside my regular work as a senior backend engineer on large-scale Adobe Experience Manager (AEM) platforms — Java, JCR, Apache Sling, OSGi — which keeps me close to the day-to-day problems the engineers I train are dealing with.
+I've been a backend developer for more than ten years, most of it on large Adobe Experience Manager (AEM) platforms built with Java, JCR, Apache Sling and OSGi. That's still my day job as a senior engineer at Cognizant Netcentric. I'm also the Backend Community AI Champion there, which means I built and look after an internal marketplace of AI tools for our backend engineers, and I plan and run the training sessions that get people actually using them. Since I still do the regular engineering work, I run into the same problems as the people I'm training.
 
-I also have experience as technical co-founder of a small startup, where I was responsible for all technical decisions and built a SaaS product from prototype to production.
+Before that I was the technical co-founder of a small startup. I made all the technical decisions and took our SaaS product from prototype to production.
 
 ## What I'm doing now
 
 ### AI adoption & enablement
 
-Primary author of an internal AI-tooling marketplace used across the backend engineering organization, plus the onboarding and deep-dive training sessions that drive its adoption.
+I'm the main author of the AI tooling marketplace our backend engineers use, and I run both the onboarding sessions and the more in-depth ones that go with it.
 
 ### Senior AEM engineering
 
-Sole senior contributor pattern on a large-scale Adobe Experience Manager platform: PIM integration, product/parts filtering, a Jackrabbit Oak search-index migration, dispatcher and release engineering, and localization.
+I'm the only senior developer on a large AEM platform. That covers the PIM integration, product and parts filtering, a Jackrabbit Oak search index migration, dispatcher and release work, and localization.
 
 ### Platform health
 
-Beyond features: dispatcher and cache tuning, concurrency and thread-safety fixes, CI/CD and build tooling, and repository/index migrations that keep large systems reliable at scale.
+The less visible side of the job: tuning the dispatcher and caches, fixing concurrency and thread-safety bugs, looking after CI/CD and build tooling, and running repository and index migrations so large systems keep working.
 
 ---
 

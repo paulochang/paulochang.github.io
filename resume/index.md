@@ -1,6 +1,6 @@
 # Resume — Paulo Chang
 
-Senior backend engineer & Backend Community AI champion
+Senior backend engineer and Backend Community AI Champion
 
 ## Experience
 
@@ -8,28 +8,28 @@ Senior backend engineer & Backend Community AI champion
 
 **Cognizant Netcentric** — *2023 – Present*
 
-- Built and maintain an internal AI tooling marketplace for backend engineers as primary author, and design/deliver the training that drives its adoption org-wide.
-- Sole senior contributor on a large-scale AEM platform: PIM integration, product/parts filtering, a Jackrabbit Oak search-index migration, dispatcher/release engineering, and localization.
-- Contributed high-impact fixes to a shared platform-core library used across a multi-brand estate — content-activation workflows, thread-safety fixes in resource-resolver handling, and dispatcher cache/HTTP client refactoring.
-- Independently authored a JUnit 5 testing module for validating Oak Lucene index definitions, and designed/built Backend-for-Frontend (BFF) services and serverless APIs from the ground up.
+- Primary author and maintainer of an internal marketplace of AI tools for backend engineers. Also design and run the training sessions that get teams across the backend org using it.
+- Only senior developer on a large AEM platform, covering the PIM integration, product and parts filtering, a Jackrabbit Oak search index migration, dispatcher and release work, and localization.
+- Fixed content activation workflow bugs and thread-safety issues in resource resolver handling in the platform-core library shared by a group of brand sites. Also refactored its dispatcher cache and HTTP client code.
+- Wrote a JUnit 5 module that validates Oak Lucene index definitions. Designed and built Backend-for-Frontend (BFF) services and serverless APIs from scratch.
 
 ### Technical Co-Founder
 
 **Hyggs** — *2021 – 2023*
 
-- Owned all technical decisions for a services marketplace connecting clients and suppliers, taking the product from prototype to production (C#, ASP.NET Core, Blazor, PostgreSQL/SQL Server, Azure and GCP).
-- Built the core request-management app end to end — onboarding, editing, and address-management flows — plus admin/back-office tooling and an operations dashboard.
-- Built a KYC/compliance intake pipeline processing structured submissions against onboarding requirements.
-- Hired and led an outsourced team of 9 engineers who rebuilt the platform in PHP, integrating Stripe, Firebase, and GCP.
+- Made all the technical decisions for a services marketplace connecting clients and suppliers, and took it from prototype to production (C#, ASP.NET Core, Blazor, PostgreSQL, SQL Server, Azure, GCP).
+- Built the main request-management app, including onboarding, editing and address management, along with the back-office admin tools and an operations dashboard.
+- Built the KYC and compliance intake, which checked structured submissions against the onboarding requirements.
+- Hired and led an outsourced team of nine engineers who rebuilt the platform in PHP, with Stripe, Firebase and GCP.
 
 ### AEM Platform Engineer
 
 **Global consumer goods brand platforms** — *2018 – 2021*
 
-- Built and maintained shared AEM components and pattern libraries used across a dozen+ brand and market sites (Java, JCR, Apache Sling, OSGi).
-- Developed cart/checkout and promotional components for two direct-to-consumer storefronts, sustained over about a year.
-- Fixed authentication and webhook logging issues on a CRM platform's third-party identity integration.
-- Maintained AEM server environments — dependency versions, memory tuning, ACS Commons — across several brand server repositories.
+- Built and maintained shared AEM components and pattern libraries used by more than a dozen brand and market sites (Java, JCR, Apache Sling, OSGi).
+- Worked for about a year on cart, checkout and promotion components for two direct-to-consumer online shops.
+- Fixed authentication and webhook logging bugs in a CRM platform's third-party identity integration.
+- Looked after the AEM server environments for several brands: dependency versions, memory tuning, ACS Commons.
 
 ## Education
 
@@ -85,6 +85,6 @@ Senior backend engineer & Backend Community AI champion
 
 ---
 
-Open to roles focused on driving AI adoption in the development process.
+I'm looking for a leadership role in AI adoption for software teams.
 
 [GitHub](https://github.com/paulochang) · [LinkedIn](https://www.linkedin.com/in/paulochang)

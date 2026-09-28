@@ -1,34 +1,34 @@
 # Projects — Paulo Chang
 
-Small, self-contained tools built and shipped end to end.
+Small tools I've built and put online.
 
 ## [BSR Straßenreinigung Berlin](https://paulochang.com/berlin-cleaning/)
 
-Berlin's official street-cleaning schedule — the Reinigungsklassen — rendered as an interactive MapLibre GL map. Bilingual German/English, with address search and per-class filtering over the full city street network.
+Berlin's official street-cleaning classes, the Reinigungsklassen, on an interactive MapLibre GL map of the whole city. In German and English, with address search and a filter for each class.
 
 ## [A Moment of Light](https://paulochang.com/quotes/)
 
-A deliberately minimal reader that surfaces one short poem at a time from a curated client-side collection.
+Shows one short poem at a time, picked from a small collection that lives in the page.
 
 ## [Syntax-Aware Diff Tool](https://paulochang.com/diff/)
 
-A single self-contained page built around the Monaco diff editor — side-by-side or inline views, drag-and-drop input, and live added/removed/modified metrics.
+One self-contained page around the Monaco diff editor. Side-by-side or inline view, drag-and-drop files, and live stats on what was added, removed and changed.
 
 ## [JSON Query Tool (JSONata)](https://paulochang.com/json/)
 
-A three-panel workbench for exploring JSON: paste input, browse the structure in an expandable tree, and query it live with JSONata and autocomplete.
+Paste some JSON, browse it as an expandable tree, and query it with JSONata. Results update as you type, and there's autocomplete.
 
 ## [Geometric Wall Designer](https://paulochang.com/paint/)
 
-Procedurally generates wall-paint patterns constrained to be paintable with masking tape — straight lines only, a maximum of three colors, with PNG export.
+Generates wall patterns you can actually paint with masking tape: straight lines only and no more than three colors. Exports to PNG.
 
 ## [Traffic](https://paulochang.com/traffic/)
 
-The 40 classic Rush Hour-style sliding-block traffic puzzles — slide vehicles out of the way to free the red car, with a move counter, timer, and offline installable play.
+The 40 classic Rush Hour-style puzzles. Slide the other vehicles out of the way to get the red car out. Has a move counter and a timer, and installs as an app for offline play.
 
 ## [CCAR-F Study Guide](https://paulochang.com/study-guide/)
 
-A 25-document markdown corpus compiled into a single offline-readable HTML file with collapsible navigation and light/dark theming — zero runtime dependencies.
+25 markdown documents compiled into one HTML file you can read offline, with collapsible navigation and light and dark themes. No runtime dependencies.
 
 ---
 
