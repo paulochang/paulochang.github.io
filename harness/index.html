@@ -347,7 +347,7 @@
     .empty { text-align: center; color: var(--ink-soft); padding: 2rem 0; font-size: 0.95rem; }
 
     /* ---------- Tool cards ---------- */
-    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr)); gap: 1.25rem; }
+    .cards { display: flex; flex-direction: column; gap: 1.25rem; }
     .card { background: var(--surface); border: 1px solid var(--rule); padding: 1.25rem 1.25rem 1rem; display: flex; flex-direction: column; gap: 0.7rem; scroll-margin-top: 7rem; }
     .card:target { outline: 2px solid var(--ink); }
     .card header { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; }
@@ -426,7 +426,6 @@
       .board .bar { grid-column: 1 / -1; grid-row: 2; }
       .caprow { grid-template-columns: 1fr; }
       .caprow .who { justify-content: flex-start; }
-      .cards { grid-template-columns: 1fr; }
       nav.sections ul { justify-content: flex-start; }
       input[type="search"] { width: 100%; }
     }
