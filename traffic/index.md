@@ -1,3 +1,5 @@
 # Traffic
 
-The 40 classic Rush Hour-style sliding-block traffic puzzles: slide vehicles out of the way to free the red car and clear the exit, with a move counter, timer, and progress saved per puzzle. Installable as an offline-capable PWA via a service worker that precaches the whole app on first load. The content is a live, client-side Canvas application with no fixed text to render here — visit the live page at https://paulochang.com/traffic/ to play.
+The 40 classic Rush Hour-style sliding-block puzzles. Slide the other vehicles out of the way to get the red car to the exit. There's a move counter and a timer, and your progress is saved for each puzzle. It installs as an app, and a service worker caches the whole game on first load so it works offline.
+
+The game runs in the browser, so this file only describes it. Play it at https://paulochang.com/traffic/.

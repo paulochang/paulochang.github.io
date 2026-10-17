@@ -2,7 +2,7 @@
 
 ## Background
 
-I've been a backend developer for more than ten years, most of it on large Adobe Experience Manager (AEM) platforms built with Java, JCR, Apache Sling and OSGi. That's still my day job as a senior engineer at Cognizant Netcentric. I'm also the Backend Community AI Champion there, which means I built and look after an internal marketplace of AI tools for our backend engineers, and I plan and run the training sessions that get people actually using them. Since I still do the regular engineering work, I run into the same problems as the people I'm training.
+I've been a backend developer for more than ten years, most of it on large Adobe Experience Manager (AEM) platforms built with Java, JCR, Apache Sling and OSGi. That's still my day job as a senior engineer at Cognizant Netcentric. I'm also the Backend Community AI Champion there, which means I built and look after an internal marketplace of AI tools for our backend engineers, and I plan and run the training sessions that get people using them. Since I still do the regular engineering work, I run into the same problems as the people I'm training.
 
 Before that I was the technical co-founder of a small startup. I made all the technical decisions and took our SaaS product from prototype to production.
 

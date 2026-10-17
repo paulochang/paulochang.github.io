@@ -2,7 +2,7 @@
 
 > Senior backend engineer in Berlin with more than ten years of backend work for large brands, mostly on Adobe Experience Manager, Java and serverless. Backend Community AI Champion at Cognizant Netcentric, where Paulo built and maintains an internal AI tooling marketplace for backend developers and runs the training that goes with it. Looking for a leadership role focused on AI adoption in software development.
 
-This is a personal professional profile plus a small number of self-contained side projects. Every page publishes a Markdown alternate of its content, declared in the HTML via `<link rel="alternate" type="text/markdown">` and linked directly below. The Markdown files are served as `text/markdown` and are the preferred source for agents: they carry the same text as the rendered pages without the layout markup.
+This is a personal professional profile plus a few side projects. Every page has a Markdown version, declared in the HTML with `<link rel="alternate" type="text/markdown">` and linked below. The Markdown files are served as `text/markdown` and are the best source for agents: they have the same text as the pages without the layout markup. Most project pages run in the browser, so their Markdown describes the tool instead of copying its text.
 
 Canonical host: https://paulochang.com/
 
@@ -15,13 +15,14 @@ Canonical host: https://paulochang.com/
 ## Projects
 
 - [Projects index](https://paulochang.com/projects/index.md): listing page linking to the tools below.
-- [BSR Straßenreinigung Berlin](https://paulochang.com/berlin-cleaning/index.md): Interactive MapLibre GL map of Berlin's official street-cleaning classes (Reinigungsklassen), bilingual German/English, with address search and per-class filtering. The live page at https://paulochang.com/berlin-cleaning/ renders client-side, so the Markdown is a description rather than a transcript.
-- [A Moment of Light](https://paulochang.com/quotes/index.md): Shows one short poem at a time from a small collection stored in the page. The live page at https://paulochang.com/quotes/ generates its content in the browser.
-- [Syntax-Aware Diff Tool](https://paulochang.com/diff/index.md): A browser-based diff tool built around the Monaco diff editor, with side-by-side/inline views, drag-and-drop input, and live change metrics. The live page at https://paulochang.com/diff/ renders client-side, so the Markdown is a description rather than a transcript.
-- [JSON Query Tool (JSONata)](https://paulochang.com/json/index.md): A three-panel workbench for exploring JSON — input, structure explorer, and a JSONata query box with autocomplete and live results. The live page at https://paulochang.com/json/ renders client-side, so the Markdown is a description rather than a transcript.
-- [Geometric Wall Designer](https://paulochang.com/paint/index.md): Generates wall patterns you can paint with masking tape: straight lines only, at most three colors. The live page at https://paulochang.com/paint/ renders client-side, so the Markdown is a description rather than a transcript.
-- [Traffic](https://paulochang.com/traffic/index.md): The 40 classic Rush Hour-style sliding-block traffic puzzles — slide vehicles out of the way to free the red car, with a move counter, timer, and offline installable play via a service worker. The live page at https://paulochang.com/traffic/ renders client-side, so the Markdown is a description rather than a transcript.
-- [CCAR-F Study Guide](https://paulochang.com/study-guide/index.md): A self-contained offline study guide for the Claude Certified Architect (Foundations) exam, compiled into one zero-dependency HTML file. The live page at https://paulochang.com/study-guide/ is a static document reader.
+- [BSR Straßenreinigung Berlin](https://paulochang.com/berlin-cleaning/index.md): MapLibre GL map of Berlin's official street-cleaning classes (Reinigungsklassen), in German and English, with address search and a filter for each class. Live page: https://paulochang.com/berlin-cleaning/
+- [A Moment of Light](https://paulochang.com/quotes/index.md): Shows one short poem at a time, picked at random from a small collection. Live page: https://paulochang.com/quotes/
+- [Syntax-Aware Diff Tool](https://paulochang.com/diff/index.md): Diff tool built on the Monaco diff editor, with side-by-side and inline views, drag-and-drop files and a count of added, removed and changed lines. Live page: https://paulochang.com/diff/
+- [JSON Query Tool (JSONata)](https://paulochang.com/json/index.md): Paste JSON, browse it as a tree and query it with JSONata, with autocomplete and results that update as you type. Live page: https://paulochang.com/json/
+- [Geometric Wall Designer](https://paulochang.com/paint/index.md): Generates wall patterns you can paint with masking tape: straight lines only, at most three colors. Live page: https://paulochang.com/paint/
+- [Traffic](https://paulochang.com/traffic/index.md): The 40 classic Rush Hour-style sliding-block puzzles, with a move counter and a timer. Installs as an app and works offline. Live page: https://paulochang.com/traffic/
+- [CCAR-F Study Guide](https://paulochang.com/study-guide/index.md): Offline study guide for the Claude Certified Architect (Foundations) exam: 25 markdown documents compiled into one HTML file with no dependencies. Live page: https://paulochang.com/study-guide/
+- [Agent Harness Tracker](https://paulochang.com/harness/index.md): Compares AI coding agents on what a shared team harness needs: instruction files such as AGENTS.md and CLAUDE.md, skills, agent profiles, hooks, policy and sandboxing, MCP, code intelligence and plugin packaging. The Markdown has the full matrix, notes on each tool and the changelog. Raw data: https://paulochang.com/harness/data.json
 
 ## Elsewhere
 
@@ -32,4 +33,4 @@ Canonical host: https://paulochang.com/
 
 - [Machine-readable profile (JSON-LD)](https://paulochang.com/resume/): The resume page embeds the full schema.org `Person` graph with `sameAs`, `jobTitle`, `worksFor`, `knowsAbout`, `knowsLanguage` and `hasCredential`; the homepage embeds a lighter `ProfilePage` / `Person` summary.
 - [Sitemap](https://paulochang.com/sitemap.xml): All indexable URLs with last-modified dates.
-- [Crawler policy](https://paulochang.com/robots.txt): All content here is public and intended to be crawled, indexed and cited. AI search crawlers are explicitly allowed.
+- [Crawler policy](https://paulochang.com/robots.txt): Everything here is public and can be crawled, indexed and cited. AI search crawlers are allowed.

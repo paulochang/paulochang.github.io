@@ -7,12 +7,12 @@
   </url>
   <url>
     <loc>https://paulochang.com/about/</loc>
-    <lastmod>2026-09-28</lastmod>
+    <lastmod>2026-10-17</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://paulochang.com/projects/</loc>
-    <lastmod>2026-09-28</lastmod>
+    <lastmod>2026-10-17</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -22,37 +22,42 @@
   </url>
   <url>
     <loc>https://paulochang.com/berlin-cleaning/</loc>
-    <lastmod>2026-09-10</lastmod>
+    <lastmod>2026-10-17</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://paulochang.com/quotes/</loc>
-    <lastmod>2026-09-10</lastmod>
+    <lastmod>2026-10-17</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://paulochang.com/diff/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-17</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://paulochang.com/json/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-17</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://paulochang.com/paint/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-17</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://paulochang.com/traffic/</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-17</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://paulochang.com/study-guide/</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-17</lastmod>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://paulochang.com/harness/</loc>
+    <lastmod>2026-10-18</lastmod>
+    <priority>0.7</priority>
   </url>
 </urlset>

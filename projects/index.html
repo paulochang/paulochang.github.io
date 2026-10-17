@@ -5,14 +5,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Projects &mdash; Paulo Chang</title>
-  <meta name="description" content="Side projects by Paulo Chang: a map of Berlin's street-cleaning classes, a one-poem-at-a-time reader, a diff tool, a JSONata query tool, a wall-paint pattern designer, a sliding-block puzzle game, and an offline exam study guide.">
+  <meta name="description" content="Side projects by Paulo Chang: browser tools, a Berlin street-cleaning map, a puzzle game, a study guide and a live comparison of AI coding agents.">
   <meta name="author" content="Paulo Chang">
   <link rel="canonical" href="https://paulochang.com/projects/">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Paulo Chang">
   <meta property="og:title" content="Projects &mdash; Paulo Chang">
-  <meta property="og:description" content="Side projects by Paulo Chang: a map of Berlin's street-cleaning classes, a one-poem-at-a-time reader, a diff tool, a JSONata query tool, a wall-paint pattern designer, a sliding-block puzzle game, and an offline exam study guide.">
+  <meta property="og:description" content="Side projects by Paulo Chang: browser tools, a Berlin street-cleaning map, a puzzle game, a study guide and a live comparison of AI coding agents.">
   <meta property="og:url" content="https://paulochang.com/projects/">
   <meta property="og:locale" content="en_US">
   <meta property="og:image" content="https://paulochang.com/img/og.png">
@@ -21,7 +21,7 @@
   <meta property="og:image:alt" content="Paulo Chang — senior backend engineer and AI-driven development champion">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Projects &mdash; Paulo Chang">
-  <meta name="twitter:description" content="Side projects by Paulo Chang: a map of Berlin's street-cleaning classes, a one-poem-at-a-time reader, a diff tool, a JSONata query tool, a wall-paint pattern designer, a sliding-block puzzle game, and an offline exam study guide.">
+  <meta name="twitter:description" content="Side projects by Paulo Chang: browser tools, a Berlin street-cleaning map, a puzzle game, a study guide and a live comparison of AI coding agents.">
   <meta name="twitter:image" content="https://paulochang.com/img/og.png">
   <meta name="twitter:image:alt" content="Paulo Chang — senior backend engineer and AI-driven development champion">
 
@@ -226,7 +226,7 @@
     "url": "https://paulochang.com/projects/",
     "name": "Projects — Paulo Chang",
     "inLanguage": "en",
-    "dateModified": "2026-09-28",
+    "dateModified": "2026-10-17",
     "author": { "@id": "https://paulochang.com/#paulo-chang" },
     "hasPart": [
       {
@@ -251,7 +251,7 @@
         "inLanguage": "en",
         "isAccessibleForFree": true,
         "author": { "@id": "https://paulochang.com/#paulo-chang" },
-        "description": "Shows one short poem at a time from a small collection stored in the page."
+        "description": "Shows one short poem at a time, picked at random from a small collection."
       },
       {
         "@type": "WebApplication",
@@ -311,7 +311,17 @@
         "inLanguage": "en",
         "isAccessibleForFree": true,
         "author": { "@id": "https://paulochang.com/#paulo-chang" },
-        "description": "25 markdown documents compiled into one offline HTML file with collapsible navigation and light and dark themes, with no runtime dependencies."
+        "description": "25 markdown documents compiled into one HTML file you can read offline, with collapsible navigation and light and dark themes. No runtime dependencies."
+      },
+      {
+        "@type": "Dataset",
+        "@id": "https://paulochang.com/harness/#dataset",
+        "name": "Agent Harness Tracker",
+        "url": "https://paulochang.com/harness/",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "author": { "@id": "https://paulochang.com/#paulo-chang" },
+        "description": "Which AI coding agents support which parts of a shared team harness, with a source for every cell."
       }
     ]
   }
@@ -353,14 +363,14 @@
       <article class="project-card" aria-labelledby="proj-quotes">
         <h3 id="proj-quotes"><a href="../quotes/">A Moment of Light</a></h3>
         <p>
-          Shows one short poem at a time, picked from a small collection that lives in the page.
+          Shows one short poem at a time, picked at random from a small collection.
         </p>
       </article>
 
       <article class="project-card" aria-labelledby="proj-diff">
         <h3 id="proj-diff"><a href="../diff/">Syntax-Aware Diff Tool</a></h3>
         <p>
-          One self-contained page around the Monaco diff editor. Side-by-side or inline view,
+          A diff tool built on the Monaco diff editor. Side-by-side or inline view,
           drag-and-drop files, and live stats on what was added, removed and changed.
         </p>
       </article>
@@ -376,7 +386,7 @@
       <article class="project-card" aria-labelledby="proj-paint">
         <h3 id="proj-paint"><a href="../paint/">Geometric Wall Designer</a></h3>
         <p>
-          Generates wall patterns you can actually paint with masking tape: straight lines only and
+          Generates wall patterns you can paint with masking tape: straight lines only and
           no more than three colors. Exports to PNG.
         </p>
       </article>
@@ -394,6 +404,14 @@
         <p>
           25 markdown documents compiled into one HTML file you can read offline, with collapsible
           navigation and light and dark themes. No runtime dependencies.
+        </p>
+      </article>
+
+      <article class="project-card" aria-labelledby="proj-harness">
+        <h3 id="proj-harness"><a href="../harness/">Agent Harness Tracker</a></h3>
+        <p>
+          Which coding agents support which parts of a shared team harness: instruction files, skills,
+          hooks, MCP servers, policy and packaging. Every cell is sourced, and each review is logged.
         </p>
       </article>
     </section>

@@ -8,11 +8,11 @@ Berlin's official street-cleaning classes, the Reinigungsklassen, on an interact
 
 ## [A Moment of Light](https://paulochang.com/quotes/)
 
-Shows one short poem at a time, picked from a small collection that lives in the page.
+Shows one short poem at a time, picked at random from a small collection.
 
 ## [Syntax-Aware Diff Tool](https://paulochang.com/diff/)
 
-One self-contained page around the Monaco diff editor. Side-by-side or inline view, drag-and-drop files, and live stats on what was added, removed and changed.
+A diff tool built on the Monaco diff editor. Side-by-side or inline view, drag-and-drop files, and live stats on what was added, removed and changed.
 
 ## [JSON Query Tool (JSONata)](https://paulochang.com/json/)
 
@@ -20,7 +20,7 @@ Paste some JSON, browse it as an expandable tree, and query it with JSONata. Res
 
 ## [Geometric Wall Designer](https://paulochang.com/paint/)
 
-Generates wall patterns you can actually paint with masking tape: straight lines only and no more than three colors. Exports to PNG.
+Generates wall patterns you can paint with masking tape: straight lines only and no more than three colors. Exports to PNG.
 
 ## [Traffic](https://paulochang.com/traffic/)
 
@@ -29,6 +29,10 @@ The 40 classic Rush Hour-style puzzles. Slide the other vehicles out of the way 
 ## [CCAR-F Study Guide](https://paulochang.com/study-guide/)
 
 25 markdown documents compiled into one HTML file you can read offline, with collapsible navigation and light and dark themes. No runtime dependencies.
+
+## [Agent Harness Tracker](https://paulochang.com/harness/)
+
+Which coding agents support which parts of a shared team harness: instruction files, skills, hooks, MCP servers, policy and packaging. Every cell is sourced, and each review is logged.
 
 ---
 

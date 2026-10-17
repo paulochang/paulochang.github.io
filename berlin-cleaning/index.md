@@ -1,3 +1,5 @@
 # BSR Straßenreinigung Berlin
 
-An interactive map of Berlin street-cleaning classes (Reinigungsklassen), built with MapLibre GL. Available in German and English, with address search and a legend showing cleaning-class categories. The content is a live, client-side rendered map with no fixed text to render here — visit the live page at https://paulochang.com/berlin-cleaning/ to explore it.
+A map of Berlin's official street-cleaning classes (Reinigungsklassen), built with MapLibre GL. It covers the whole city and works in German and English. You can search for an address, and the legend lets you show or hide each class.
+
+The map is drawn in the browser, so this file only describes it. Open it at https://paulochang.com/berlin-cleaning/.

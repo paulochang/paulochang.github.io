@@ -21,6 +21,7 @@ json/             JSON query tool (JSONata)
 paint/            Geometric wall designer
 traffic/          Sliding-block traffic puzzle game
 study-guide/      CCAR-F study guide
+harness/          Agent harness tracker (generated, see below)
 css/site.css      Shared stylesheet
 img/              Favicon, social card, icons
 ```
@@ -43,6 +44,17 @@ Project pages:
   installable play as a PWA.
 - **CCAR-F Study Guide** (`study-guide/`): offline study guide for the Claude
   Certified Architect (Foundations) exam, in one zero-dependency HTML file.
+
+- **Agent Harness Tracker** (`harness/`): live comparison of AI coding agents on
+  shared-harness capabilities, with a coverage leaderboard, per-area heatmap, a
+  compare view, tool cards and a changelog. Generated from a separate (private) research
+  knowledge base by `node harness/sync.mjs <path/to/kb>` (or set `HARNESS_KB`), which validates
+  the data, strips internal-only fields, and rewrites `harness/data.json`,
+  the data embedded in `harness/index.html`, `harness/index.md` and the sitemap
+  `lastmod`. Edit the page's markup and script by hand; never hand-edit the data.
+  Wording-only edits don't count as a review: commit them in the KB with a subject
+  starting `Copy:`, or sync uncommitted ones with `--copy`. Either way they add no
+  changelog entry and keep the review dates.
 
 ## Conventions
 

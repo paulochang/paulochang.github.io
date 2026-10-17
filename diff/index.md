@@ -1,3 +1,5 @@
 # Syntax-Aware Diff Tool
 
-A browser-based diff tool built around the Monaco diff editor — side-by-side or inline views, drag-and-drop or pasted input, a language selector, and live added/removed/modified line metrics. Ships with a sample prod-vs-stage JSON payload as a demo. The content is a live, client-side application with no fixed text to render here — visit the live page at https://paulochang.com/diff/ to use it.
+A diff tool built on the Monaco diff editor. Paste or drop in two files and it shows the changes side by side or inline, with syntax highlighting for 11 languages and a count of added, removed and changed lines. There's a sample pair of prod and stage JSON files to try it on.
+
+The tool runs in the browser, so this file only describes it. Use it at https://paulochang.com/diff/.
