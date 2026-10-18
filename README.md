@@ -68,9 +68,11 @@ Project pages:
   written by hand. Adding or removing a page means updating all three.
 - **CSS.** The four core pages (Home, About, Projects, Resume) each inline the
   same full stylesheet in a `<style>` block, with no external CSS, so nothing
-  loads late and shifts the layout. The four copies must stay byte-identical:
-  edit one and copy the block to the other three. The project pages are
-  self-contained.
+  loads late and shifts the layout. The CSS and JSON-LD are minified, and the
+  four `<style>` blocks must stay byte-identical. To edit the CSS, expand it
+  with `npx prettier --parser css`, make the change, minify it again with
+  `npx esbuild --minify --loader=css`, and paste the result into all four
+  pages. The project pages are self-contained.
 
 ## License
 
