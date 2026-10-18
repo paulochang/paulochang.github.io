@@ -1,0 +1,4 @@
+# Cloudflare Pages headers. Images are not versioned, so cache them for a
+# week and revalidate in the background rather than forever.
+/img/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400

@@ -22,8 +22,8 @@ paint/            Geometric wall designer
 traffic/          Sliding-block traffic puzzle game
 study-guide/      CCAR-F study guide
 harness/          Agent harness tracker (generated, see below)
-css/site.css      Shared stylesheet
-img/              Favicon, social card, icons
+img/              Favicon and social card
+_headers          Cloudflare Pages cache headers
 ```
 
 Project pages:
@@ -66,10 +66,11 @@ Project pages:
   `robots.txt` and `llms.txt` all use `https://paulochang.com/`.
 - **Hand-maintained indexes.** `llms.txt`, `sitemap.xml` and `robots.txt` are
   written by hand. Adding or removing a page means updating all three.
-- **CSS.** The four core pages (Home, About, Projects, Resume) inline their
-  critical CSS in a `<style>` block and load `css/site.css` for the rest. The
-  inlining exists to avoid layout shift, so keep it. The project pages are
-  self-contained and do not use `css/site.css`.
+- **CSS.** The four core pages (Home, About, Projects, Resume) each inline the
+  same full stylesheet in a `<style>` block, with no external CSS, so nothing
+  loads late and shifts the layout. The four copies must stay byte-identical:
+  edit one and copy the block to the other three. The project pages are
+  self-contained.
 
 ## License
 
