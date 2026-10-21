@@ -21,7 +21,7 @@ Canonical host: https://paulochang.com/
 - [JSON Query Tool (JSONata)](https://paulochang.com/json/index.md): Paste JSON, browse it as a tree and query it with JSONata, with autocomplete and results that update as you type. Live page: https://paulochang.com/json/
 - [Geometric Wall Designer](https://paulochang.com/paint/index.md): Generates wall patterns you can paint with masking tape: straight lines only, at most three colors. Live page: https://paulochang.com/paint/
 - [Traffic](https://paulochang.com/traffic/index.md): The 40 classic Rush Hour-style sliding-block puzzles, with a move counter and a timer. Installs as an app and works offline. Live page: https://paulochang.com/traffic/
-- [CCAR-F Study Guide](https://paulochang.com/study-guide/index.md): Offline study guide for the Claude Certified Architect (Foundations) exam: 25 markdown documents compiled into one HTML file with no dependencies. Live page: https://paulochang.com/study-guide/
+- [CCAR-F Study Guide](https://paulochang.com/study-guide/index.md): Offline study guide for the Claude Certified Architect (Foundations) exam: 14 prep pages, a 134-question drill with recall cards and a 16-chapter companion book in one HTML file with no dependencies. Live page: https://paulochang.com/study-guide/
 - [Agent Harness Tracker](https://paulochang.com/harness/index.md): Compares AI coding agents on what a shared team harness needs: instruction files such as AGENTS.md and CLAUDE.md, skills, agent profiles, hooks, policy and sandboxing, MCP, code intelligence and plugin packaging. The Markdown has the full matrix, notes on each tool and the changelog. Raw data: https://paulochang.com/harness/data.json
 
 ## Elsewhere
