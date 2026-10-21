@@ -28,7 +28,7 @@ The 40 classic Rush Hour-style puzzles. Slide the other vehicles out of the way 
 
 ## [CCAR-F Study Guide](https://paulochang.com/study-guide/)
 
-14 prep pages, a drill with a 134-question bank and 36 recall cards, and a 16-chapter companion book, compiled into one HTML file you can read offline. No runtime dependencies.
+A study guide for the Claude Certified Architect (Foundations) exam. It has 14 prep pages, a drill with a 134-question bank and 36 recall cards, and a 16-chapter companion book, compiled into one HTML file you can read offline. No runtime dependencies.
 
 ## [Agent Harness Tracker](https://paulochang.com/harness/)
 

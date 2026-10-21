@@ -1,6 +1,6 @@
 # Paulo Chang
 
-> Senior backend engineer in Berlin with more than ten years of backend work for large brands, mostly on Adobe Experience Manager, Java and serverless. Backend Community AI Champion at Cognizant Netcentric, where Paulo built and maintains an internal AI tooling marketplace for backend developers and runs the training that goes with it. Looking for a leadership role focused on AI adoption in software development.
+> Senior backend engineer in Berlin with more than ten years of backend work for large brands, mostly on Adobe Experience Manager, Java and serverless. Backend Community AI Champion at Cognizant Netcentric, where Paulo built and maintains an internal AI tooling marketplace for backend developers and runs the training that goes with it. Looking for a leadership role in AI adoption for software teams.
 
 This is a personal professional profile plus a few side projects. Every page has a Markdown version, declared in the HTML with `<link rel="alternate" type="text/markdown">` and linked below. The Markdown files are served as `text/markdown` and are the best source for agents: they have the same text as the pages without the layout markup. Most project pages run in the browser, so their Markdown describes the tool instead of copying its text.
 
@@ -10,7 +10,7 @@ Canonical host: https://paulochang.com/
 
 - [Home](https://paulochang.com/index.md): name, role, and links.
 - [About](https://paulochang.com/about/index.md): background and current focus areas.
-- [Resume](https://paulochang.com/resume/index.md): complete role history (Cognizant Netcentric, Hyggs, earlier AEM platform work), skills and stack, certifications, and spoken languages.
+- [Resume](https://paulochang.com/resume/index.md): complete role history (Cognizant Netcentric, Hyggs, earlier AEM platform work), skills and stack, certifications and spoken languages.
 
 ## Projects
 
@@ -31,6 +31,6 @@ Canonical host: https://paulochang.com/
 
 ## Optional
 
-- [Machine-readable profile (JSON-LD)](https://paulochang.com/resume/): The resume page embeds the full schema.org `Person` graph with `sameAs`, `jobTitle`, `worksFor`, `knowsAbout`, `knowsLanguage` and `hasCredential`; the homepage embeds a lighter `ProfilePage` / `Person` summary.
+- [Machine-readable profile (JSON-LD)](https://paulochang.com/): The homepage embeds the full schema.org `Person` with `sameAs`, `jobTitle`, `worksFor`, `knowsAbout`, `knowsLanguage` and `hasCredential`. The other core pages reference it by `@id`.
 - [Sitemap](https://paulochang.com/sitemap.xml): All indexable URLs with last-modified dates.
 - [Crawler policy](https://paulochang.com/robots.txt): Everything here is public and can be crawled, indexed and cited. AI search crawlers are allowed.

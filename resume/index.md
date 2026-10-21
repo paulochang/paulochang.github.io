@@ -8,10 +8,11 @@ Senior backend engineer and Backend Community AI Champion
 
 **Cognizant Netcentric** — *2023 – Present*
 
-- Primary author and maintainer of an internal marketplace of AI tools for backend engineers. Also design and run the training sessions that get teams across the backend org using it.
+- Primary author and maintainer of an internal marketplace of AI tools for backend engineers. Design and run the training sessions that get teams across the backend org using it.
 - Only senior developer on a large AEM platform, covering the PIM integration, product and parts filtering, a Jackrabbit Oak search index migration, dispatcher and release work, and localization.
-- Fixed content activation workflow bugs and thread-safety issues in resource resolver handling in the platform-core library shared by a group of brand sites. Also refactored its dispatcher cache and HTTP client code.
-- Wrote a JUnit 5 module that validates Oak Lucene index definitions. Designed and built Backend-for-Frontend (BFF) services and serverless APIs from scratch.
+- Fixed content activation workflow bugs and thread-safety issues in resource resolver handling in the platform-core library shared by a group of brand sites. Refactored its dispatcher cache and HTTP client code.
+- Wrote a JUnit 5 module that validates Oak Lucene index definitions.
+- Designed and built Backend-for-Frontend (BFF) services and serverless APIs.
 
 ### Technical Co-Founder
 
