@@ -149,7 +149,21 @@ const scrub = (s) => String(s ?? '')
   .replace(/\s{2,}/g, ' ')
   .trim();
 
+// Main vendor sources for each tool, listed under "Sources & data". Every cell also cites its own
+// source; these are the entry points. Check the links when adding a tool.
+const MAIN_SOURCES = {
+  'claude-code': [['Documentation', 'https://code.claude.com/docs/en/overview'], ['Changelog', 'https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md']],
+  'codex': [['Documentation', 'https://learn.chatgpt.com/docs/'], ['Source code', 'https://github.com/openai/codex']],
+  'github-copilot': [['Documentation', 'https://docs.github.com/en/copilot'], ['VS Code agent customization', 'https://code.visualstudio.com/docs/agent-customization/overview'], ['CLI changelog', 'https://github.com/github/copilot-cli/blob/main/changelog.md']],
+  'cursor': [['Documentation', 'https://cursor.com/docs']],
+  'gemini-cli': [['Documentation', 'https://geminicli.com/docs/'], ['Source code', 'https://github.com/google-gemini/gemini-cli'], ['Move to Antigravity CLI', 'https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/']],
+  'antigravity': [['Documentation', 'https://antigravity.google/docs/overview'], ['CLI changelog', 'https://github.com/google-antigravity/antigravity-cli/blob/main/CHANGELOG.md'], ['Move from Gemini CLI', 'https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/']],
+  'opencode': [['Documentation', 'https://opencode.ai/docs/'], ['Source code', 'https://github.com/anomalyco/opencode']],
+};
+
 const { catalog, hosts } = current;
+const noSources = catalog.hosts.filter((h) => hosts[h.id] && !MAIN_SOURCES[h.id]).map((h) => h.id);
+if (noSources.length) die(`No MAIN_SOURCES entry for: ${noSources.join(', ')}`);
 const updated = day((revisions.findLast((r, i) => i === 0 || !/^copy:/i.test(r.subject)) || revisions.at(-1)).date);
 const payload = {
   updated,
@@ -168,6 +182,7 @@ const payload = {
       unique: h.unique.map((u) => ({ title: u.title, detail: scrub(u.detail), source: scrub(u.source) })),
       gotchas: h.gotchas.map(scrub),
       cells: Object.fromEntries(Object.entries(h.cells).map(([k, c]) => [k, { level: c.level, native: c.native, note: scrub(c.note), source: scrub(c.source) }])),
+      sources: MAIN_SOURCES[id].map(([label, url]) => ({ label, url })),
     };
   }),
   changelog,
@@ -243,6 +258,8 @@ function markdown(p) {
       else out.push(`  - ${c.type.replace('-', ' ')}: ${c.hostLabel || c.capLabel}`);
     }
   }
+  out.push('', '## Main sources', '');
+  for (const h of p.hosts) out.push(`- ${h.label}: ${h.sources.map((s) => `[${s.label}](${s.url})`).join(', ')}`);
   out.push('', '---', '', '[GitHub](https://github.com/paulochang) · [LinkedIn](https://www.linkedin.com/in/paulochang)', '');
   return out.join('\n');
 }

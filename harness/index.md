@@ -306,6 +306,16 @@ Gotchas:
   - OpenCode, IDE (editor or extension): `?` → `P`
 - 2026-09-29: first published with 7 tools and 47 capabilities.
 
+## Main sources
+
+- Claude Code: [Documentation](https://code.claude.com/docs/en/overview), [Changelog](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
+- OpenAI Codex: [Documentation](https://learn.chatgpt.com/docs/), [Source code](https://github.com/openai/codex)
+- GitHub Copilot: [Documentation](https://docs.github.com/en/copilot), [VS Code agent customization](https://code.visualstudio.com/docs/agent-customization/overview), [CLI changelog](https://github.com/github/copilot-cli/blob/main/changelog.md)
+- Cursor: [Documentation](https://cursor.com/docs)
+- Gemini CLI: [Documentation](https://geminicli.com/docs/), [Source code](https://github.com/google-gemini/gemini-cli), [Move to Antigravity CLI](https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/)
+- Antigravity: [Documentation](https://antigravity.google/docs/overview), [CLI changelog](https://github.com/google-antigravity/antigravity-cli/blob/main/CHANGELOG.md), [Move from Gemini CLI](https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/)
+- OpenCode: [Documentation](https://opencode.ai/docs/), [Source code](https://github.com/anomalyco/opencode)
+
 ---
 
 [GitHub](https://github.com/paulochang) · [LinkedIn](https://www.linkedin.com/in/paulochang)

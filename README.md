@@ -37,7 +37,8 @@ Project pages:
   `lastmod`. Edit the page's markup and script by hand; never hand-edit the data.
   Wording-only edits don't count as a review: commit them in the KB with a subject
   starting `Copy:`, or sync uncommitted ones with `--copy`. Either way they add no
-  changelog entry and keep the review dates.
+  changelog entry and keep the review dates. The main sources listed for each tool
+  are set in `MAIN_SOURCES` in `sync.mjs`; add an entry when adding a tool.
 - **CCAR-F Study Guide** (`study-guide/`): offline study guide for the Claude
   Certified Architect (Foundations) exam, in one zero-dependency HTML file.
 - **Syntax-Aware Diff Tool** (`diff/`): Monaco diff editor with side-by-side and

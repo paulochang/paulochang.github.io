@@ -718,7 +718,17 @@
      "note": "The source format. Also read by VS Code Copilot, Copilot CLI and Codex; Codex path confirmed in source.",
      "source": "tools/claude-code.md §12; verification log row 31"
     }
-   }
+   },
+   "sources": [
+    {
+     "label": "Documentation",
+     "url": "https://code.claude.com/docs/en/overview"
+    },
+    {
+     "label": "Changelog",
+     "url": "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+    }
+   ]
   },
   {
    "id": "codex",
@@ -1067,7 +1077,17 @@
      "note": "Fallback after root plugin.json and .codex-plugin; path confirmed only in source (manifest.rs); docs say only Claude-compatible manifests accepted.",
      "source": "tools/codex.md §12; open-questions.md (resolved 2026-09-29)"
     }
-   }
+   },
+   "sources": [
+    {
+     "label": "Documentation",
+     "url": "https://learn.chatgpt.com/docs/"
+    },
+    {
+     "label": "Source code",
+     "url": "https://github.com/openai/codex"
+    }
+   ]
   },
   {
    "id": "github-copilot",
@@ -1413,7 +1433,21 @@
      "note": "VS Code and CLI (CLI discovery since v1.0.6, MCP/LSP loading fixed v1.0.10). Whether ${CLAUDE_PLUGIN_ROOT} expands in skill bodies is unverified.",
      "source": "tools/github-copilot.md §12; open-questions.md"
     }
-   }
+   },
+   "sources": [
+    {
+     "label": "Documentation",
+     "url": "https://docs.github.com/en/copilot"
+    },
+    {
+     "label": "VS Code agent customization",
+     "url": "https://code.visualstudio.com/docs/agent-customization/overview"
+    },
+    {
+     "label": "CLI changelog",
+     "url": "https://github.com/github/copilot-cli/blob/main/changelog.md"
+    }
+   ]
   },
   {
    "id": "cursor",
@@ -1758,7 +1792,13 @@
      "note": "Cursor imports third-party plugins by default via Third-Party Imports toggle, but .claude-plugin/ manifest reading is not documented; verification log lists only VS Code, Copilot CLI, Codex.",
      "source": "open-questions.md (Claude-plugin skills discovery); verification log"
     }
-   }
+   },
+   "sources": [
+    {
+     "label": "Documentation",
+     "url": "https://cursor.com/docs"
+    }
+   ]
   },
   {
    "id": "gemini-cli",
@@ -2099,7 +2139,21 @@
      "note": "Uses its own gemini-extension.json; no .claude-plugin/ reading documented.",
      "source": "topics/plugins-and-distribution.md manifest path row; tools/gemini-cli.md §12"
     }
-   }
+   },
+   "sources": [
+    {
+     "label": "Documentation",
+     "url": "https://geminicli.com/docs/"
+    },
+    {
+     "label": "Source code",
+     "url": "https://github.com/google-gemini/gemini-cli"
+    },
+    {
+     "label": "Move to Antigravity CLI",
+     "url": "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/"
+    }
+   ]
   },
   {
    "id": "antigravity",
@@ -2441,7 +2495,21 @@
      "note": "Verification log lists VS Code, Copilot CLI and Codex as accepting a Claude manifest; Antigravity is not among them.",
      "source": "verification log"
     }
-   }
+   },
+   "sources": [
+    {
+     "label": "Documentation",
+     "url": "https://antigravity.google/docs/overview"
+    },
+    {
+     "label": "CLI changelog",
+     "url": "https://github.com/google-antigravity/antigravity-cli/blob/main/CHANGELOG.md"
+    },
+    {
+     "label": "Move from Gemini CLI",
+     "url": "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/"
+    }
+   ]
   },
   {
    "id": "opencode",
@@ -2783,7 +2851,17 @@
      "note": "No file looked for; verification log: Gemini CLI, Antigravity, OpenCode get nothing.",
      "source": "verification log; topics/plugins-and-distribution.md"
     }
-   }
+   },
+   "sources": [
+    {
+     "label": "Documentation",
+     "url": "https://opencode.ai/docs/"
+    },
+    {
+     "label": "Source code",
+     "url": "https://github.com/anomalyco/opencode"
+    }
+   ]
   }
  ],
  "changelog": [
