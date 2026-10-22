@@ -28,23 +28,6 @@ _headers          Cloudflare Pages cache headers
 
 Project pages:
 
-- **BSR Straßenreinigung Berlin** (`berlin-cleaning/`): MapLibre GL map of Berlin's
-  official street-cleaning classes, bilingual German/English, with address search
-  and per-class filtering.
-- **A Moment of Light** (`quotes/`): minimal reader that surfaces one short poem at
-  a time from a curated client-side collection.
-- **Syntax-Aware Diff Tool** (`diff/`): Monaco diff editor with side-by-side and
-  inline views, drag-and-drop input, and live change metrics.
-- **JSON Query Tool** (`json/`): three-panel workbench with input, structure
-  explorer, and a JSONata query box with autocomplete and live results.
-- **Geometric Wall Designer** (`paint/`): generates wall-paint patterns that can be
-  painted with masking tape, so straight lines only and at most three colors.
-- **Traffic** (`traffic/`): the 40 classic Rush Hour-style sliding-block puzzles —
-  slide vehicles to free the red car, with a move counter, timer, and offline
-  installable play as a PWA.
-- **CCAR-F Study Guide** (`study-guide/`): offline study guide for the Claude
-  Certified Architect (Foundations) exam, in one zero-dependency HTML file.
-
 - **Agent Harness Tracker** (`harness/`): live comparison of AI coding agents on
   shared-harness capabilities, with a coverage leaderboard, per-area heatmap, a
   compare view, tool cards and a changelog. Generated from a separate (private) research
@@ -55,6 +38,22 @@ Project pages:
   Wording-only edits don't count as a review: commit them in the KB with a subject
   starting `Copy:`, or sync uncommitted ones with `--copy`. Either way they add no
   changelog entry and keep the review dates.
+- **CCAR-F Study Guide** (`study-guide/`): offline study guide for the Claude
+  Certified Architect (Foundations) exam, in one zero-dependency HTML file.
+- **Syntax-Aware Diff Tool** (`diff/`): Monaco diff editor with side-by-side and
+  inline views, drag-and-drop input, and live change metrics.
+- **JSON Query Tool** (`json/`): three-panel workbench with input, structure
+  explorer, and a JSONata query box with autocomplete and live results.
+- **BSR Straßenreinigung Berlin** (`berlin-cleaning/`): MapLibre GL map of Berlin's
+  official street-cleaning classes, bilingual German/English, with address search
+  and per-class filtering.
+- **Geometric Wall Designer** (`paint/`): generates wall-paint patterns that can be
+  painted with masking tape, so straight lines only and at most three colors.
+- **Traffic** (`traffic/`): the 40 classic Rush Hour-style sliding-block puzzles —
+  slide vehicles to free the red car, with a move counter, timer, and offline
+  installable play as a PWA.
+- **A Moment of Light** (`quotes/`): minimal reader that surfaces one short poem at
+  a time from a curated client-side collection.
 
 ## Conventions
 
