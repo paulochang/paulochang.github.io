@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-18",
+ "updated": "2026-10-26",
  "firstPublished": "2026-09-29",
  "levels": {
   "N": "Native",
@@ -59,7 +59,7 @@
    "area": "surfaces",
    "label": "IDE (editor or extension)",
    "tier": "-",
-   "strategy": "Test IDE and CLI separately; Copilot VS Code Local and Copilot CLI differ materially."
+   "strategy": "Test IDE and CLI separately; Copilot's VS Code Local harness and the CLI differ materially."
   },
   {
    "id": "surface.cloud",
@@ -381,7 +381,7 @@
   {
    "id": "claude-code",
    "label": "Claude Code",
-   "reviewed": "2026-10-18",
+   "reviewed": "2026-10-26",
    "headless": "claude -p",
    "homeDirs": [
     ".claude/",
@@ -402,7 +402,7 @@
     },
     {
      "title": "Auto permission mode",
-     "detail": "In auto mode a classifier reviews actions. There is also dontAsk, and a sandbox that protects credentials. Anthropic reports 93% of prompts approved.",
+     "detail": "In auto mode a classifier (Sonnet 5 by default) reviews actions. Since v2.1.283 it is the built-in starting mode for interactive sessions, but not for claude -p or the Agent SDK. There is also dontAsk, and a sandbox that protects credentials. Anthropic reports 93% of prompts approved.",
      "source": "tools/claude-code.md §8; topics/evidence-what-works.md (Anthropic auto-mode post, 2026-03-25)"
     },
     {
@@ -417,7 +417,7 @@
     },
     {
      "title": "Cloud, teleport and scheduling",
-     "detail": "Cloud sessions, --teleport, Remote Control, Channels, Routines, /loop, auto-fix PRs, agent teams.",
+     "detail": "Cloud sessions, --teleport, Remote Control, Channels, cloud scheduled tasks (formerly routines), /loop, auto-fix PRs, agent teams.",
      "source": "tools/claude-code.md §1, §14"
     },
     {
@@ -451,7 +451,7 @@
     "surface.cloud": {
      "level": "N",
      "native": "claude.ai/code, claude --cloud, --teleport",
-     "note": "Managed VMs read repo .claude/ (settings, agents, skills, hooks) but NOT ~/.claude or user-only plugins; LSP servers do not start.",
+     "note": "Managed VMs read repo .claude/ (settings, agents, skills, hooks) but NOT ~/.claude or user-only plugins; LSP servers do not start. A thread in a claude.ai Project loads only root CLAUDE.md and non-path-scoped rules, with no repo hooks, skills or agents.",
      "source": "tools/claude-code.md §2"
     },
     "headless.run": {
@@ -487,7 +487,7 @@
     "instr.nested": {
      "level": "N",
      "native": "subdirectory CLAUDE.md (lazy)",
-     "note": "Ancestors load at launch; subdirectory files load on demand when Claude reads files there. Nested AGENTS.md only if the dir has no CLAUDE.md.",
+     "note": "Ancestors load at launch; subdirectory files load on demand when Claude reads files there. Nested AGENTS.md only if the dir has no CLAUDE.md. Capped at 40,000 chars (200K window) or 150,000 to 200,000 (1M window) since v2.1.309.",
      "source": "tools/claude-code.md §3"
     },
     "instr.imports": {
@@ -541,7 +541,7 @@
     "agents.profiles": {
      "level": "N",
      "native": ".claude/agents/*.md",
-     "note": "Markdown plus YAML; only name and description required; subagents with worktree isolation, memory, hooks and MCP scoping.",
+     "note": "Markdown plus YAML; only name and description required; subagents with worktree isolation, memory, hooks, MCP scoping and a per-agent autoCompactWindow (v2.1.296+).",
      "source": "tools/claude-code.md §6"
     },
     "agents.tool-limits": {
@@ -589,7 +589,7 @@
     "hooks.block": {
      "level": "N",
      "native": "exit 2 or permissionDecision deny",
-     "note": "Exit 2 blocks only on events marked Yes; a deny/ask permission rule still wins over a hook allow.",
+     "note": "Exit 2 blocks only on events marked Yes; a deny/ask permission rule still wins over a hook allow. Tested in 2.1.310: exit 1, a timeout and a missing script fail open; onFailure: block makes them block.",
      "source": "tools/claude-code.md §7"
     },
     "hooks.inject-context": {
@@ -637,7 +637,7 @@
     "policy.rules": {
      "level": "N",
      "native": "permissions allow/ask/deny in settings.json",
-     "note": "Order deny, ask, allow; first match wins; specificity does not matter. Modes include plan, auto (classifier), dontAsk.",
+     "note": "Order deny, ask, allow; first match wins; specificity does not matter. Modes include plan, auto (classifier), dontAsk. Auto is the built-in starting mode for interactive terminal and VS Code sessions since v2.1.283; claude -p, the Agent SDK, disableAutoMode and HIPAA start in default.",
      "source": "tools/claude-code.md §8"
     },
     "policy.repo": {
@@ -733,7 +733,7 @@
   {
    "id": "codex",
    "label": "OpenAI Codex",
-   "reviewed": "2026-10-18",
+   "reviewed": "2026-10-26",
    "headless": "codex exec",
    "homeDirs": [
     ".codex/",
@@ -771,8 +771,8 @@
      "source": "tools/codex.md §7"
     },
     {
-     "title": "Rich per-agent TOML",
-     "detail": "Agent TOML can set sandbox_mode, model_reasoning_effort (up to ultra), MCP servers and skill config.",
+     "title": "Per-agent TOML",
+     "detail": "Agent TOML sets model, model_reasoning_effort (up to ultra), skill config and feature switches. Sandbox, approvals and MCP servers are inherited from the parent.",
      "source": "tools/codex.md §6"
     },
     {
@@ -810,7 +810,7 @@
     "surface.cloud": {
      "level": "N",
      "native": "Codex Cloud (web, mobile, desktop; `codex cloud` CLI)",
-     "note": "Current Cloud uses reusable published environments and isolated task workspaces; saved VM state is recoverable for up to 7 days. The setup-script workflow and 12 h cache describe Codex Cloud (Legacy). Plugin loading in current Cloud is unverified.",
+     "note": "Current Cloud uses reusable published environments and isolated task workspaces; saved VM state is recoverable for up to 7 days. The setup-script workflow and 12 h cache are Codex Cloud (Legacy), which OpenAI plans to deprecate. Plugin loading in current Cloud is not documented here (unverified).",
      "source": "tools/codex.md §2"
     },
     "headless.run": {
@@ -905,9 +905,9 @@
     },
     "agents.tool-limits": {
      "level": "P",
-     "native": "sandbox_mode, mcp_servers, skills.config",
-     "note": "No tool allowlist; restriction is by sandbox mode and MCP/skill config per agent. No lossless mapping from a tool list.",
-     "source": "topics/agents-and-commands.md; tools/codex.md §6"
+     "native": "features.shell_tool|apps|plugins|memories = false; skills.config",
+     "note": "No tool allowlist. Per-agent TOML can switch off feature groups and skills (disable-only). sandbox_mode, approval_policy, model_provider and mcp_servers are inherited from the parent and not overridable per agent (docs and rust-v0.164.0 core/src/agent/role.rs). No lossless tool-list mapping.",
+     "source": "tools/codex.md §6; https://learn.chatgpt.com/docs/agent-configuration/subagents"
     },
     "agents.cross-read": {
      "level": "-",
@@ -918,7 +918,7 @@
     "hooks.shell": {
      "level": "N",
      "native": ".codex/hooks.json or [hooks] in config.toml",
-     "note": "12 events; handlers command and mcp_tool (prompt/agent parsed but skipped). On by default; non-managed hooks need /hooks trust review.",
+     "note": "14 events at rust-v0.164.0 (docs list 12, lagging); handlers command and mcp_tool (prompt/agent parsed but skipped). On by default (tested); non-managed hooks need /hooks trust review (untrusted hooks did not run in a test).",
      "source": "tools/codex.md §7"
     },
     "hooks.session-start": {
@@ -970,10 +970,10 @@
      "source": "tools/codex.md §7"
     },
     "hooks.model-level": {
-     "level": "-",
-     "native": "",
-     "note": "No before/after model-call events.",
-     "source": "tools/codex.md §7 (event list)"
+     "level": "P",
+     "native": "PreModelRequest / PostModelRequest",
+     "note": "Observation-only model-request events: declared and dispatched in rust-v0.164.0 (hook_config.rs, core/src/session/turn.rs) and fired in a test with Codex 0.164.0. Cannot veto or alter requests. The public hooks page still lists 12 events (lagging); the runtime has 14.",
+     "source": "tools/codex.md §7; openai/codex@rust-v0.164.0 codex-rs/core/src/session/turn.rs; tested with Codex 0.164.0 on 2026-10-26"
     },
     "hooks.inferential": {
      "level": "-",
@@ -1008,7 +1008,7 @@
     "policy.sandbox": {
      "level": "N",
      "native": "sandbox_mode (Seatbelt / bubblewrap / Windows)",
-     "note": "read-only, workspace-write, danger-full-access; .git, .agents, .codex read-only inside writable roots; network off by default.",
+     "note": "read-only, workspace-write, danger-full-access; .git, .agents, .codex and .aws are read-only inside writable roots (source and tested with Codex 0.164.0); network off by default.",
      "source": "tools/codex.md §8"
     },
     "policy.ignore": {
@@ -1038,7 +1038,7 @@
     "mcp.remote": {
      "level": "N",
      "native": "url + auth / bearer_token_env_var",
-     "note": "HTTP servers with oauth or chatgpt auth, headers, env_http_headers, http_headers_helper.",
+     "note": "HTTP servers with oauth (default) or chatgpt auth, bearer_token_env_var, headers, env_http_headers, http_headers_helper.",
      "source": "tools/codex.md §10"
     },
     "intel.lsp": {
@@ -1050,7 +1050,7 @@
     "intel.memory": {
      "level": "P",
      "native": "[features] memories; ~/.codex/memories/",
-     "note": "Off by default; opt in via config or Settings; generated async, secrets redacted; /memories per chat. Supplements, not replaces, AGENTS.md.",
+     "note": "Off by default (stage stable, default false per source and codex features list 0.164.0); opt in via config or Settings; generated async, secrets redacted; /memories per chat. Supplements, not replaces, AGENTS.md.",
      "source": "tools/codex.md §13"
     },
     "plugins.package": {
@@ -1092,7 +1092,7 @@
   {
    "id": "github-copilot",
    "label": "GitHub Copilot",
-   "reviewed": "2026-10-18",
+   "reviewed": "2026-10-26",
    "headless": "copilot -p",
    "homeDirs": [
     "~/.copilot/",
@@ -1113,7 +1113,7 @@
     },
     {
      "title": "MCP inputs prompting (VS Code)",
-     "detail": "An inputs array with ${input:id} asks for secrets at runtime instead of storing them. Also supports envFile and a sandbox per server.",
+     "detail": "In the VS Code format, an inputs array with ${input:id} asks for secrets at runtime instead of storing them. Also envFile and a sandbox per server. The Copilot harness skips servers that need ${input:}.",
      "source": "tools/github-copilot.md §10"
     },
     {
@@ -1140,6 +1140,11 @@
      "title": "Hosted Copilot Memory",
      "detail": "GitHub-hosted repo and user memory shared across cloud agent, review and CLI, with citations validated against the branch.",
      "source": "tools/github-copilot.md §13"
+    },
+    {
+     "title": "Agent-scoped hooks",
+     "detail": "A hooks field in agent frontmatter runs hooks only for that agent. CLI since 1.0.97; Local and Copilot harness in VS Code. Remote and org-hosted agents do not run them.",
+     "source": "tools/github-copilot.md §6, §14"
     }
    ],
    "gotchas": [
@@ -1148,7 +1153,9 @@
     "VS Code Local ignores hook matcher values, so every command for the event runs.",
     "The CLI does not read .vscode/mcp.json. Use .mcp.json or .github/mcp.json (root key mcpServers).",
     "VS Code skill names with invalid characters silently fail to load. The name must match the directory.",
-    "The cloud agent loads only committed repo files. It cannot see symlinks, user scope or plugins."
+    "The cloud agent loads only committed repo files. It cannot see symlinks, user scope or plugins.",
+    "Cloud reads hooks from the default branch, but instructions and skills from the head branch.",
+    "VS Code prompt files, handoffs, chat.useHooks and chat.useClaudeHooks apply to the Local harness only."
    ],
    "cells": {
     "surface.cli": {
@@ -1159,8 +1166,8 @@
     },
     "surface.ide": {
      "level": "N",
-     "native": "VS Code agent mode (Local / Agent Host); JetBrains",
-     "note": "VS Code Local agent is slated for removal; Agent Host is the successor. Skills also in JetBrains agent mode.",
+     "native": "VS Code agent mode (Local and Copilot harness); JetBrains",
+     "note": "VS Code runs sessions in harnesses: Local (extension host) and Copilot (Agent Host, shared with the CLI and app). The old \"Local agent will be removed\" sentence is gone. JetBrains: plugin, AI Assistant via ACP, or CLI.",
      "source": "tools/github-copilot.md §2, §1"
     },
     "surface.cloud": {
@@ -1202,13 +1209,13 @@
     "instr.nested": {
      "level": "P",
      "native": "AGENTS.md nearest-wins; chat.useNestedAgentsMdFiles",
-     "note": "VS Code nested AGENTS.md is off by default (Local agent only; the \"experimental\" wording is gone from the current page). Cloud: nearest wins. CLI: standard locations, combined.",
+     "note": "VS Code nested AGENTS.md is off by default (Local harness only; the \"experimental\" wording is gone from the current page). Cloud: nearest wins. CLI: standard locations, combined.",
      "source": "tools/github-copilot.md §3"
     },
     "instr.imports": {
      "level": "P",
      "native": "@ file references",
-     "note": "CLI supports @ refs in copilot-instructions.md, AGENTS.md, CLAUDE.md; not expanded in GEMINI.md. Other interfaces not documented in KB.",
+     "note": "CLI supports @ refs in copilot-instructions.md, AGENTS.md, CLAUDE.md; not expanded in GEMINI.md. Tested with Copilot CLI 1.0.103 (2026-10-26): relative @ paths load, absolute and ~/ paths do not. Other interfaces not documented in KB.",
      "source": "tools/github-copilot.md §3"
     },
     "rules.glob": {
@@ -1250,7 +1257,7 @@
     "commands.format": {
      "level": "P",
      "native": ".claude/commands/*.md (CLI); .github/prompts/*.prompt.md (VS Code Local)",
-     "note": "Prompt files not loaded by Agent Host, deprecated; CLI reads .claude/commands, lower priority than same-name skills. No Copilot-native CLI command dir.",
+     "note": "Prompt files run only in the VS Code Local harness; chat.promptFilesLocations is deprecated. CLI reads .claude/commands, lower priority than same-name skills. No Copilot-native CLI command dir.",
      "source": "tools/github-copilot.md §5"
     },
     "agents.profiles": {
@@ -1268,13 +1275,13 @@
     "agents.cross-read": {
      "level": "C",
      "native": ".claude/agents/ (VS Code and CLI), ~/.claude/agents (VS Code)",
-     "note": "CLI walks up to Git root; .github/agents beats .claude/agents at same level. CLI also documents plugin agents.",
+     "note": "CLI walks up to Git root; every project .github/agents dir loads before any .claude/agents dir, and user ~/.copilot/agents wins a same-ID clash. CLI also documents plugin agents.",
      "source": "tools/github-copilot.md §6"
     },
     "hooks.shell": {
      "level": "N",
      "native": ".github/hooks/*.json",
-     "note": "14 events on CLI + Cloud; 8 on VS Code Local. Handlers: command, http, prompt. Cloud honours only bash/command.",
+     "note": "14 events on CLI + Cloud; 8 on VS Code Local. VS Code Copilot harness uses the same GitHub format (14 events there not documented). Handlers: command, http, prompt. Cloud honours only bash/command and reads the default branch.",
      "source": "tools/github-copilot.md §7"
     },
     "hooks.session-start": {
@@ -1286,7 +1293,7 @@
     "hooks.tool-before": {
      "level": "N",
      "native": "preToolUse / PreToolUse",
-     "note": "VS Code Local ignores matcher values, so every command runs; CLI and Cloud honour anchored regex matchers.",
+     "note": "VS Code Local ignores matcher values, so every command runs; CLI and Cloud honour anchored regex matchers. In -p and autopilot (CLI) and Cloud, ask becomes deny (tested with CLI 1.0.103, 2026-10-26). CLI hook payload names MCP tools <server>-<tool>.",
      "source": "tools/github-copilot.md §7"
     },
     "hooks.tool-after": {
@@ -1304,7 +1311,7 @@
     "hooks.block": {
      "level": "N",
      "native": "permissionDecision: deny; exit 2",
-     "note": "preToolUse and permissionRequest (CLI only). Under Cloud, ask is treated as deny.",
+     "note": "preToolUse and permissionRequest (CLI only). Under Cloud, ask is treated as deny. Tested with CLI 1.0.103 (2026-10-26): deny output blocks the call and the model sees the reason; exit 2 not retested.",
      "source": "tools/github-copilot.md §7"
     },
     "hooks.inject-context": {
@@ -1322,7 +1329,7 @@
     "hooks.rewrite-output": {
      "level": "P",
      "native": "modifiedResult (postToolUse)",
-     "note": "Documented for command/HTTP hooks, but issue copilot-cli#3361 says the model does not see it. Unproven; verify with a live test.",
+     "note": "Tested with Copilot CLI 1.0.103 (2026-10-26): a command postToolUse hook returning modifiedResult replaced an MCP tool result for the model. Issue copilot-cli#3361 (open) concerns SDK extensions. Built-in tools, HTTP hooks and Cloud untested, so the level stays P.",
      "source": "tools/github-copilot.md §7; open-questions.md Copilot output rewriting"
     },
     "hooks.model-level": {
@@ -1345,8 +1352,8 @@
     },
     "hooks.cross-read": {
      "level": "C",
-     "native": "CLI reads .claude/settings.json; VS Code chat.useClaudeHooks",
-     "note": "CLI reads repo .claude/settings(.local).json hooks; VS Code opt-in, off by default. PascalCase events use Claude-style matchers.",
+     "native": "CLI and VS Code Copilot harness read .claude/settings(.local).json; VS Code Local needs chat.useClaudeHooks",
+     "note": "CLI reads repo .claude/settings(.local).json hooks; the VS Code Copilot harness does too with no opt-in. The Local harness needs chat.useClaudeHooks (off by default) and ignores matchers. PascalCase events use Claude-style matchers.",
      "source": "tools/github-copilot.md §7"
     },
     "policy.rules": {
@@ -1370,7 +1377,7 @@
     "policy.ignore": {
      "level": "P",
      "native": "Content exclusion (GitHub settings)",
-     "note": "No local .copilotignore. Not honoured in VS Code Edit/Agent modes; honoured in CLI (since 2026-09-02) and Cloud (since 2026-06-30, preview). Not a security boundary.",
+     "note": "No local .copilotignore. Not honoured in VS Code Edit/Agent modes; honoured in CLI (since 2026-09-02) and Cloud (since 2026-06-30). Docs conflict on CLI (how-to says unsupported). Not a security boundary.",
      "source": "tools/github-copilot.md §9"
     },
     "policy.managed": {
@@ -1388,7 +1395,7 @@
     "mcp.project-config": {
      "level": "N",
      "native": ".vscode/mcp.json + .mcp.json; CLI .mcp.json / .github/mcp.json",
-     "note": "CLI does not read .vscode/mcp.json (root key servers is unsupported); CLI root key mcpServers. Cloud: repo settings on github.com.",
+     "note": "CLI does not read .vscode/mcp.json (root key servers is unsupported); CLI root key mcpServers. VS Code Copilot harness reads .mcp.json and mcp-config.json directly and forwards eligible .vscode/mcp.json servers. Cloud: repo settings on github.com.",
      "source": "tools/github-copilot.md §10"
     },
     "mcp.remote": {
@@ -1400,7 +1407,7 @@
     "intel.lsp": {
      "level": "P",
      "native": "CLI .github/lsp.json, ~/.copilot/lsp-config.json",
-     "note": "CLI only (lspServers, fileExtensions). Plugin LSP path is inconsistent in docs; needs live test. VS Code has language-extension tools, no config.",
+     "note": "CLI only (lspServers, fileExtensions; command, bash or powershell). Per-server timeouts and disabled flag. Plugin LSP path is inconsistent in docs; needs live test. VS Code has language-extension tools, no config.",
      "source": "tools/github-copilot.md §11; open-questions.md Copilot CLI LSP"
     },
     "intel.memory": {
@@ -1417,7 +1424,7 @@
     },
     "plugins.marketplace": {
      "level": "N",
-     "native": "marketplace.json; defaults copilot-plugins, awesome-copilot",
+     "native": "marketplace.json; awesome-copilot built in, copilot-plugins added manually",
      "note": "CLI plugin install; VS Code chat.plugins.marketplaces. CLI also reads .claude-plugin/marketplace.json.",
      "source": "tools/github-copilot.md §12"
     },
@@ -1430,7 +1437,7 @@
     "plugins.claude-manifest": {
      "level": "C",
      "native": ".claude-plugin/plugin.json",
-     "note": "VS Code and CLI (CLI discovery since v1.0.6, MCP/LSP loading fixed v1.0.10). Whether ${CLAUDE_PLUGIN_ROOT} expands in skill bodies is unverified.",
+     "note": "VS Code and CLI (CLI discovery since v1.0.6, MCP/LSP loading fixed v1.0.10). Tested with CLI 1.0.103 (2026-10-26): ${CLAUDE_PLUGIN_ROOT} is not expanded in a plugin skill body (VS Code unverified). Plugin root .lsp.json (lspServers/fileExtensions schema) loads.",
      "source": "tools/github-copilot.md §12; open-questions.md"
     }
    },
@@ -1452,7 +1459,7 @@
   {
    "id": "cursor",
    "label": "Cursor",
-   "reviewed": "2026-10-18",
+   "reviewed": "2026-10-26",
    "headless": "agent -p",
    "homeDirs": [
     ".cursor/",
@@ -1497,7 +1504,7 @@
     },
     {
      "title": ".cursorignore breadth",
-     "detail": "One ignore file also covers Tab, Inline Edit and @-mentions, though terminal and MCP bypass it.",
+     "detail": "One ignore file also covers Tab and @-mentions, though terminal and MCP bypass it.",
      "source": "tools/cursor.md §9; hub §6"
     }
    ],
@@ -1525,13 +1532,13 @@
     "surface.cloud": {
      "level": "N",
      "native": "Cloud Agents (background)",
-     "note": "Triggered from Slack, PR comments, Linear, API; & prefix in CLI. Skips user hooks, session and MCP hooks.",
+     "note": "Triggered from Slack, PR comments, Linear, API, iOS, web; & prefix in CLI. Self-hosted workers exist. Skips user hooks, session and MCP hooks.",
      "source": "tools/cursor.md §14, §7; https://cursor.com/docs/cloud-agent"
     },
     "headless.run": {
      "level": "N",
      "native": "agent -p",
-     "note": "--force/--yolo. Docs conflict: the CLI usage page says -p has full write access in non-interactive mode, the headless page says changes are only proposed without --force (verify). Key: CURSOR_API_KEY.",
+     "note": "--force/--yolo. Docs still conflict: three CLI pages say -p has write access, the headless page says changes are only proposed without --force (verify). Key: CURSOR_API_KEY.",
      "source": "tools/cursor.md §2; topics/code-intelligence-memory-and-headless.md"
     },
     "headless.json": {
@@ -1555,13 +1562,13 @@
     "instr.own-file": {
      "level": "N",
      "native": ".cursor/rules/*.mdc (alwaysApply: true)",
-     "note": "Also User Rules (settings) and Team Rules (dashboard). Plain .md in rules dir is ignored.",
+     "note": "Also User Rules (Customize > Rules) and Team Rules (dashboard, can be enforced). Plain .md in rules dir is ignored.",
      "source": "tools/cursor.md §3"
     },
     "instr.nested": {
      "level": "N",
      "native": "nested AGENTS.md",
-     "note": "Read in subdirectories. Nested CLAUDE.md not documented (verify).",
+     "note": "Read in subdirectories; CLI also applies a directory's AGENTS.md when the agent edits a file there (v2026.10.22). Nested CLAUDE.md not documented (verify).",
      "source": "tools/cursor.md §3"
     },
     "instr.imports": {
@@ -1603,7 +1610,7 @@
     "skills.extras": {
      "level": "N",
      "native": "paths, disable-model-invocation, icon, color, metadata",
-     "note": "paths is outside the Agent Skills spec; other hosts ignore it.",
+     "note": "paths (string or list; legacy globs still accepted) is outside the Agent Skills spec; other hosts ignore it.",
      "source": "tools/cursor.md §4, §15"
     },
     "commands.format": {
@@ -1615,7 +1622,7 @@
     "agents.profiles": {
      "level": "N",
      "native": ".cursor/agents/*.md",
-     "note": "Fields name, description, model, readonly, is_background. Built-ins Explore and Browser (no Bash). Two nesting levels max.",
+     "note": "Fields name, description (both optional), model, readonly, is_background. Built-ins Explore and Browser (no Bash). Two nesting levels max.",
      "source": "tools/cursor.md §6; https://cursor.com/docs/subagents"
     },
     "agents.tool-limits": {
@@ -1639,7 +1646,7 @@
     "hooks.session-start": {
      "level": "N",
      "native": "sessionStart",
-     "note": "Can return env and additional_context. Not run in cloud agents.",
+     "note": "Can return env and additional_context. Fire-and-forget: cannot block. Not run in cloud agents.",
      "source": "tools/cursor.md §7"
     },
     "hooks.tool-before": {
@@ -1663,7 +1670,7 @@
     "hooks.block": {
      "level": "N",
      "native": "exit code 2 or permission: deny",
-     "note": "Dedicated before* events for shell, MCP, file read. Other non-zero exit fails open unless failClosed.",
+     "note": "Dedicated before* events for shell, MCP, file read. Invalid JSON from a permission hook blocks. Other non-zero exit fails open unless failClosed.",
      "source": "tools/cursor.md §7"
     },
     "hooks.inject-context": {
@@ -1699,7 +1706,7 @@
     "hooks.fail-closed": {
      "level": "N",
      "native": "failClosed (per hook, default false)",
-     "note": "Default is fail-open on non-0/2 exit. Unique per-hook option among the hosts.",
+     "note": "Default is fail-open on crash, timeout or non-0/2 exit; permission hooks still block on invalid JSON. Unique per-hook option among the hosts.",
      "source": "tools/cursor.md §7"
     },
     "hooks.cross-read": {
@@ -1729,7 +1736,7 @@
     "policy.ignore": {
      "level": "P",
      "native": ".cursorignore (gitignore syntax)",
-     "note": "Covers Agent, Tab, Inline Edit and @ mentions but terminal and MCP tools bypass it. Not security.",
+     "note": "Covers Agent, Tab and @ mentions, but terminal and MCP tools bypass it. Not security.",
      "source": "tools/cursor.md §9; https://cursor.com/docs/reference/ignore-file"
     },
     "policy.managed": {
@@ -1741,7 +1748,7 @@
     "mcp.client": {
      "level": "N",
      "native": "mcpServers",
-     "note": "stdio, SSE and streamable HTTP. Tools ask approval by default.",
+     "note": "stdio, SSE and streamable HTTP. Tools, prompts, resources, roots, elicitation and MCP Apps. Tools ask approval by default.",
      "source": "tools/cursor.md §10; https://cursor.com/docs/mcp"
     },
     "mcp.project-config": {
@@ -1777,7 +1784,7 @@
     "plugins.marketplace": {
      "level": "N",
      "native": "Cursor Marketplace; team marketplaces",
-     "note": "Private marketplaces with Default Off/On/Required via Organization Groups. Codex reads .cursor-plugin/marketplace.json.",
+     "note": "Private marketplaces with Default Off/On/Required via Organization Groups; Teams 1 imported, Enterprise unlimited. Codex reads .cursor-plugin/marketplace.json.",
      "source": "tools/cursor.md §12"
     },
     "plugins.agent-plugins": {
@@ -1803,7 +1810,7 @@
   {
    "id": "gemini-cli",
    "label": "Gemini CLI",
-   "reviewed": "2026-10-18",
+   "reviewed": "2026-10-26",
    "headless": "gemini -p",
    "homeDirs": [
     ".gemini/",
@@ -1850,11 +1857,12 @@
    ],
    "gotchas": [
     "Consumer access (AI Pro/Ultra, free Code Assist) ended 2026-06-18. Google's word is 'transitioning', not 'successor'. Paid API keys and enterprise continue.",
-    "The gemini-cli README still advertises a free tier, but the Google blog contradicts it. Trust the blog, and say the README looks out of date.",
+    "The gemini-cli README now carries the Antigravity notice (since 2026-10-16) and agrees with the Google blog. The repo's quota-and-pricing doc still mentions a free tier and is out of date.",
     "Workspace policy TOML in .gemini/policies does not work (#18186), so a repo cannot ship policy.",
     "Hook exit codes: docs say exit 2 blocks, source says only exit 1 warns and other non-zero denies. Emit JSON and exit 0.",
     "Hook stdout must be pure JSON. Plain text breaks parsing, and the hook then defaults to allow.",
-    ".geminiignore is advisory: shell, writes and fallback grep bypass it, and the model can opt out on most tools."
+    ".geminiignore is advisory: shell, writes and fallback grep bypass it, and the model can opt out on most tools.",
+    "Untrusted folders (default: any unlisted folder): project and user hooks, workspace skills, project agents and project GEMINI.md/AGENTS.md are not loaded (source and test, v0.65.0). Headless runs exit with an error unless --skip-trust or GEMINI_CLI_TRUST_WORKSPACE=true."
    ],
    "cells": {
     "surface.cli": {
@@ -1948,15 +1956,15 @@
      "source": "tools/gemini-cli.md §4"
     },
     "skills.extras": {
-     "level": "?",
+     "level": "-",
      "native": "",
-     "note": "Frontmatter beyond name/description not documented in the fetch (verify). Hub matrix says extras are ignored.",
-     "source": "tools/gemini-cli.md §4 (verify); cross-platform-ai-harness.md §5"
+     "note": "Source (v0.65.0 skills/skillLoader.ts) parses only name and description; extra keys such as allowed-tools are ignored without error (tested 2026-10-26).",
+     "source": "tools/gemini-cli.md §4; google-gemini/gemini-cli@v0.65.0 packages/core/src/skills/skillLoader.ts"
     },
     "commands.format": {
      "level": "N",
      "native": ".gemini/commands/*.toml",
-     "note": "TOML with prompt/description; subdir becomes :namespace; {{args}}, !{cmd}, @{path}. Not deprecated; not loaded in untrusted folders.",
+     "note": "TOML with prompt/description; subdir becomes :namespace; {{args}}, !{cmd}, @{path}. Not deprecated; not loaded in untrusted folders (docs, source FileCommandLoader).",
      "source": "tools/gemini-cli.md §5; https://geminicli.com/docs/cli/custom-commands/"
     },
     "agents.profiles": {
@@ -2044,10 +2052,10 @@
      "source": "tools/gemini-cli.md §7"
     },
     "hooks.fail-closed": {
-     "level": "?",
+     "level": "P",
      "native": "",
-     "note": "Docs: exit 2 blocks, others warn. Source (fe63502): only exit 1 warns; any other non-zero with text denies. Unparseable stdout allows. Open question.",
-     "source": "tools/gemini-cli.md §7; open-questions.md Gemini hook exit codes"
+     "note": "No per-hook option. Tested v0.65.0: with non-JSON output, exit 1 warns (fail open), any other non-zero code with text blocks (exit 2 and 3 tested), exit 2 with no output does not block; JSON deny blocks whatever the exit code. Docs say 'Other = warning' (lagging).",
+     "source": "tools/gemini-cli.md §7; google-gemini/gemini-cli@v0.65.0 packages/core/src/hooks/hookRunner.ts"
     },
     "hooks.cross-read": {
      "level": "-",
@@ -2064,7 +2072,7 @@
     "policy.repo": {
      "level": "-",
      "native": ".gemini/policies/*.toml (non-functional)",
-     "note": "Workspace tier is documented as currently non-functional (issue #18186). Only user and admin tiers work, so a repo cannot ship policy.",
+     "note": "Workspace tier is disabled in source (policy.ts: disableWorkspacePolicies = true at v0.65.0; a workspace deny rule had no effect in a test) and in the docs (#18186). Only user and admin tiers work, so a repo cannot ship policy.",
      "source": "tools/gemini-cli.md §8, §15; verification log"
     },
     "policy.sandbox": {
@@ -2082,7 +2090,7 @@
     "policy.managed": {
      "level": "N",
      "native": "Admin policy tier (/etc/gemini-cli/policies)",
-     "note": "Tier base 5, highest priority. macOS /Library/Application Support/GeminiCli/policies; also /etc/gemini-cli/settings.json.",
+     "note": "Tier base 5, highest priority. macOS /Library/Application Support/GeminiCli/policies; also /etc/gemini-cli/settings.json. The --admin-policy flag also gets tier 5 (tested: deny rule blocked the tool). System dirs not tested.",
      "source": "tools/gemini-cli.md §8; topics/policy-sandbox-and-ignore.md"
     },
     "mcp.client": {
@@ -2106,7 +2114,7 @@
     "intel.lsp": {
      "level": "-",
      "native": "",
-     "note": "No LSP tool documented; built-in codebase_investigator subagent only (verify).",
+     "note": "No LSP tool in the v0.65.0 tool list (source, 2026-10-26); built-in codebase_investigator subagent only.",
      "source": "tools/gemini-cli.md §11"
     },
     "intel.memory": {
@@ -2158,7 +2166,7 @@
   {
    "id": "antigravity",
    "label": "Antigravity",
-   "reviewed": "2026-10-18",
+   "reviewed": "2026-10-26",
    "headless": "agy -p",
    "homeDirs": [
     "~/.gemini/config/",
@@ -2209,7 +2217,7 @@
     "Permissions are user-level only (~/.gemini/antigravity-cli/settings.json). A repo cannot ship allow/deny rules, so committed guards need a gate elsewhere.",
     "Rules with missing frontmatter or a camelCase trigger (alwaysOn) are silently discarded. Subfolders of .agents/rules are ignored without .agents/rules.json.",
     "PreInvocation/PostInvocation are per model call, not prompt-submit or stop. SessionStart runs once at session initialization, but the hook payload omits the event name.",
-    "Global skill and hook folders differ per surface (antigravity-cli vs config). Remote MCP needs serverUrl, not url or httpUrl.",
+    "Global skill folders differ per surface (antigravity-cli vs config); hooks.json is shared. Remote MCP: use serverUrl (url also accepted, httpUrl not); Streamable HTTP only.",
     "Do not say Gemini CLI is dead. Consumer access ended 2026-06-18, but paid API keys and enterprise continue, and Google says 'transitioning'."
    ],
    "cells": {
@@ -2222,7 +2230,7 @@
     "surface.ide": {
      "level": "N",
      "native": "Antigravity IDE (VS Code fork) + 2.0 desktop app",
-     "note": "IDE and 2.0 app share ~/.gemini/config but have separate app dirs. Extensions for other editors are (verify).",
+     "note": "IDE and 2.0 app share ~/.gemini/config but have separate app dirs. Editor extensions: GA in VS Code and Visual Studio, Preview in JetBrains, Zed and Xcode. IDE as VS Code fork (verify).",
      "source": "tools/antigravity.md §2"
     },
     "surface.cloud": {
@@ -2234,7 +2242,7 @@
     "headless.run": {
      "level": "N",
      "native": "agy -p / --print / --prompt",
-     "note": "Needs prior interactive login. Approval-needing tools are soft-denied unless allowed in settings.json or --dangerously-skip-permissions.",
+     "note": "Needs prior interactive login. Approval-needing tools are soft-denied unless allowed in settings.json or --dangerously-skip-permissions. Unknown --agent name exits 1 (CLI 1.3.4). Default --print-timeout is unlimited (0s; changelog 1.2.6), not the 5m in headless.md.",
      "source": "tools/antigravity.md §2; https://antigravity.google/docs/cli/headless/"
     },
     "headless.json": {
@@ -2310,10 +2318,10 @@
      "source": "tools/antigravity.md §4; topics/skills.md Open questions"
     },
     "commands.format": {
-     "level": "P",
-     "native": "Workflows (IDE/2.0), /workflow-name",
-     "note": "Markdown, 12,000-char limit; current workflows stop working 2026-10-19 (docs changed from a 2026-11-01 deprecation); /migrate-workflows converts to skills. CLI has no command file format; skills are the slash commands.",
-     "source": "tools/antigravity.md §5; https://antigravity.google/docs/ide/workflows/"
+     "level": "-",
+     "native": "",
+     "note": "Workflows (IDE/2.0, /workflow-name) stopped working 2026-10-19; /migrate-workflows converts them to skills. No replacement documented yet. Skills are the slash commands; the CLI never had a command file format.",
+     "source": "tools/antigravity.md §5; https://antigravity.google/docs/ide/workflows/; /docs/migration/workflows-to-skills"
     },
     "agents.profiles": {
      "level": "N",
@@ -2348,7 +2356,7 @@
     "hooks.tool-before": {
      "level": "N",
      "native": "PreToolUse (matcher)",
-     "note": "Matcher: empty, exact name, pipe list or regex over tool names like run_command. Payload lacks the event name.",
+     "note": "Matcher: empty, exact name, pipe list or regex over tool names like run_command. Payload lacks the event name; tested with agy 1.4.7: stdin has toolCall{name,args}, stepIdx, lastUserInput and the common fields.",
      "source": "tools/antigravity.md §7"
     },
     "hooks.tool-after": {
@@ -2366,7 +2374,7 @@
     "hooks.block": {
      "level": "N",
      "native": "PreToolUse decision: deny|ask|force_ask|deny_unless_prior_grant",
-     "note": "Blocking is by JSON decision on stdout. The exit-code contract is undocumented (all 89 pages checked).",
+     "note": "Blocking is by JSON decision on stdout. Exit-code contract undocumented, but tested with agy 1.4.7 (2026-10-26): exit 1 and exit 2 both block the call, exit 0 passes; deny blocks, ask is denied in headless, auto_approve lets it run.",
      "source": "tools/antigravity.md §7"
     },
     "hooks.inject-context": {
@@ -2400,9 +2408,9 @@
      "source": "tools/antigravity.md §7"
     },
     "hooks.fail-closed": {
-     "level": "?",
+     "level": "P",
      "native": "",
-     "note": "No fail-closed switch; timeout and exit-code behaviour undocumented. 2.0 v2.12.0: a failing hook is reported and the session continues (2.0 app only).",
+     "note": "Tested with agy 1.4.7 (2026-10-26): a PreToolUse hook exiting 1 or 2 blocks the call and skips later hooks, so any non-zero exit fails closed; timeout behaviour untested. A failing hook is reported and the session continues (2.0 v2.12.0); CLI 1.4.3: a failing PostToolUse hook is logged and the tool keeps its result.",
      "source": "tools/antigravity.md §7; topics/hooks.md exit codes table"
     },
     "hooks.cross-read": {
@@ -2414,7 +2422,7 @@
     "policy.rules": {
      "level": "N",
      "native": "permissions allow/ask/deny: command(...), read_file, write_file, read_url, execute_url, mcp",
-     "note": "Deny > Ask > Allow. Defaults: workspace files allowed; outside files, web and unconfigured commands ask. toolPermission modes incl. strict.",
+     "note": "Deny > Ask > Allow. Defaults: workspace files allowed; outside files, web and unconfigured commands ask. toolPermission modes incl. strict. Auto (Preview) preset/mode added (app v2.23.0, CLI v1.3.5).",
      "source": "tools/antigravity.md §8; https://antigravity.google/docs/permissions"
     },
     "policy.repo": {
@@ -2426,14 +2434,14 @@
     "policy.sandbox": {
      "level": "P",
      "native": "enableTerminalSandbox",
-     "note": "Seatbelt (macOS), nsjail/namespaces (Linux); Windows keeps older behaviour. On by default in the 2.0 app on macOS/Linux, off in CLI and IDE. Linux backend wording conflicts.",
+     "note": "Seatbelt (macOS), kernel namespaces (Linux); Windows keeps older behaviour. On by default in the 2.0 app on macOS/Linux (Default and Auto presets), off in CLI and IDE. Linux backend wording conflicts (bubblewrap).",
      "source": "tools/antigravity.md §8; open-questions.md (Antigravity sandbox default)"
     },
     "policy.ignore": {
-     "level": "?",
+     "level": "-",
      "native": ".antigravityignore (changelog only)",
-     "note": "No docs page documents an ignore file. Changelog v1.1.16 shows it affects @ completion; agent-tool coverage unknown. Use deny read_file(...) rules.",
-     "source": "tools/antigravity.md §9; open-questions.md Antigravity"
+     "note": "No docs page documents an ignore file (86 pages re-read 2026-10-26). Changelog v1.1.16 shows it affects @ completion. Tested with agy 1.4.7 (2026-10-26): it did not stop the agent reading a listed file by explicit path (headless). Use deny read_file(...) rules. Level - because the tested agent read was not stopped.",
+     "source": "tools/antigravity.md §9 rv31; open-questions.md Antigravity"
     },
     "policy.managed": {
      "level": "?",
@@ -2456,7 +2464,7 @@
     "mcp.remote": {
      "level": "N",
      "native": "serverUrl",
-     "note": "Streamable HTTP/SSE/websocket via serverUrl only; url and httpUrl are not supported. headers, oauth, authProviderType available.",
+     "note": "Streamable HTTP only, via serverUrl (canonical); url also accepted; httpUrl and legacy HTTP+SSE not supported. Tested with agy 1.4.7 (2026-10-26): serverUrl and url connect and expose the tool, httpUrl is never contacted. Migration guide still calls url legacy. headers, oauth, authProviderType, timeoutSeconds.",
      "source": "tools/antigravity.md §10; topics/mcp.md"
     },
     "intel.lsp": {
@@ -2514,84 +2522,91 @@
   {
    "id": "opencode",
    "label": "OpenCode",
-   "reviewed": "2026-10-18",
+   "reviewed": "2026-10-26",
    "headless": "opencode run",
    "homeDirs": [
     "~/.config/opencode/",
-    "~/.claude/ (read)",
-    "~/.agents/ (read)",
+    "~/.claude/skills (read)",
+    "~/.agents/skills (read)",
     "~/.local/share/opencode/"
    ],
-   "summary": "An open-source TUI that can run as a client and a server. Hooks are JS/TS plugins that run in-process, not shell commands. It reads AGENTS.md and falls back to CLAUDE.md and .claude/skills. No triggered rules, sandbox or marketplace.",
+   "summary": "An open-source TUI and background-service coding agent (V2, 2.x). Hooks are in-process JS/TS plugins, not shell commands. It reads AGENTS.md only (no CLAUDE.md fallback) and skills from .opencode, .claude and .agents. No triggered rules or marketplace; V2 runs no language servers. V1 (1.x) is the legacy line.",
    "unique": [
     {
+     "title": "Policies",
+     "detail": "Admin-enforced allow/deny on providers, tools and integrations that never prompt and outrank permissions; system policies outrank all.",
+     "source": "tools/opencode.md §8"
+    },
+    {
      "title": "Plugins as code",
-     "detail": "In-process JS/TS plugins with an SDK client, Bun shell, event bus and shell.env injection. No process is spawned per hook.",
-     "source": "tools/opencode.md §14"
+     "detail": "In-process plugins with one mutable event per hook, including a permission-evaluate hook and model and HTTP request hooks. No process is spawned per hook.",
+     "source": "tools/opencode.md §7"
     },
     {
      "title": "Client/server architecture",
-     "detail": "`opencode serve`/`web` with `--attach` lets run/TUI clients share a running server; auth via OPENCODE_SERVER_PASSWORD.",
+     "detail": "A background service plus `opencode serve`, `opencode api` and `--server` let several clients share sessions; auth via OPENCODE_SERVER_PASSWORD.",
      "source": "tools/opencode.md §2"
     },
     {
-     "title": "Remote instructions and org config",
-     "detail": "`instructions` accepts URLs (5 s timeout) and globs, and a remote .well-known/opencode supplies org defaults.",
-     "source": "tools/opencode.md §3, §12"
+     "title": "Code Mode",
+     "detail": "Tools, including MCP tools, are reachable through one `execute` tool; `codemode: false` exposes a server's tools directly.",
+     "source": "tools/opencode.md §10"
     },
     {
-     "title": "Broad built-in LSP set",
-     "detail": "34 language servers listed, most of them installed automatically and configurable via `lsp`. The lsp tool the model uses is experimental.",
-     "source": "tools/opencode.md §11"
-    },
-    {
-     "title": "Custom tools",
-     "detail": "Custom tools live in .opencode/tools/ and plugin tools register as <file>_<export>.",
-     "source": "tools/opencode.md §14"
+     "title": "Remote and nested instructions",
+     "detail": "`instructions` accepts URLs (5 s timeout) and globs; nested AGENTS.md files load on read.",
+     "source": "tools/opencode.md §3"
     },
     {
      "title": "Auto-approve flag",
-     "detail": "`opencode run --auto` approves all non-denied permissions for unattended runs.",
+     "detail": "`opencode run --auto` approves ask permissions for unattended runs; without it ask is auto-rejected.",
      "source": "tools/opencode.md §2"
     },
     {
-     "title": "Env kill switches for Claude reads",
-     "detail": "OPENCODE_DISABLE_CLAUDE_CODE, _PROMPT, _SKILLS turn off .claude cross-reads to avoid double loading.",
-     "source": "tools/opencode.md §3"
+     "title": "Claude skills kill switch",
+     "detail": "OPENCODE_DISABLE_CLAUDE_CODE or _SKILLS removes only the .claude/skills roots, to avoid double loading.",
+     "source": "tools/opencode.md §4"
+    },
+    {
+     "title": "Two product lines",
+     "detail": "V2 (2.1.x, opencode.ai/v2/docs) is described here. V1 (1.19.x) differs in plugins, LSP, CLAUDE.md fallback and config keys.",
+     "source": "tools/opencode.md header"
     }
    ],
    "gotchas": [
-    "Silently reads CLAUDE.md and .claude/skills unless kill-switch env vars are set, so harnesses can double-load.",
-    "No triggered rules: `instructions` globs only select files that are then always loaded.",
-    "Nested AGENTS.md loading is upward only; downward or read-triggered loading is undocumented code behaviour.",
-    "Permission rules are last-match-wins, the opposite ordering of Claude's fixed deny > ask > allow.",
-    "No shell hooks: guards must be JS plugins that throw. The `permission.ask` hook may never fire, and SessionStart is reportedly broken.",
-    "MCP `timeout` (5000 ms default) applies to fetching the tool list, not per call."
+    "CLAUDE.md is not read; put guidance in AGENTS.md or add instructions: [\"CLAUDE.md\"]. .claude/skills are read, so .agents/skills and .claude/skills can double-load.",
+    ".claude/agents, .claude/commands and .mcp.json are not read.",
+    "Default permissions allow edits, shell and external-directory access; only dotenv reads ask.",
+    "Environment variables are read when the background service starts; run `opencode service stop` after changing them.",
+    "MCP tools sit behind the execute Code Mode tool unless the server sets codemode: false.",
+    "Permission rules are last-match-wins, the opposite of Claude's fixed deny > ask > allow.",
+    "No shell hooks: guards must be JS plugins that throw. V1 plugins fail to load in V2.",
+    "No triggered rules: `instructions` globs only select files that are then always loaded."
    ],
    "cells": {
     "surface.cli": {
      "level": "N",
      "native": "opencode (TUI)",
-     "note": "Open-source terminal TUI; also `opencode serve` / `opencode web` HTTP servers with `--attach`.",
+     "note": "Open-source terminal TUI plus a background service; `opencode serve` runs the HTTP/web server, `--server` and `opencode api` use it. V1: `opencode web` and `--attach`.",
      "source": "tools/opencode.md §1-2"
     },
     "surface.ide": {
      "level": "P",
      "native": "IDE extension (opens the TUI in a terminal)",
-     "note": "IDE docs page: extension auto-installs for VS Code, Cursor, Windsurf, VSCodium when you run `opencode` in the integrated terminal; shares selection/tab and file references. It is a terminal wrapper, not a native panel.",
-     "source": "tools/opencode.md §1; https://opencode.ai/docs/ide/"
+     "note": "Install the extension from the VS Code, Cursor, Windsurf or VSCodium marketplace, then run `opencode` in the integrated terminal. Shares selection, tab and file references; a terminal wrapper, not a native panel.",
+     "source": "tools/opencode.md §1; https://opencode.ai/v2/docs/"
     },
     "surface.cloud": {
-     "level": "P",
-     "native": "opencode github install|run",
-     "note": "Only GitHub Actions integration documented; no hosted cloud agent in KB.",
-     "source": "tools/opencode.md §1-2"
+     "level": "-",
+     "native": "",
+     "note": "No hosted cloud agent and no GitHub Actions command in V2 (no `github` subcommand in 2.1.4, tested). V1 had `opencode github install|run`.",
+     "source": "tools/opencode.md §2"
     },
     "headless.run": {
      "level": "N",
      "native": "opencode run",
-     "note": "Flags: --agent, --command, -c/-s, --fork, --attach; --auto approves non-denied permissions.",
-     "source": "tools/opencode.md §2; https://opencode.ai/docs/cli/"
+     "note": "Tested flags (2.1.4): --agent, -c/-s, --fork, -m provider/model#variant, --title, --thinking, --standalone, --server, -f; --auto approves ask permissions, otherwise ask is auto-rejected. No --command or --attach (V1 flags).",
+     "source": "tools/opencode.md §2; https://opencode.ai/v2/docs/cli/commands"
     },
     "headless.json": {
      "level": "N",
@@ -2602,14 +2617,14 @@
     "instr.agents-md": {
      "level": "N",
      "native": "AGENTS.md",
-     "note": "Project (walks up tree) and global ~/.config/opencode/AGENTS.md; /init generates it.",
-     "source": "tools/opencode.md §3; https://opencode.ai/docs/rules/"
+     "note": "Tested: global ~/.config/opencode/AGENTS.md, then AGENTS.md from the working directory up to the project root; /init generates it.",
+     "source": "tools/opencode.md §3; https://opencode.ai/v2/docs/instructions"
     },
     "instr.claude-md": {
      "level": "C",
-     "native": "CLAUDE.md, ~/.claude/CLAUDE.md",
-     "note": "Fallback only if no AGENTS.md; first match per category wins. Disable with OPENCODE_DISABLE_CLAUDE_CODE=1.",
-     "source": "tools/opencode.md §3"
+     "native": "instructions: [\"CLAUDE.md\"] (explicit only)",
+     "note": "V2 does not read CLAUDE.md by default (tested: project, nested and ~/.claude/CLAUDE.md all ignored); `instructions: [\"CLAUDE.md\"]` loads it explicitly (tested). V1: fallback when no AGENTS.md, kill switch OPENCODE_DISABLE_CLAUDE_CODE.",
+     "source": "tools/opencode.md §3; https://opencode.ai/v2/docs/instructions"
     },
     "instr.own-file": {
      "level": "-",
@@ -2618,10 +2633,10 @@
      "source": "tools/opencode.md §3"
     },
     "instr.nested": {
-     "level": "P",
-     "native": "AGENTS.md (walk up only)",
-     "note": "Docs describe only upward walk from cwd. Read-triggered subdirectory loading exists in code, undocumented.",
-     "source": "tools/opencode.md §3; verification log"
+     "level": "N",
+     "native": "AGENTS.md (walk up; also on read)",
+     "note": "Tested: reading a file loads AGENTS.md files between it and the workspace, injected as a user message after the tool result. Documented in V2; V1 had it in code, undocumented.",
+     "source": "tools/opencode.md §3; https://opencode.ai/v2/docs/instructions"
     },
     "instr.imports": {
      "level": "-",
@@ -2644,110 +2659,110 @@
     "skills.agents-dir": {
      "level": "N",
      "native": "`.agents/skills/`, ~/.agents/skills/",
-     "note": "Loaded alongside .opencode/ and .claude/ roots while walking up to the git worktree.",
-     "source": "tools/opencode.md §4; https://opencode.ai/docs/skills/"
+     "note": "Tested: .agents/skills (project, per ancestor) and ~/.agents/skills load beside .opencode/skills and .claude/skills.",
+     "source": "tools/opencode.md §4; https://opencode.ai/v2/docs/skills"
     },
     "skills.claude-dir": {
      "level": "C",
      "native": "`.claude/skills/`, ~/.claude/skills/",
-     "note": "Read by default; Loaded side by side (resolved from code 2026-09-29); the rules page's 'fallback' wording is stale. Kill switch OPENCODE_DISABLE_CLAUDE_CODE_SKILLS.",
-     "source": "tools/opencode.md §4, §15; open-questions.md"
+     "note": "Tested: .claude/skills and ~/.claude/skills load by default. OPENCODE_DISABLE_CLAUDE_CODE=1 or OPENCODE_DISABLE_CLAUDE_CODE_SKILLS=1 remove only these roots. OPENCODE_DISABLE_EXTERNAL_SKILLS has no effect in V2.",
+     "source": "tools/opencode.md §4, §15; https://opencode.ai/v2/docs/skills"
     },
     "skills.spec": {
      "level": "N",
      "native": "SKILL.md via `skill` tool",
-     "note": "name (regex, must equal dir), description, license, compatibility, metadata (string map). Own root `.opencode/skills/`. Older docs said unknown fields are ignored; current docs say to put OpenCode-specific behaviour in metadata.",
-     "source": "tools/opencode.md §4"
+     "note": "Tested: reads name, description, metadata, disable-model-invocation. ID comes from the path, not name; a skill without description is not listed; flat .md skills; `skills` array with HTTP catalogs. V1: name must equal the directory.",
+     "source": "tools/opencode.md §4; https://opencode.ai/v2/docs/skills"
     },
     "skills.extras": {
-     "level": "-",
-     "native": "",
-     "note": "Docs (2026-10-11) define metadata keys opencode/slash and opencode/autoinvoke (docs-only, verify in code); earlier text said only spec fields are recognised. Level left at none pending a code check.",
-     "source": "tools/opencode.md §4"
+     "level": "P",
+     "native": "metadata.opencode/autoinvoke, disable-model-invocation",
+     "note": "Tested: metadata.opencode/autoinvoke: false and disable-model-invocation: true hide a skill from the model. metadata.opencode/slash is ignored. V1 ignores all metadata.",
+     "source": "tools/opencode.md §4; https://opencode.ai/v2/docs/skills"
     },
     "commands.format": {
      "level": "N",
      "native": ".opencode/commands/*.md",
-     "note": "Frontmatter description, agent, model, subtask; $ARGUMENTS, $1, !`cmd`, @file. Also `command` key in opencode.json.",
-     "source": "tools/opencode.md §5"
+     "note": "Tested: .opencode/commands/ (and command/) markdown, frontmatter description, agent, model, subagent (alias subtask); $ARGUMENTS, $1, !`cmd`. .claude/commands is not read. V1 also documents @file.",
+     "source": "tools/opencode.md §5; https://opencode.ai/v2/docs/commands"
     },
     "agents.profiles": {
      "level": "N",
      "native": ".opencode/agents/*.md",
-     "note": "Primary and subagent modes; built-in build, plan, general, explore, scout. Fields include mode, model, permission, steps.",
-     "source": "tools/opencode.md §6"
+     "note": "Tested: built-in build, plan, general, explore (no scout). Fields: description, mode, model, system, permissions array, steps, hidden, color, disabled. V1 files with `permission` and `prompt` are migrated.",
+     "source": "tools/opencode.md §6; https://opencode.ai/v2/docs/agents"
     },
     "agents.tool-limits": {
      "level": "N",
-     "native": "`permission` per agent",
-     "note": "`tools` field deprecated and converted to `permission`; `skill: false` disables the skill tool.",
+     "native": "`permissions` per agent",
+     "note": "Tested: an agent with `edit` deny loses the edit and write tools; a direct call fails with 'No tool named write is currently available'. Per-agent `permissions` array.",
      "source": "tools/opencode.md §6"
     },
     "agents.cross-read": {
      "level": "-",
      "native": "",
-     "note": "No .claude/agents or .codex/agents cross-read documented; Claude compatibility covers CLAUDE.md and skills only.",
+     "note": "Tested: .claude/agents is not read.",
      "source": "tools/opencode.md §6"
     },
     "hooks.shell": {
      "level": "P",
      "native": "JS/TS plugins (no shell hooks)",
-     "note": "No shell-command hooks: hooks are in-process JS/TS plugins (the hub matrix counts this as partial). In-process plugin functions, not stdin/stdout JSON commands. Hooks exist, so shell-hook reuse is not possible.",
-     "source": "tools/opencode.md §7; hub §4"
+     "note": "No shell-command hooks. Hooks are in-process JS/TS plugins with a default export {id, setup(ctx)}; V1-style plugins fail to load in V2 (tested).",
+     "source": "tools/opencode.md §7; hub §4; https://opencode.ai/v2/docs/build/plugins/migrate-v1"
     },
     "hooks.session-start": {
      "level": "P",
-     "native": "`session.created` (event hook)",
-     "note": "context-mode reports SessionStart broken (issues #14808, #5409); surrogate experimental.chat.system.transform.",
+     "native": "`session.created` (event)",
+     "note": "No session-start hook; observe the session.created event through ctx.event.subscribe() (source). Not tested.",
      "source": "tools/opencode.md §7; topics/hooks.md events table"
     },
     "hooks.tool-before": {
      "level": "N",
-     "native": "`tool.execute.before`",
-     "note": "input {tool, sessionID, callID}, output {args}. MCP tools also pass through as <server>_<tool>.",
-     "source": "tools/opencode.md §7"
+     "native": "ctx.tool.hook(\"execute.before\")",
+     "note": "Tested: ctx.tool.hook('execute.before') receives {tool, sessionID, agent, messageID, id, input}. V1: tool.execute.before(input, output).",
+     "source": "tools/opencode.md §7; https://opencode.ai/v2/docs/build/plugins"
     },
     "hooks.tool-after": {
      "level": "N",
-     "native": "`tool.execute.after`",
-     "note": "output {title, output, metadata}.",
-     "source": "tools/opencode.md §7"
+     "native": "ctx.tool.hook(\"execute.after\")",
+     "note": "Tested: ctx.tool.hook('execute.after') fires with status completed (result) or error. No after event for a call blocked before execution.",
+     "source": "tools/opencode.md §7; https://opencode.ai/v2/docs/build/plugins"
     },
     "hooks.agent-stop": {
      "level": "P",
-     "native": "`session.idle` (bus event)",
-     "note": "Closest equivalent; notify-only (verify), per topics/hooks.md.",
+     "native": "`session.idle` (event)",
+     "note": "session.idle event via ctx.event.subscribe(); notify-only (source, not tested).",
      "source": "tools/opencode.md §7; topics/hooks.md outputs table"
     },
     "hooks.block": {
      "level": "N",
-     "native": "throw in `tool.execute.before`",
-     "note": "Blocking is by throwing an Error, not exit code or JSON.",
-     "source": "tools/opencode.md §7"
+     "native": "throw in execute.before; permission evaluate hook",
+     "note": "Tested: throwing an Error in execute.before rejects the call and the model sees the message. ctx.permission.hook('evaluate') can set effect to deny with a message (tested).",
+     "source": "tools/opencode.md §7; https://opencode.ai/v2/docs/build/plugins"
     },
     "hooks.inject-context": {
-     "level": "P",
-     "native": "`experimental.chat.system.transform`, `chat.message`",
-     "note": "Via experimental transform hooks; no `additionalContext` output field.",
-     "source": "tools/opencode.md §7; hub §4 matrix"
+     "level": "N",
+     "native": "ctx.session.hook(\"context\" | \"prompt\")",
+     "note": "Tested: ctx.session.hook('context') fires with {system, messages, tools, ...} and ctx.session.hook('prompt') fires; the built-in plan plugin edits messages there (source). Mutation not tested by us.",
+     "source": "tools/opencode.md §7; https://opencode.ai/v2/docs/build/plugins"
     },
     "hooks.rewrite-input": {
      "level": "N",
-     "native": "mutate `output.args`",
-     "note": "Write to output.args in tool.execute.before.",
+     "native": "assign event.input in execute.before",
+     "note": "Tested: assigning event.input in execute.before changed the written file content.",
      "source": "tools/opencode.md §7"
     },
     "hooks.rewrite-output": {
      "level": "N",
-     "native": "mutate `output` in tool.execute.after",
-     "note": "Mutation via output argument; caveats noted in KB.",
-     "source": "tools/opencode.md §7; topics/hooks.md"
+     "native": "assign event.result in execute.after",
+     "note": "result and error are mutable in execute.after per docs and types; mutation not tested.",
+     "source": "tools/opencode.md §7; https://opencode.ai/v2/docs/build/plugins"
     },
     "hooks.model-level": {
-     "level": "P",
-     "native": "`chat.params`, `chat.headers`",
-     "note": "Per-request parameter hooks exist; not a clean before/after model-call pair like Gemini BeforeModel/AfterModel.",
-     "source": "tools/opencode.md §7; hub §4 matrix (P)"
+     "level": "N",
+     "native": "ctx.session.hook(\"model.request\" | \"http.request\" | \"http.response\")",
+     "note": "Tested: session hooks model.request, http.request and http.response fire around each model call.",
+     "source": "tools/opencode.md §7"
     },
     "hooks.inferential": {
      "level": "-",
@@ -2758,25 +2773,25 @@
     "hooks.fail-closed": {
      "level": "P",
      "native": "throw = block",
-     "note": "No fail-open/closed switch; a thrown error blocks tool hooks, so closed is achievable in code.",
+     "note": "No fail-open/closed switch; a thrown error blocks in execute.before, so closed is achievable in code.",
      "source": "tools/opencode.md §7; topics/hooks.md exit codes table"
     },
     "hooks.cross-read": {
      "level": "-",
      "native": "",
-     "note": "Reads .claude skills and CLAUDE.md, not Claude hooks.",
+     "note": "Claude hooks are not read; .claude is read for skills only (source).",
      "source": "tools/opencode.md ; topics/hooks.md cross-read table"
     },
     "policy.rules": {
      "level": "N",
-     "native": "`permission` in opencode.json",
-     "note": "allow/ask/deny; last matching rule wins (opposite of Claude); per-agent overrides beat global.",
-     "source": "tools/opencode.md §8; https://opencode.ai/docs/permissions/"
+     "native": "`permissions` array in opencode.json",
+     "note": "Ordered permissions array {action, resource, effect}; last matching rule wins (opposite of Claude). Defaults tested: everything allowed, dotenv reads ask, external_directory allowed. Headless ask is auto-rejected without --auto (tested).",
+     "source": "tools/opencode.md §8; https://opencode.ai/v2/docs/permissions"
     },
     "policy.repo": {
      "level": "N",
      "native": "project `opencode.json`",
-     "note": "Project config merges with global and managed layers.",
+     "note": "Tested: project opencode.json and .opencode/ merge over global; OPENCODE_CONFIG_CONTENT and managed settings sit above (source order).",
      "source": "tools/opencode.md §2, §8"
     },
     "policy.sandbox": {
@@ -2787,39 +2802,39 @@
     },
     "policy.ignore": {
      "level": "P",
-     "native": "`permission.read` patterns; .gitignore/.ignore",
-     "note": "No deny-read ignore file; .env read denied by default; shell reads and MCP not covered.",
-     "source": "tools/opencode.md §8-9; topics/policy-sandbox-and-ignore.md"
+     "native": "`permissions` read patterns; .gitignore",
+     "note": "No deny-read ignore file; use permissions such as a read deny on dotenv files. Default dotenv reads ask (from the effective ruleset; live read not tested).",
+     "source": "tools/opencode.md §8-9; https://opencode.ai/v2/docs/permissions"
     },
     "policy.managed": {
      "level": "N",
-     "native": "managed system settings, macOS MDM",
-     "note": "Highest in the config precedence chain; remote .well-known/opencode for org defaults.",
-     "source": "tools/opencode.md §2, §8"
+     "native": "managed system settings, macOS MDM; V2 `policies`",
+     "note": "Source: system directory (/Library/Application Support/opencode, /etc/opencode), macOS MDM plist and remote .well-known manifests; `policies` (provider.use, tool.use, integration.use) outrank permissions and never prompt. Not tested.",
+     "source": "tools/opencode.md §2, §8; https://opencode.ai/v2/docs/policies"
     },
     "mcp.client": {
      "level": "N",
-     "native": "`mcp` key",
-     "note": "Local and remote servers; `opencode mcp auth|list|logout|debug`.",
-     "source": "tools/opencode.md §10"
+     "native": "`mcp.servers`",
+     "note": "Tested: local stdio server connected (opencode api mcp.list). `opencode mcp list|add|auth|logout`. By default tools are reached through the execute Code Mode tool as tools.<server>.<tool>.",
+     "source": "tools/opencode.md §10; https://opencode.ai/v2/docs/mcp-servers"
     },
     "mcp.project-config": {
      "level": "N",
-     "native": "opencode.json[c] `mcp`",
-     "note": "Local: type local, command array, environment, timeout (5000 ms, for tool listing). {env:VAR} interpolation.",
-     "source": "tools/opencode.md §10"
+     "native": "opencode.json[c] `mcp.servers`",
+     "note": "Tested: opencode.json mcp.servers.<name> {type local, command[], environment, disabled, codemode, timeout}. .mcp.json is not read. `codemode: false` exposes a direct <server>_<tool> tool. V1: mcp.<name>, enabled, numeric timeout.",
+     "source": "tools/opencode.md §10; https://opencode.ai/v2/docs/mcp-servers"
     },
     "mcp.remote": {
      "level": "N",
      "native": "type: remote (url, headers, oauth)",
-     "note": "OAuth with dynamic client registration (RFC 7591); SSE support unverified.",
+     "note": "Source: type remote with url, headers and OAuth (snake_case client_id etc.); Streamable HTTP. Not tested.",
      "source": "tools/opencode.md §10"
     },
     "intel.lsp": {
-     "level": "P",
-     "native": "`lsp` tool (experimental)",
-     "note": "Needs OPENCODE_EXPERIMENTAL_LSP_TOOL=true; 34 built-in servers listed in docs; LSP off by default per docs.",
-     "source": "tools/opencode.md §11"
+     "level": "-",
+     "native": "",
+     "note": "V2 accepts and preserves `lsp` config but runs no language servers and has no lsp tool (docs; no source found; no lsp tool in the tested tool list). V1: 34 built-in servers.",
+     "source": "tools/opencode.md §11; https://opencode.ai/v2/docs/migrate-v1"
     },
     "intel.memory": {
      "level": "-",
@@ -2829,14 +2844,14 @@
     },
     "plugins.package": {
      "level": "P",
-     "native": "`plugin` array (npm) + .opencode/plugins/",
-     "note": "Code plugins only, not bundles of skills/MCP; hooks are JS.",
-     "source": "tools/opencode.md §12; topics/plugins-and-distribution.md"
+     "native": "`plugins` array + .opencode/plugins/",
+     "note": "Code plugins only (npm packages in `plugins`, or .opencode/plugins/); no bundles of skills or MCP. `opencode plugin add|list|check|update|remove`.",
+     "source": "tools/opencode.md §12; https://opencode.ai/v2/docs/plugins"
     },
     "plugins.marketplace": {
      "level": "-",
      "native": "",
-     "note": "No marketplace found; remote .well-known/opencode gives org config.",
+     "note": "No marketplace; remote .well-known/opencode manifests (source, undocumented) give org config.",
      "source": "tools/opencode.md §12"
     },
     "plugins.agent-plugins": {
@@ -2865,6 +2880,129 @@
   }
  ],
  "changelog": [
+  {
+   "date": "2026-10-26",
+   "kind": "review",
+   "edited": [
+    "antigravity",
+    "claude-code",
+    "codex",
+    "cursor",
+    "gemini-cli",
+    "github-copilot",
+    "opencode"
+   ],
+   "changes": [
+    {
+     "type": "level",
+     "host": "antigravity",
+     "hostLabel": "Antigravity",
+     "cap": "commands.format",
+     "capLabel": "User commands as their own format",
+     "from": "P",
+     "to": "-"
+    },
+    {
+     "type": "level",
+     "host": "antigravity",
+     "hostLabel": "Antigravity",
+     "cap": "hooks.fail-closed",
+     "capLabel": "Hooks can be configured or default to fail closed",
+     "from": "?",
+     "to": "P"
+    },
+    {
+     "type": "level",
+     "host": "antigravity",
+     "hostLabel": "Antigravity",
+     "cap": "policy.ignore",
+     "capLabel": "Ignore list that actually holds",
+     "from": "?",
+     "to": "-"
+    },
+    {
+     "type": "level",
+     "host": "codex",
+     "hostLabel": "OpenAI Codex",
+     "cap": "hooks.model-level",
+     "capLabel": "Model-level hooks (before/after model call)",
+     "from": "-",
+     "to": "P"
+    },
+    {
+     "type": "level",
+     "host": "gemini-cli",
+     "hostLabel": "Gemini CLI",
+     "cap": "skills.extras",
+     "capLabel": "Host-specific skill frontmatter extensions",
+     "from": "?",
+     "to": "-"
+    },
+    {
+     "type": "level",
+     "host": "gemini-cli",
+     "hostLabel": "Gemini CLI",
+     "cap": "hooks.fail-closed",
+     "capLabel": "Hooks can be configured or default to fail closed",
+     "from": "?",
+     "to": "P"
+    },
+    {
+     "type": "level",
+     "host": "opencode",
+     "hostLabel": "OpenCode",
+     "cap": "surface.cloud",
+     "capLabel": "Cloud / background agent",
+     "from": "P",
+     "to": "-"
+    },
+    {
+     "type": "level",
+     "host": "opencode",
+     "hostLabel": "OpenCode",
+     "cap": "instr.nested",
+     "capLabel": "Per-folder (nested) instruction files",
+     "from": "P",
+     "to": "N"
+    },
+    {
+     "type": "level",
+     "host": "opencode",
+     "hostLabel": "OpenCode",
+     "cap": "skills.extras",
+     "capLabel": "Host-specific skill frontmatter extensions",
+     "from": "-",
+     "to": "P"
+    },
+    {
+     "type": "level",
+     "host": "opencode",
+     "hostLabel": "OpenCode",
+     "cap": "hooks.inject-context",
+     "capLabel": "Hook can inject context",
+     "from": "P",
+     "to": "N"
+    },
+    {
+     "type": "level",
+     "host": "opencode",
+     "hostLabel": "OpenCode",
+     "cap": "hooks.model-level",
+     "capLabel": "Model-level hooks (before/after model call)",
+     "from": "P",
+     "to": "N"
+    },
+    {
+     "type": "level",
+     "host": "opencode",
+     "hostLabel": "OpenCode",
+     "cap": "intel.lsp",
+     "capLabel": "Language-server tool exposed to the model",
+     "from": "P",
+     "to": "-"
+    }
+   ]
+  },
   {
    "date": "2026-10-18",
    "kind": "review",
