@@ -3,15 +3,17 @@ layout: base.njk
 ogType: article
 navCurrent: post
 ---
-  <header class="page-header">
+  {%- set readMinutes = ((content | striptags | wordcount) / 265) | round(0, "ceil") %}
+  <header class="page-header post-header">
     <h1>{{ title }}{% if draft %}<span class="draft-label">Draft</span>{% endif %}</h1>
     <p id="lede" class="post-meta">
+      Paulo Chang &middot; {{ readMinutes if readMinutes > 1 else 1 }} min read &middot;
       <time datetime="{{ postDate | isoDate }}">{{ postDate | displayDate }}</time>
       {%- if updated %}, updated <time datetime="{{ updated | isoDate }}">{{ updated | displayDate }}</time>{% endif %}
     </p>
   </header>
 
-  <main id="main" tabindex="-1">
+  <main id="main" class="post" tabindex="-1">
     <div class="post-body">
 {{ content | safe }}
     </div>
