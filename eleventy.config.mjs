@@ -47,6 +47,8 @@ export default function (eleventyConfig) {
   eleventyConfig.ignores.add("blog-src/attachments/**");
   eleventyConfig.ignores.add("blog-src/HOW-TO-PUBLISH.md");
 
+  // Curly quotes and dashes, as Medium renders them. Code is left untouched.
+  eleventyConfig.amendLibrary("md", (md) => md.set({ typographer: true }));
   eleventyConfig.amendLibrary("md", headingIds);
 
   // ---- global data ---------------------------------------------------------

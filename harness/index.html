@@ -60,7 +60,6 @@
       --rule: #e3e3de;
       --rule-strong: #c9c9c2;
       --hover: #efefea;
-      --serif: Didot, "Big Caslon", "Iowan Old Style", Georgia, "Times New Roman", serif;
       --serif-text: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, "Times New Roman", serif;
       --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
       --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -162,7 +161,7 @@
       width: 100%; max-width: 52rem; margin: 0 auto; padding: 4rem 6vw 1.5rem; text-align: center;
     }
     header.page-header h1 {
-      font-family: var(--serif); font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.2rem);
+      font-family: var(--sans); font-weight: 600; font-size: clamp(2.2rem, 7vw, 3.2rem);
       letter-spacing: -0.01em; line-height: 1.05;
     }
     #lede { font-size: 1.15rem; color: var(--ink-soft); margin: 1em auto 0; max-width: 38em; }
@@ -202,7 +201,7 @@
     main > section { padding-top: 4.5rem; }
 
     h2 {
-      font-family: var(--serif); font-weight: 400; font-size: clamp(1.6rem, 4vw, 2.1rem);
+      font-family: var(--sans); font-weight: 600; font-size: clamp(1.6rem, 4vw, 2.1rem);
       text-align: center; margin-bottom: 0.5rem;
     }
     .section-lede { text-align: center; color: var(--ink-soft); max-width: 40em; margin: 0 auto 2.25rem; font-size: 1.02rem; }
@@ -215,7 +214,7 @@
     /* ---------- Key findings ---------- */
     .findings { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
     .finding { background: var(--bg); padding: 1.25rem 1.25rem 1.1rem; }
-    .finding .big { font-family: var(--serif); font-size: 2.4rem; line-height: 1; }
+    .finding .big { font-family: var(--sans); font-weight: 700; font-size: 2.4rem; line-height: 1; }
     .finding .big small { font-size: 0.45em; color: var(--ink-soft); font-family: var(--serif-text); }
     .finding p { margin-top: 0.6rem; font-size: 0.98rem; }
     .finding .ui { margin-top: 0.4rem; color: var(--ink-soft); font-size: 0.78rem; }
@@ -351,7 +350,7 @@
     .card { background: var(--surface); border: 1px solid var(--rule); padding: 1.25rem 1.25rem 1rem; display: flex; flex-direction: column; gap: 0.7rem; scroll-margin-top: 7rem; }
     .card:target { outline: 2px solid var(--ink); }
     .card header { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; }
-    .card h3 { font-family: var(--serif); font-weight: 400; font-size: 1.5rem; }
+    .card h3 { font-family: var(--sans); font-weight: 600; font-size: 1.5rem; }
     .card .meta { font-family: var(--sans); font-size: 0.72rem; color: var(--ink-soft); white-space: nowrap; }
     .card p { font-size: 0.95rem; }
     .card dl { display: grid; grid-template-columns: auto 1fr; gap: 0.2rem 0.75rem; font-size: 0.85rem; }
@@ -401,7 +400,7 @@
     }
     dialog::backdrop { background: rgb(0 0 0 / 0.35); }
     dialog .close { position: absolute; top: 0.6rem; right: 0.8rem; background: none; border: 0; font-size: 1.5rem; line-height: 1; color: var(--ink-soft); }
-    dialog h3 { font-family: var(--serif); font-weight: 400; font-size: 1.45rem; padding-right: 2rem; line-height: 1.2; }
+    dialog h3 { font-family: var(--sans); font-weight: 600; font-size: 1.45rem; padding-right: 2rem; line-height: 1.2; }
     dialog .crumbs { font-family: var(--sans); font-size: 0.72rem; color: var(--ink-soft); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.35rem; }
     dialog .cells { list-style: none; margin-top: 1rem; }
     dialog .cells li { display: grid; grid-template-columns: 1.6rem 1fr; gap: 0.75rem; padding: 0.7rem 0; border-top: 1px solid var(--rule); }

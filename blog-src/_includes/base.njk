@@ -37,26 +37,46 @@
   <link rel="alternate" type="text/markdown" href="{{ mdHref or (canonical + 'index.md') }}">
   <link rel="alternate" type="application/atom+xml" title="Paulo Chang: Blog" href="{{ site.blogBase }}feed.xml">
   <style>{{ siteCss | safe }}
-.post-body{font-size:1.1rem}
-.post-body>*+*{margin-top:1.25rem}
-.post-body p{margin-bottom:0}
-.post-body h2{font-size:1.6rem;text-align:left;margin:2.5rem 0 0;scroll-margin-top:6rem}
-.post-body h3{font-size:1.25rem;text-align:left;margin:2rem 0 0}
-.post-body h4,.post-body h5,.post-body h6{font-size:1.1rem;text-align:left;margin:1.5rem 0 0}
+/* Post typography, modelled on Medium's published article view:
+   680px column, 20/32 serif body, 600-weight sans headings close to their text.
+   The column, page title and h2/h3 base styles come from the shared site CSS above. */
+header.post-header{padding-bottom:0}
+header.post-header #lede{margin-top:2rem;font-size:.875rem;line-height:1.75}
+main.post{padding-top:2.5rem}
+.post-body{font-size:1.25rem;line-height:1.6;letter-spacing:-.003em;color:var(--ink)}
+.post-body p,.post-body li{font-size:inherit;margin-bottom:0;text-wrap:pretty}
+.post-body>*+*{margin-top:1.7em}
+.post-body>:first-child{margin-top:0}
+.post-body :is(h2,h3,h4,h5,h6){font-family:var(--sans);font-weight:600;font-style:normal;text-wrap:balance}
+.post-body h2{margin:1.75em 0 0}
+.post-body h3{font-size:1.25rem;line-height:1.2;margin:1.25em 0 0}
+.post-body h4,.post-body h5,.post-body h6{font-size:1.25rem;line-height:1.2;margin:1.25em 0 0}
+.post-body>:is(h2,h3,h4,h5,h6)+*{margin-top:.6rem}
 .post-body ul,.post-body ol{padding-left:1.5em}
 .post-body ul{list-style:disc}
 .post-body ol{list-style:decimal}
-.post-body li{font-size:1.1rem;margin-bottom:.4em}
-.post-body li>ul,.post-body li>ol{margin-top:.4em}
-.post-body pre{overflow-x:auto;padding:1em;background:#ecece7;border:1px solid var(--rule);font-size:.9rem;line-height:1.5}
-.post-body code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9em}
-.post-body :not(pre)>code{background:#ecece7;padding:.1em .3em}
-.post-body blockquote{padding-left:1.25em;border-left:3px solid var(--rule);color:var(--ink-soft)}
+.post-body li+li,.post-body li>ul,.post-body li>ol{margin-top:.7em}
+.post-body li::marker{color:var(--ink)}
+.post-body pre{overflow-x:auto;padding:2rem;background:#f0f0ec;border:1px solid var(--rule);border-radius:4px;font-size:.875rem;line-height:1.4;letter-spacing:0}
+.post-body code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.post-body :not(pre)>code{font-size:.75em;background:#ebebe6;padding:2px 4px}
+.post-body blockquote{font-style:italic;padding-left:20px;box-shadow:inset 3px 0 0 var(--ink)}
 .post-body img{max-width:100%;height:auto}
-.post-body hr{border:0;border-top:1px solid var(--rule);margin:2.5rem 0}
+.post-body hr{border:0;text-align:center;margin:2.5em 0;height:auto}
+.post-body hr::before{content:"\2026";font-size:1.5rem;letter-spacing:.6em;color:var(--ink)}
 .post-body table{display:block;overflow-x:auto;border-collapse:collapse;font-size:1rem}
 .post-body th,.post-body td{padding:.4em .8em;border:1px solid var(--rule);text-align:left}
 .post-body th{font-weight:600}
+.post-back{font-family:var(--sans)}
+@media (min-width:768px){.post-body blockquote{margin-left:-20px;padding-left:23px}}
+@media (max-width:728px){
+header.post-header #lede{margin-top:1.5rem}
+.post-body{font-size:1.125rem;line-height:1.556}
+.post-body>*+*{margin-top:1.1em}
+.post-body h2{margin-top:2em}
+.post-body h3,.post-body h4,.post-body h5,.post-body h6{font-size:1rem}
+.post-body>:is(h2,h3,h4,h5,h6)+*{margin-top:.4rem}
+}
 .post-meta{font-size:.9rem;color:var(--ink-soft)}
 .draft-label{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--ink-soft);padding:.1em .5em;margin-left:.5em}
 .pager{display:flex;justify-content:space-between;gap:1em;margin-top:3rem;font-size:.9rem}
