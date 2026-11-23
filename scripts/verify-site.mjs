@@ -178,6 +178,9 @@ for (const file of built.filter((f) => f.startsWith("blog/") && f.endsWith(".md"
   for (const [, url] of md.matchAll(/\]\(([^)\s]*)/g)) {
     check(url.startsWith("#") || /^[a-z][a-z0-9+.-]*:/i.test(url), `${file}: link is not absolute: ${url}`);
   }
+  for (const [, url] of md.matchAll(/<(?:a|img)\b[^>]*?\s(?:href|src)="([^"]*)"/g)) {
+    check(url.startsWith("#") || /^[a-z][a-z0-9+.-]*:/i.test(url), `${file}: HTML link is not absolute: ${url}`);
+  }
 }
 
 // ---- result ----------------------------------------------------------------

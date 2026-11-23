@@ -13,6 +13,8 @@ export default {
     },
     // In preview mode drafts stay visible to the `blogList` collection, which filters them itself.
     eleventyExcludeFromCollections: (data) => data.draft === true && !showDrafts(),
+    // Drafts may have no date; page.date is the file time then.
+    postDate: (data) => data.date || data.page.date,
     metaDescription: (data) => data.description || excerpt(data.page.rawInput || ""),
     jsonldData: (data) => ({
       "@context": "https://schema.org",

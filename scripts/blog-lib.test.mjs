@@ -98,3 +98,16 @@ test("slugs and excerpts", () => {
   const long = excerpt("word ".repeat(100));
   assert.ok(long.length <= 201 && long.endsWith("…"));
 });
+
+test("headings do not run into the next paragraph in excerpts", () => {
+  assert.equal(excerpt("## A Heading\n\nbody text"), "A Heading. body text");
+  assert.equal(excerpt("# Why?\n\nbody"), "Why? body");
+});
+
+test("raw HTML links in Markdown alternates are rewritten", () => {
+  const warnings = [];
+  const md = 'See <a href="Some%20Other%20Post.md#x">it</a>, <a href="Secret.md">no</a> <img src="../attachments/Pasted%20image%201.png" alt="s">';
+  const result = rewriteMarkdownLinks(md, ctx, { warn: (m) => warnings.push(m) });
+  assert.equal(result, 'See <a href="https://paulochang.com/blog/other/#x">it</a>, no <img src="https://paulochang.com/blog/attachments/Pasted%20image%201.png" alt="s">');
+  assert.equal(warnings.length, 1);
+});

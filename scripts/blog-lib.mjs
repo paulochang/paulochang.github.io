@@ -110,6 +110,7 @@ export function isoDay(value) {
 export function stripMarkdown(markdown) {
   return String(markdown)
     .replace(/^(```|~~~)[\s\S]*?^\1.*$/gm, " ")
+    .replace(/^\s{0,3}#{1,6}\s+(.*?)\s*#*\s*$/gm, (_, text) => (/[.!?:]$/.test(text) ? text : `${text}.`))
     .replace(/<[^>]+>/g, " ")
     .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
@@ -245,7 +246,9 @@ export function rewriteMarkdownLinks(markdown, ctx, { warn = () => {} } = {}) {
         return line;
       }
       if (fence) return line;
-      return line.replace(linkPattern, (whole, bang, text, target, title) => {
+      // raw HTML links and images get the same treatment as Markdown ones
+      const rewritten = rewriteHtmlLinks(line, ctx, { absolute: true, warn });
+      return rewritten.replace(linkPattern, (whole, bang, text, target, title) => {
         const href = target.replace(/^<|>$/g, "");
         const result = resolveLink(href, ctx);
         if (result.action === "unlink") {

@@ -6,7 +6,7 @@ navCurrent: post
   <header class="page-header">
     <h1>{{ title }}{% if draft %}<span class="draft-label">Draft</span>{% endif %}</h1>
     <p id="lede" class="post-meta">
-      <time datetime="{{ date | isoDate }}">{{ date | displayDate }}</time>
+      <time datetime="{{ postDate | isoDate }}">{{ postDate | displayDate }}</time>
       {%- if updated %}, updated <time datetime="{{ updated | isoDate }}">{{ updated | displayDate }}</time>{% endif %}
     </p>
   </header>
