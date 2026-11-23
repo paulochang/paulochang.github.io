@@ -87,7 +87,8 @@ workflow is in `blog-src/HOW-TO-PUBLISH.md`, which is also copied into the vault
 - **Absolute URLs.** Canonical tags, `og:url`, JSON-LD, `sitemap.xml`,
   `robots.txt` and `llms.txt` all use `https://paulochang.com/`.
 - **Hand-maintained indexes.** `llms.txt`, `sitemap.xml` and `robots.txt` are
-  written by hand. Adding or removing a page means updating all three.
+  written by hand. Adding or removing a page means updating all three. Blog posts
+  are the exception: the blog sitemap, feed and `blog/index.md` are generated.
 - **CSS.** The four core pages (Home, About, Projects, Resume) each inline the
   same full stylesheet in a `<style>` block, with no external CSS, so nothing
   loads late and shifts the layout. The CSS and JSON-LD are minified, and the
