@@ -7,7 +7,10 @@ Live at **https://paulochang.com/**.
 ## Layout
 
 The site is plain static files. A page's path in this repo is its path on the
-site, so `diff/index.html` is served at `https://paulochang.com/diff/`.
+site, so `diff/index.html` is served at `https://paulochang.com/diff/`. The one
+exception is the blog: Eleventy renders `blog-src/` into `_site/blog/` and copies
+every other tracked file into `_site/` unchanged, and Cloudflare Pages serves
+`_site/` (see Blog below).
 
 ```
 index.html        Home
@@ -24,6 +27,8 @@ study-guide/      CCAR-F study guide
 harness/          Agent harness tracker (generated, see below)
 img/              Favicon and social card
 _headers          Cloudflare Pages cache headers
+blog-src/         Blog posts and templates (built into /blog/)
+scripts/          Blog sync and verification scripts
 ```
 
 Project pages:
@@ -55,6 +60,23 @@ Project pages:
   installable play as a PWA.
 - **A Moment of Light** (`quotes/`): minimal reader that surfaces one short poem at
   a time from a curated client-side collection.
+
+## Blog
+
+Posts are written in an Obsidian vault named `Blog` in iCloud Drive and built from
+`blog-src/posts/` (one Markdown file per post, filename = title). The writing
+workflow is in `blog-src/HOW-TO-PUBLISH.md`, which is also copied into the vault.
+
+- `npm run notes` copies the vault's `posts/` and `attachments/` into `blog-src/`.
+  It never deletes anything and lists files that only exist in the repo.
+- A post needs `title` and `date` (with a UTC offset) in its front matter.
+  `draft: true` keeps it out of the build, so drafts are safe to commit.
+- `npm run serve` previews the site locally (`BLOG_DRAFTS=1 npm run serve` shows
+  drafts too). `npm run build` writes `_site/`, and
+  `node scripts/verify-site.mjs` checks that every page outside `/blog/` is copied
+  byte for byte.
+- A push to `master` deploys. A post without a `date`, or two posts with the same
+  slug, fails the Cloudflare Pages build.
 
 ## Conventions
 

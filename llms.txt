@@ -24,6 +24,11 @@ Canonical host: https://paulochang.com/
 - [Traffic](https://paulochang.com/traffic/index.md): The 40 classic Rush Hour-style sliding-block puzzles, with a move counter and a timer. Installs as an app and works offline. Live page: https://paulochang.com/traffic/
 - [A Moment of Light](https://paulochang.com/quotes/index.md): Shows one short poem at a time, picked at random from a small collection. Live page: https://paulochang.com/quotes/
 
+## Blog
+
+- [Blog index](https://paulochang.com/blog/index.md): every published post, newest first, with links to the Markdown version of each post.
+- [Atom feed](https://paulochang.com/blog/feed.xml): the 20 newest posts with full content.
+
 ## Elsewhere
 
 - [GitHub](https://github.com/paulochang): Source for this site and public repositories.
