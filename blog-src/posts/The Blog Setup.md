@@ -5,7 +5,6 @@ description: Describes the current blog setup. The architecture behind it and ho
 draft: false
 slug: the-blog-setup
 ---
-> **How to use this draft:** answer each question in your own words, right under it, then delete the question. Skip any that don't interest you. A few sentences per question is plenty. The notes in *(italics)* are facts from the build to jog your memory, so keep or drop them as you like. Before publishing, delete this box, write the `description` line in one sentence, and remove `draft: true`.
 ## The Why
 I think that by now, creating a blog is almost a meme within the developer community. You start thinking about your career, what you have done and suddenly, the urge to create a blog materializes. It's the middle age crisis equivalent in the senior development career. In any case, here I am doing what I finally set up to do after about a year. 
 
