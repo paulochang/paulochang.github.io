@@ -1,0 +1,19 @@
+---
+layout: base.njk
+ogType: article
+navCurrent: post
+---
+  <header class="page-header">
+    <h1>{{ title }}{% if draft %}<span class="draft-label">Draft</span>{% endif %}</h1>
+    <p id="lede" class="post-meta">
+      <time datetime="{{ postDate | isoDate }}">{{ postDate | displayDate }}</time>
+      {%- if updated %}, updated <time datetime="{{ updated | isoDate }}">{{ updated | displayDate }}</time>{% endif %}
+    </p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <div class="post-body">
+{{ content | safe }}
+    </div>
+    <p class="post-back"><a href="/blog/">&larr; All posts</a></p>
+  </main>
