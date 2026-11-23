@@ -1,6 +1,6 @@
 ---
 title: "Welcome to my blog!"
-date: 2026-11-24T10:00:00+01:00
+date: 2026-11-23T16:50:00+01:00
 description: "The first post on this blog."
 slug: welcome
 ---
