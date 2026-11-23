@@ -1,0 +1,53 @@
+---
+layout: base.njk
+title: Blog
+description: "Posts by Paulo Chang."
+navCurrent: list
+mdHref: "https://paulochang.com/blog/index.md"
+eleventyExcludeFromCollections: true
+pagination:
+  data: collections.blogList
+  size: 10
+  reverse: true
+  alias: items
+  generatePageOnEmptyData: true
+permalink: "{% if pagination.pageNumber == 0 %}/blog/{% else %}/blog/page/{{ pagination.pageNumber + 1 }}/{% endif %}"
+jsonldData:
+  "@context": "https://schema.org"
+  "@type": Blog
+  url: "https://paulochang.com/blog/"
+  name: "Blog — Paulo Chang"
+  inLanguage: en
+  author:
+    "@id": "https://paulochang.com/#paulo-chang"
+  publisher:
+    "@id": "https://paulochang.com/#paulo-chang"
+---
+  <header class="page-header">
+    <h1>Blog</h1>
+    <p id="lede">Posts by Paulo Chang.</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+
+    <section aria-labelledby="posts-heading">
+      <h2 id="posts-heading" tabindex="-1" class="visually-hidden">Posts</h2>
+{% if items.length == 0 %}
+      <p>No posts yet.</p>
+{% endif %}
+{%- for item in items %}
+      <article class="project-card" aria-labelledby="post-{{ pagination.pageNumber }}-{{ loop.index }}">
+        <h3 id="post-{{ pagination.pageNumber }}-{{ loop.index }}"><a href="{{ item.url }}">{{ item.data.title }}</a>{% if item.data.draft %}<span class="draft-label">Draft</span>{% endif %}</h3>
+        <p><small><time datetime="{{ item.date | isoDate }}">{{ item.date | displayDate }}</time></small></p>
+        <p>{{ item.data.metaDescription }}</p>
+      </article>
+{% endfor %}
+{%- if pagination.pages.length > 1 %}
+      <nav class="pager" aria-label="Pagination">
+        <span>{% if pagination.href.next %}<a href="{{ pagination.href.next }}" rel="next">&larr; Older posts</a>{% endif %}</span>
+        <span>{% if pagination.href.previous %}<a href="{{ pagination.href.previous }}" rel="prev">Newer posts &rarr;</a>{% endif %}</span>
+      </nav>
+{% endif %}
+    </section>
+
+  </main>

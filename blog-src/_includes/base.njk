@@ -1,0 +1,96 @@
+{%- set canonical = site.origin + page.url -%}
+{%- set pageSuffix = (", page " + (pagination.pageNumber + 1)) if pagination.pageNumber else "" -%}
+{%- set pageDescription = metaDescription or description -%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }}{{ pageSuffix }} &mdash; Paulo Chang</title>
+  <meta name="description" content="{{ pageDescription }}">
+  <meta name="author" content="Paulo Chang">
+  <link rel="canonical" href="{{ canonical }}">
+{%- if pagination.href.previous %}
+  <link rel="prev" href="{{ site.origin }}{{ pagination.href.previous }}">
+{%- endif %}
+{%- if pagination.href.next %}
+  <link rel="next" href="{{ site.origin }}{{ pagination.href.next }}">
+{%- endif %}
+
+  <meta property="og:type" content="{{ ogType or 'website' }}">
+  <meta property="og:site_name" content="Paulo Chang">
+  <meta property="og:title" content="{{ title }}{{ pageSuffix }} &mdash; Paulo Chang">
+  <meta property="og:description" content="{{ pageDescription }}">
+  <meta property="og:url" content="{{ canonical }}">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:image" content="{{ site.origin }}/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Paulo Chang, senior backend engineer and Backend Community AI Champion">
+  <meta name="twitter:card" content="summary_large_image">
+{%- if ogType == "article" and date %}
+  <meta property="article:published_time" content="{{ date | isoDate }}">
+{%- endif %}
+
+  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+  <link rel="alternate" type="text/markdown" href="{{ mdHref or (canonical + 'index.md') }}">
+  <link rel="alternate" type="application/atom+xml" title="Paulo Chang: Blog" href="{{ site.blogBase }}feed.xml">
+  <style>{{ siteCss | safe }}
+.post-body{font-size:1.1rem}
+.post-body>*+*{margin-top:1.25rem}
+.post-body p{margin-bottom:0}
+.post-body h2{font-size:1.6rem;text-align:left;margin:2.5rem 0 0;scroll-margin-top:6rem}
+.post-body h3{font-size:1.25rem;text-align:left;margin:2rem 0 0}
+.post-body h4,.post-body h5,.post-body h6{font-size:1.1rem;text-align:left;margin:1.5rem 0 0}
+.post-body ul,.post-body ol{padding-left:1.5em}
+.post-body ul{list-style:disc}
+.post-body ol{list-style:decimal}
+.post-body li{font-size:1.1rem;margin-bottom:.4em}
+.post-body li>ul,.post-body li>ol{margin-top:.4em}
+.post-body pre{overflow-x:auto;padding:1em;background:#ecece7;border:1px solid var(--rule);font-size:.9rem;line-height:1.5}
+.post-body code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9em}
+.post-body :not(pre)>code{background:#ecece7;padding:.1em .3em}
+.post-body blockquote{padding-left:1.25em;border-left:3px solid var(--rule);color:var(--ink-soft)}
+.post-body img{max-width:100%;height:auto}
+.post-body hr{border:0;border-top:1px solid var(--rule);margin:2.5rem 0}
+.post-body table{display:block;overflow-x:auto;border-collapse:collapse;font-size:1rem}
+.post-body th,.post-body td{padding:.4em .8em;border:1px solid var(--rule);text-align:left}
+.post-body th{font-weight:600}
+.post-meta{font-size:.9rem;color:var(--ink-soft)}
+.draft-label{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--ink-soft);padding:.1em .5em;margin-left:.5em}
+.pager{display:flex;justify-content:space-between;gap:1em;margin-top:3rem;font-size:.9rem}
+.post-back{margin-top:3rem;font-size:.9rem}
+</style>
+{%- if jsonldData %}
+
+  <script type="application/ld+json">{{ jsonldData | jsonLd | safe }}</script>
+{%- endif %}
+</head>
+
+<body>
+  <a id="skip-link" href="#main">Skip to main content</a>
+
+  <nav aria-label="Primary">
+    <a href="/">Paulo Chang</a>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/about/">About</a></li>
+      <li><a href="/projects/">Projects</a></li>
+      <li><a href="/resume/">Resume</a></li>
+      <li><a href="/blog/" aria-current="{{ 'page' if navCurrent == 'list' else 'true' }}">Blog</a></li>
+    </ul>
+  </nav>
+
+{{ content | safe }}
+
+  <footer>
+    <p>
+      <a href="https://github.com/paulochang">GitHub</a> &middot;
+      <a href="https://www.linkedin.com/in/paulochang">LinkedIn</a> &middot;
+      <a href="/blog/feed.xml">Feed</a>
+    </p>
+  </footer>
+</body>
+
+</html>

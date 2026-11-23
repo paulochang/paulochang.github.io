@@ -1,0 +1,15 @@
+{
+  "name": "paulochang-com",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "eleventy",
+    "serve": "eleventy --serve",
+    "notes": "node scripts/sync-notes.mjs"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "~3.1",
+    "@11ty/eleventy-plugin-rss": "^3.1.0",
+    "@sindresorhus/slugify": "^2.2.1"
+  }
+}

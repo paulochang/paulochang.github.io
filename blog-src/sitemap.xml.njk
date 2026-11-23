@@ -1,0 +1,20 @@
+---
+permalink: /blog/sitemap.xml
+layout: false
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>{{ site.blogBase }}</loc>
+{%- if collections.posts.length %}
+    <lastmod>{{ collections.posts | newestDate | isoDay }}</lastmod>
+{%- endif %}
+  </url>
+{%- for post in collections.posts | reverse %}
+  <url>
+    <loc>{{ site.origin }}{{ post.url }}</loc>
+    <lastmod>{{ post | lastModified | isoDay }}</lastmod>
+  </url>
+{%- endfor %}
+</urlset>
