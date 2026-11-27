@@ -166,6 +166,18 @@ for (const file of ["blog/sitemap.xml"]) {
   }
 }
 
+// Every tag page has to be listed in the sitemap. The loop above only checks sitemap -> files.
+{
+  const sitemap = built.includes("blog/sitemap.xml") ? fs.readFileSync(path.join(out, "blog/sitemap.xml"), "utf8") : "";
+  const locs = new Set([...sitemap.matchAll(/<loc>([^<]*)<\/loc>/g)].map((m) => m[1]));
+  const tagPages = built.filter((f) => /^blog\/tags\/(?:[^/]+\/)?index\.html$/.test(f));
+  check(tagPages.length > 0, "no tag pages were built under blog/tags/");
+  for (const file of tagPages) {
+    const url = `${ORIGIN}/${file.replace(/index\.html$/, "")}`;
+    check(locs.has(url), `blog/sitemap.xml does not list the tag page ${url}`);
+  }
+}
+
 // The root sitemap is copied through unchanged, but it still has to be XML.
 if (built.includes("sitemap.xml")) {
   const problem = xmlProblem(fs.readFileSync(path.join(out, "sitemap.xml"), "utf8"));
