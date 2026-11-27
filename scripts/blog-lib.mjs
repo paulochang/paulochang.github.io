@@ -293,3 +293,27 @@ export function rewriteMarkdownLinks(markdown, ctx, { warn = () => {} } = {}) {
     })
     .join("\n");
 }
+
+/**
+ * Inline `#tag` words in a post body. Tags only publish from the `tags:`
+ * property, so a `#tag` typed in prose (an Obsidian habit) is a mistake worth
+ * warning about. Returns the tag names, without the `#`, in order of first use.
+ *
+ * Ignored: front matter, fenced and inline code, heading markers, URL
+ * fragments and hex colours. A word that is all hex digits and exactly 3, 4, 6
+ * or 8 characters long (`#fff`, `#face`, `#bad`) is treated as a colour, so a
+ * real tag like `#face` is missed. That ambiguity is accepted.
+ */
+export function findInlineTags(body) {
+  const text = String(body)
+    .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "")
+    .replace(/^\s{0,3}(```|~~~)[^\n]*\n[\s\S]*?(?:\n\s{0,3}\1[^\n]*|$)/gm, "")
+    .replace(/(`+)[^`]*?\1/g, "")
+    .replace(/^\s{0,3}#{1,6}[ \t]/gm, "")
+    .replace(/\]\([^)\s]*#[^)]*\)/g, "]()")
+    .replace(/https?:\/\/[^\s)]*/g, "")
+    .replace(/(^|[^\p{L}\p{N}_])#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})(?![\p{L}\p{N}_\-/])/gu, "$1");
+  const found = new Set();
+  for (const match of text.matchAll(/(^|\s)#([\p{L}_][\p{L}\p{N}_\-/]*)/gmu)) found.add(match[2]);
+  return [...found];
+}

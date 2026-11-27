@@ -3,7 +3,7 @@ import path from "node:path";
 import { feedPlugin } from "@11ty/eleventy-plugin-rss";
 import {
   ORIGIN, BLOG_BASE, siteFiles, readSiteStyle, displayDate, isoDate, isoDay, toDate,
-  jsonLd, headingIds, normalizeTags, tagSlug, RESERVED_TAG_NAMES, rewriteHtmlLinks, rewriteMarkdownLinks,
+  jsonLd, headingIds, normalizeTags, findInlineTags, tagSlug, RESERVED_TAG_NAMES, rewriteHtmlLinks, rewriteMarkdownLinks,
 } from "./scripts/blog-lib.mjs";
 
 const root = import.meta.dirname;
@@ -76,6 +76,9 @@ export default function (eleventyConfig) {
     }
     if (content.includes("[[")) {
       warnOnce(`${path.basename(this.inputPath)} contains "[[" and may have wikilinks; use Markdown links.`);
+    }
+    for (const tag of findInlineTags(content)) {
+      warnOnce(`${this.inputPath}: inline #tag "${tag}" is not published; move it to the tags: property`);
     }
   });
 

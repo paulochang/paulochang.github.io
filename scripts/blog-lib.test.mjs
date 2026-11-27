@@ -3,7 +3,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import path from "node:path";
 import {
-  resolveLink, rewriteHtmlLinks, rewriteMarkdownLinks, displayDate, isoDate, slugifyText, excerpt, normalizeTags, tagSlug, RESERVED_TAG_NAMES,
+  resolveLink, rewriteHtmlLinks, rewriteMarkdownLinks, displayDate, isoDate, slugifyText, excerpt, normalizeTags, findInlineTags, tagSlug, RESERVED_TAG_NAMES,
 } from "./blog-lib.mjs";
 
 const postsDir = "/repo/blog-src/posts";
@@ -148,4 +148,21 @@ test("normalizeTags supports Unicode", () => {
 
 test("reserved tag names are listed", () => {
   assert.deepEqual(RESERVED_TAG_NAMES, ["all", "posts", "blogList", "tagList"]);
+});
+
+test("findInlineTags finds tags in prose, at line start and in Unicode", () => {
+  assert.deepEqual(findInlineTags("Some text #idea and #café/x here."), ["idea", "café/x"]);
+  assert.deepEqual(findInlineTags("#todo here\nmore"), ["todo"]);
+  assert.deepEqual(findInlineTags("#idea #idea"), ["idea"]);
+});
+
+test("findInlineTags ignores code, headings, links, URLs and hex colours", () => {
+  assert.deepEqual(findInlineTags("```css\n#nope here\n```\n"), []);
+  assert.deepEqual(findInlineTags("use `#nope` inline"), []);
+  assert.deepEqual(findInlineTags("# Heading\n## Another one\n"), []);
+  assert.deepEqual(findInlineTags("see [x](/a/b/#frag) now"), []);
+  assert.deepEqual(findInlineTags("see https://example.com/a #frag https://example.com/b#frag2"), ["frag"]);
+  assert.deepEqual(findInlineTags("color #fff and #a1b2c3 and #ffffff80 and #abcd"), []);
+  assert.deepEqual(findInlineTags("---\ntitle: x\ntags: [a]\n---\nbody #real"), ["real"]);
+  assert.deepEqual(findInlineTags("#fffx and #abcde"), ["fffx", "abcde"]);
 });
