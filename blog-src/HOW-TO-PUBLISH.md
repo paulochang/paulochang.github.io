@@ -10,6 +10,14 @@ Write here, in the vault. Never edit `blog-src/posts/` in the repo directly: the
 4. Write. Paste images; they land in `attachments/`.
 5. When it is ready, remove the `draft: true` line.
 
+## Tags
+
+Add tags in the `tags` property, without `#`. Lowercase kebab-case is best (`web-dev`). Nesting with `area/sub` works; the URL slug becomes `area-sub`.
+
+- Inline `#tags` in the body are not published. The build warns about them.
+- Renaming a tag changes its URL (`/blog/tags/<slug>/`).
+- All tags are listed at `/blog/tags/`.
+
 ## Publish (on the Mac)
 
 1. Open the note in Obsidian first, so iCloud has delivered the latest version.
