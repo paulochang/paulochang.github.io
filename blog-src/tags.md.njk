@@ -1,0 +1,15 @@
+---
+permalink: /blog/tags/index.md
+layout: false
+eleventyExcludeFromCollections: true
+---
+# Tags — Paulo Chang
+
+All tags on the blog.
+{% for t in collections.tagList %}
+- [{{ t.name | safe }}](https://paulochang.com/blog/tags/{{ t.slug }}/index.md), {{ t.posts.length }} {{ "post" if t.posts.length == 1 else "posts" }}
+{%- endfor %}
+{% if collections.tagList.length == 0 %}
+No tags yet.
+{% endif %}
+Back to the blog: https://paulochang.com/blog/index.md

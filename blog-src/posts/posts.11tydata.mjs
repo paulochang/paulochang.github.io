@@ -27,6 +27,9 @@ export default {
       inLanguage: "en",
       author,
       publisher: author,
+      ...(normalizeTags(data.tags, data.page?.inputPath).length && {
+        keywords: normalizeTags(data.tags, data.page?.inputPath).map((t) => t.name).join(", "),
+      }),
     }),
   },
 };

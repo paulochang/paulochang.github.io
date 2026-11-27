@@ -133,10 +133,12 @@ export default function (eleventyConfig) {
     const body = rewriteMarkdownLinks(raw, linkContext(path.resolve(root, post.inputPath)), { warn: warnOnce }).trim();
     const dates = [`Published ${displayDate(post.date)}`];
     if (post.data.updated) dates.push(`updated ${displayDate(post.data.updated)}`);
+    const tags = normalizeTags(post.data.tags, post.inputPath);
     return [
       `# ${post.data.title}`,
       "",
       `${dates.join(", ")}.`,
+      ...(tags.length ? ["", `Tags: ${tags.map((t) => t.name).join(", ")}`] : []),
       "",
       body,
       "",

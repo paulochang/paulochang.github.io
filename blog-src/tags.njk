@@ -1,0 +1,28 @@
+---
+layout: base.njk
+title: Tags
+description: "All tags on the blog."
+metaDescription: "All tags"
+ogType: website
+navCurrent: list
+permalink: /blog/tags/
+mdHref: "https://paulochang.com/blog/tags/index.md"
+eleventyExcludeFromCollections: true
+---
+  <header class="page-header">
+    <h1>Tags</h1>
+    <p id="lede">All tags on the blog.</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+{%- if collections.tagList.length == 0 %}
+    <p>No tags yet.</p>
+{%- else %}
+    <ul class="tag-index">
+{%- for t in collections.tagList %}
+      <li><a href="/blog/tags/{{ t.slug }}/" rel="tag">{{ t.name }}</a> <span class="tag-count">({{ t.posts.length }})</span></li>
+{%- endfor %}
+    </ul>
+{%- endif %}
+    <p class="post-back"><a href="/blog/">&larr; All posts</a></p>
+  </main>
