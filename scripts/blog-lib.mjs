@@ -305,9 +305,28 @@ export function rewriteMarkdownLinks(markdown, ctx, { warn = () => {} } = {}) {
  * real tag like `#face` is missed. That ambiguity is accepted.
  */
 export function findInlineTags(body) {
-  const text = String(body)
-    .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "")
-    .replace(/^\s{0,3}(```|~~~)[^\n]*\n[\s\S]*?(?:\n\s{0,3}\1[^\n]*|$)/gm, "")
+  // Drop fenced blocks (an unclosed fence runs to the end) and indented code
+  // blocks (4 spaces or a tab, after a blank line or another indented line).
+  let fence = null;
+  let prevBlankOrIndented = true;
+  const kept = [];
+  for (const line of String(body).replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "").split(/\r?\n/)) {
+    const marker = line.match(/^ {0,3}(```|~~~)/);
+    if (fence) {
+      if (marker && marker[1] === fence) fence = null;
+      continue;
+    }
+    if (marker) {
+      fence = marker[1];
+      continue;
+    }
+    const indented = /^(?: {4}|\t)/.test(line) && line.trim() !== "";
+    if (indented && prevBlankOrIndented) continue;
+    prevBlankOrIndented = line.trim() === "" || indented;
+    kept.push(line);
+  }
+  const text = kept
+    .join("\n")
     .replace(/(`+)[^`]*?\1/g, "")
     .replace(/^\s{0,3}#{1,6}[ \t]/gm, "")
     .replace(/\]\([^)\s]*#[^)]*\)/g, "]()")

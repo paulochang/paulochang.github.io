@@ -156,6 +156,14 @@ test("findInlineTags finds tags in prose, at line start and in Unicode", () => {
   assert.deepEqual(findInlineTags("#idea #idea"), ["idea"]);
 });
 
+test("findInlineTags strips whole multi-line fenced and indented code blocks", () => {
+  assert.deepEqual(findInlineTags("```js\nline1\n#foo in code\n# comment\n```"), []);
+  assert.deepEqual(findInlineTags("~~~\n#a\n#b\n~~~\nafter #real"), ["real"]);
+  assert.deepEqual(findInlineTags("```\n#a\n# comment\n#id"), []);
+  assert.deepEqual(findInlineTags("~~~\n#a\n#b"), []);
+  assert.deepEqual(findInlineTags("text\n\n    #a\n    # c\n\tmore #b\n\nthen #real"), ["real"]);
+});
+
 test("findInlineTags ignores code, headings, links, URLs and hex colours", () => {
   assert.deepEqual(findInlineTags("```css\n#nope here\n```\n"), []);
   assert.deepEqual(findInlineTags("use `#nope` inline"), []);
