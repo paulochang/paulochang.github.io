@@ -1,4 +1,4 @@
-import { ORIGIN, postSlug, excerpt, isoDate } from "../../scripts/blog-lib.mjs";
+import { ORIGIN, postSlug, excerpt, isoDate, normalizeTags } from "../../scripts/blog-lib.mjs";
 
 const showDrafts = () => process.env.BLOG_DRAFTS === "1";
 const author = { "@id": `${ORIGIN}/#paulo-chang` };
@@ -15,6 +15,7 @@ export default {
     eleventyExcludeFromCollections: (data) => data.draft === true && !showDrafts(),
     // Drafts may have no date; page.date is the file time then.
     postDate: (data) => data.date || data.page.date,
+    postTags: (data) => normalizeTags(data.tags, data.page?.inputPath),
     metaDescription: (data) => data.description || excerpt(data.page.rawInput || ""),
     jsonldData: (data) => ({
       "@context": "https://schema.org",

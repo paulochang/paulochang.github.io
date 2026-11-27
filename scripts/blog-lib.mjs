@@ -62,6 +62,38 @@ export function slugifyText(text) {
   return slugify(String(text), { decamelize: false });
 }
 
+// ---- tags ------------------------------------------------------------------
+
+export const RESERVED_TAG_NAMES = ["all", "posts", "blogList", "tagList"];
+
+export function tagSlug(name) {
+  return slugifyText(String(name).replaceAll("/", "-"));
+}
+
+// Accepts a list, a string (single, comma- or space-separated) or nothing.
+// Returns [{ name, slug }], deduplicated case-insensitively, in order.
+export function normalizeTags(raw, file) {
+  if (raw === undefined || raw === null) return [];
+  const entries = Array.isArray(raw)
+    ? raw
+    : String(raw).split(/[,\s]+/);
+  const seen = new Set();
+  const tags = [];
+  for (const entry of entries) {
+    if (entry === undefined || entry === null) continue;
+    const name = String(entry).trim().replace(/^#/, "");
+    if (name === "") continue;
+    if (!/^[\p{L}\p{N}_\-/]+$/u.test(name) || /^\p{N}+$/u.test(name)) {
+      throw new Error(`${file ? `${file}: ` : ""}invalid tag "${entry}". Tags use letters, digits, _, - and /, with at least one non-digit and no spaces.`);
+    }
+    const key = name.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    tags.push({ name, slug: tagSlug(name) });
+  }
+  return tags;
+}
+
 export function postSlug(data) {
   const slug = slugifyText(data.slug || data.page.fileSlug);
   if (!slug) throw new Error(`Cannot build a URL slug for ${data.page.inputPath}`);

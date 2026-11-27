@@ -3,7 +3,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import path from "node:path";
 import {
-  resolveLink, rewriteHtmlLinks, rewriteMarkdownLinks, displayDate, isoDate, slugifyText, excerpt,
+  resolveLink, rewriteHtmlLinks, rewriteMarkdownLinks, displayDate, isoDate, slugifyText, excerpt, normalizeTags, tagSlug, RESERVED_TAG_NAMES,
 } from "./blog-lib.mjs";
 
 const postsDir = "/repo/blog-src/posts";
@@ -110,4 +110,42 @@ test("raw HTML links in Markdown alternates are rewritten", () => {
   const result = rewriteMarkdownLinks(md, ctx, { warn: (m) => warnings.push(m) });
   assert.equal(result, 'See <a href="https://paulochang.com/blog/other/#x">it</a>, no <img src="https://paulochang.com/blog/attachments/Pasted%20image%201.png" alt="s">');
   assert.equal(warnings.length, 1);
+});
+
+test("normalizeTags accepts every input shape", () => {
+  const names = (raw) => normalizeTags(raw).map((t) => t.name);
+  assert.deepEqual(names(["ai", "tooling"]), ["ai", "tooling"]);
+  assert.deepEqual(names("ai"), ["ai"]);
+  assert.deepEqual(names("ai, tooling"), ["ai", "tooling"]);
+  assert.deepEqual(names("ai tooling"), ["ai", "tooling"]);
+  assert.deepEqual(names(undefined), []);
+  assert.deepEqual(names(null), []);
+});
+
+test("normalizeTags strips one leading # and trims", () => {
+  assert.deepEqual(normalizeTags([" #ai "]), [{ name: "ai", slug: "ai" }]);
+  assert.throws(() => normalizeTags(["##ai"]));
+});
+
+test("normalizeTags dedupes case-insensitively and keeps order", () => {
+  assert.deepEqual(normalizeTags(["AI", "tools", "ai"]).map((t) => t.name), ["AI", "tools"]);
+});
+
+test("nested tags get a flat slug", () => {
+  assert.deepEqual(normalizeTags(["area/sub"]), [{ name: "area/sub", slug: "area-sub" }]);
+  assert.equal(tagSlug("area/sub"), "area-sub");
+});
+
+test("normalizeTags rejects all-numeric tags and spaces, naming the file", () => {
+  assert.throws(() => normalizeTags(["2024"], "posts/a.md"), /posts\/a\.md.*2024/);
+  assert.throws(() => normalizeTags(["two words"], "posts/a.md"), /two words/);
+  assert.deepEqual(normalizeTags(["2024-recap"]).map((t) => t.name), ["2024-recap"]);
+});
+
+test("normalizeTags supports Unicode", () => {
+  assert.deepEqual(normalizeTags(["café"]).map((t) => t.name), ["café"]);
+});
+
+test("reserved tag names are listed", () => {
+  assert.deepEqual(RESERVED_TAG_NAMES, ["all", "posts", "blogList", "tagList"]);
 });

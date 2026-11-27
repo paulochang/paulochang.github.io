@@ -3,7 +3,7 @@ import path from "node:path";
 import { feedPlugin } from "@11ty/eleventy-plugin-rss";
 import {
   ORIGIN, BLOG_BASE, siteFiles, readSiteStyle, displayDate, isoDate, isoDay, toDate,
-  jsonLd, headingIds, rewriteHtmlLinks, rewriteMarkdownLinks,
+  jsonLd, headingIds, normalizeTags, tagSlug, RESERVED_TAG_NAMES, rewriteHtmlLinks, rewriteMarkdownLinks,
 } from "./scripts/blog-lib.mjs";
 
 const root = import.meta.dirname;
@@ -69,6 +69,11 @@ export default function (eleventyConfig) {
     if (!data.date) {
       throw new Error(`${path.basename(this.inputPath)} has no \`date\` in its front matter. Add one, or set \`draft: true\`.`);
     }
+    for (const tag of normalizeTags(data.tags, this.inputPath)) {
+      if (RESERVED_TAG_NAMES.some((name) => name.toLowerCase() === tag.name.toLowerCase())) {
+        throw new Error(`${this.inputPath}: tag "${tag.name}" is reserved (${RESERVED_TAG_NAMES.join(", ")}). Pick another name.`);
+      }
+    }
     if (content.includes("[[")) {
       warnOnce(`${path.basename(this.inputPath)} contains "[[" and may have wikilinks; use Markdown links.`);
     }
@@ -89,6 +94,27 @@ export default function (eleventyConfig) {
 
   // What the list pages show: the posts, plus drafts when previewing with BLOG_DRAFTS=1.
   eleventyConfig.addCollection("blogList", (api) => blogPosts(api).filter((item) => showDrafts || item.data.draft !== true).sort(byDateAscending));
+
+  // Tags with their posts, newest first. Built from the same list the pages show.
+  eleventyConfig.addCollection("tagList", (api) => {
+    const posts = blogPosts(api).filter((item) => showDrafts || item.data.draft !== true).sort(byDateAscending);
+    const byKey = new Map(); // lowercase name -> { name, slug, posts }
+    for (const item of posts) {
+      for (const tag of normalizeTags(item.data.tags, item.inputPath)) {
+        const key = tag.name.toLowerCase();
+        if (!byKey.has(key)) byKey.set(key, { name: tag.name, slug: tagSlug(tag.name), posts: [] });
+        byKey.get(key).posts.push(item);
+      }
+    }
+    const bySlug = new Map();
+    for (const tag of byKey.values()) {
+      const other = bySlug.get(tag.slug);
+      if (other) throw new Error(`Tags "${other.name}" and "${tag.name}" both map to the URL slug "${tag.slug}". Rename one.`);
+      bySlug.set(tag.slug, tag);
+      tag.posts.reverse();
+    }
+    return [...byKey.values()].sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+  });
 
   // ---- filters -------------------------------------------------------------
   eleventyConfig.addFilter("displayDate", displayDate);
