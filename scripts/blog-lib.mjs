@@ -74,9 +74,12 @@ export function tagSlug(name) {
 // Returns [{ name, slug }], deduplicated case-insensitively, in order.
 export function normalizeTags(raw, file) {
   if (raw === undefined || raw === null) return [];
-  const entries = Array.isArray(raw)
-    ? raw
-    : String(raw).split(/[,\s]+/);
+  const where = file ? `${file}: ` : "";
+  const isScalar = (v) => typeof v === "string" || typeof v === "number";
+  if (!isScalar(raw) && !(Array.isArray(raw) && raw.every((v) => v === null || v === undefined || isScalar(v)))) {
+    throw new Error(`${where}\`tags\` must be a list of tags or a string, got ${JSON.stringify(raw)}.`);
+  }
+  const entries = Array.isArray(raw) ? raw : String(raw).split(/[,\s]+/);
   const seen = new Set();
   const tags = [];
   for (const entry of entries) {
@@ -84,12 +87,16 @@ export function normalizeTags(raw, file) {
     const name = String(entry).trim().replace(/^#/, "");
     if (name === "") continue;
     if (!/^[\p{L}\p{N}_\-/]+$/u.test(name) || /^\p{N}+$/u.test(name)) {
-      throw new Error(`${file ? `${file}: ` : ""}invalid tag "${entry}". Tags use letters, digits, _, - and /, with at least one non-digit and no spaces.`);
+      throw new Error(`${where}invalid tag "${entry}". Tags use letters, digits, _, - and /, with at least one non-digit and no spaces.`);
+    }
+    const slug = tagSlug(name);
+    if (!slug) {
+      throw new Error(`${where}invalid tag "${entry}". A tag must contain letters or digits that form a URL slug.`);
     }
     const key = name.toLowerCase();
     if (seen.has(key)) continue;
     seen.add(key);
-    tags.push({ name, slug: tagSlug(name) });
+    tags.push({ name, slug });
   }
   return tags;
 }

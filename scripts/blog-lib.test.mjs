@@ -174,3 +174,18 @@ test("findInlineTags ignores code, headings, links, URLs and hex colours", () =>
   assert.deepEqual(findInlineTags("---\ntitle: x\ntags: [a]\n---\nbody #real"), ["real"]);
   assert.deepEqual(findInlineTags("#fffx and #abcde"), ["fffx", "abcde"]);
 });
+
+test("normalizeTags rejects tags with an empty slug", () => {
+  for (const bad of ["日本語", "-", "_", "__", "/"]) {
+    assert.throws(() => normalizeTags([bad], "posts/a.md"), /posts\/a\.md.*URL slug/, bad);
+  }
+});
+
+test("normalizeTags rejects non-string input", () => {
+  assert.throws(() => normalizeTags(true, "posts/a.md"), /posts\/a\.md.*must be a list/);
+  assert.throws(() => normalizeTags({ a: 1 }, "posts/a.md"), /must be a list/);
+  assert.throws(() => normalizeTags(["ok", { a: 1 }], "posts/a.md"), /must be a list/);
+  assert.throws(() => normalizeTags([true]), /must be a list/);
+  assert.throws(() => normalizeTags(2024, "posts/a.md"), /invalid tag "2024"/);
+  assert.throws(() => normalizeTags([2024]), /invalid tag "2024"/);
+});
