@@ -44,6 +44,9 @@ Project pages:
   starting `Copy:`, or sync uncommitted ones with `--copy`. Either way they add no
   changelog entry and keep the review dates. The main sources listed for each tool
   are set in `MAIN_SOURCES` in `sync.mjs`; add an entry when adding a tool.
+  To share the tracker as one file, run `node harness/standalone.mjs` after a sync. It
+  writes `dist/agent-harness-tracker.html` (gitignored) with the site nav, site URLs and
+  links to sibling files removed, and fails if the page markup no longer matches.
 - **CCAR-F Study Guide** (`study-guide/`): offline study guide for the Claude
   Certified Architect (Foundations) exam, in one zero-dependency HTML file.
 - **Syntax-Aware Diff Tool** (`diff/`): Monaco diff editor with side-by-side and
@@ -66,6 +69,7 @@ Project pages:
 Posts are written in an Obsidian vault named `Blog` in iCloud Drive and built from
 `blog-src/posts/` (one Markdown file per post, filename = title). The writing
 workflow is in `blog-src/HOW-TO-PUBLISH.md`, which is also copied into the vault.
+Posts can have `tags` in the front matter; tag pages are at `/blog/tags/`.
 
 - `npm run notes` copies the vault's `posts/` and `attachments/` into `blog-src/`.
   It never deletes anything and lists files that only exist in the repo.
