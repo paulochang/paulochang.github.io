@@ -2,6 +2,9 @@
 title: The Blog Setup
 date: 2026-11-23T17:13:00+01:00
 description: Describes the current blog setup, the architecture behind it and how it came to be. It also describes the rules and expectations for future readers.
+tags:
+  - blog
+  - infrastructure
 draft: false
 slug: the-blog-setup
 ---

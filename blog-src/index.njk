@@ -36,11 +36,8 @@ jsonldData:
       <p>No posts yet.</p>
 {% endif %}
 {%- for item in items %}
-      <article class="project-card" aria-labelledby="post-{{ pagination.pageNumber }}-{{ loop.index }}">
-        <h3 id="post-{{ pagination.pageNumber }}-{{ loop.index }}"><a href="{{ item.url }}">{{ item.data.title }}</a>{% if item.data.draft %}<span class="draft-label">Draft</span>{% endif %}</h3>
-        <p><small><time datetime="{{ item.date | isoDate }}">{{ item.date | displayDate }}</time></small></p>
-        <p>{{ item.data.metaDescription }}</p>
-      </article>
+{%- set cardId = "post-" + pagination.pageNumber + "-" + loop.index %}
+{%- include "post-card.njk" %}
 {% endfor %}
 {%- if pagination.pages.length > 1 %}
       <nav class="pager" aria-label="Pagination">

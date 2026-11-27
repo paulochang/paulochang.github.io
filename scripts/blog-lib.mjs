@@ -62,6 +62,45 @@ export function slugifyText(text) {
   return slugify(String(text), { decamelize: false });
 }
 
+// ---- tags ------------------------------------------------------------------
+
+export const RESERVED_TAG_NAMES = ["all", "posts", "blogList", "tagList"];
+
+export function tagSlug(name) {
+  return slugifyText(String(name).replaceAll("/", "-"));
+}
+
+// Accepts a list, a string (single, comma- or space-separated) or nothing.
+// Returns [{ name, slug }], deduplicated case-insensitively, in order.
+export function normalizeTags(raw, file) {
+  if (raw === undefined || raw === null) return [];
+  const where = file ? `${file}: ` : "";
+  const isScalar = (v) => typeof v === "string" || typeof v === "number";
+  if (!isScalar(raw) && !(Array.isArray(raw) && raw.every((v) => v === null || v === undefined || isScalar(v)))) {
+    throw new Error(`${where}\`tags\` must be a list of tags or a string, got ${JSON.stringify(raw)}.`);
+  }
+  const entries = Array.isArray(raw) ? raw : String(raw).split(/[,\s]+/);
+  const seen = new Set();
+  const tags = [];
+  for (const entry of entries) {
+    if (entry === undefined || entry === null) continue;
+    const name = String(entry).trim().replace(/^#/, "");
+    if (name === "") continue;
+    if (!/^[\p{L}\p{N}_\-/]+$/u.test(name) || /^\p{N}+$/u.test(name)) {
+      throw new Error(`${where}invalid tag "${entry}". Tags use letters, digits, _, - and /, with at least one non-digit and no spaces.`);
+    }
+    const slug = tagSlug(name);
+    if (!slug) {
+      throw new Error(`${where}invalid tag "${entry}". A tag must contain letters or digits that form a URL slug.`);
+    }
+    const key = name.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    tags.push({ name, slug });
+  }
+  return tags;
+}
+
 export function postSlug(data) {
   const slug = slugifyText(data.slug || data.page.fileSlug);
   if (!slug) throw new Error(`Cannot build a URL slug for ${data.page.inputPath}`);
@@ -260,4 +299,47 @@ export function rewriteMarkdownLinks(markdown, ctx, { warn = () => {} } = {}) {
       });
     })
     .join("\n");
+}
+
+/**
+ * Inline `#tag` words in a post body. Tags only publish from the `tags:`
+ * property, so a `#tag` typed in prose (an Obsidian habit) is a mistake worth
+ * warning about. Returns the tag names, without the `#`, in order of first use.
+ *
+ * Ignored: front matter, fenced and inline code, heading markers, URL
+ * fragments and hex colours. A word that is all hex digits and exactly 3, 4, 6
+ * or 8 characters long (`#fff`, `#face`, `#bad`) is treated as a colour, so a
+ * real tag like `#face` is missed. That ambiguity is accepted.
+ */
+export function findInlineTags(body) {
+  // Drop fenced blocks (an unclosed fence runs to the end) and indented code
+  // blocks (4 spaces or a tab, after a blank line or another indented line).
+  let fence = null;
+  let prevBlankOrIndented = true;
+  const kept = [];
+  for (const line of String(body).replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "").split(/\r?\n/)) {
+    const marker = line.match(/^ {0,3}(```|~~~)/);
+    if (fence) {
+      if (marker && marker[1] === fence) fence = null;
+      continue;
+    }
+    if (marker) {
+      fence = marker[1];
+      continue;
+    }
+    const indented = /^(?: {4}|\t)/.test(line) && line.trim() !== "";
+    if (indented && prevBlankOrIndented) continue;
+    prevBlankOrIndented = line.trim() === "" || indented;
+    kept.push(line);
+  }
+  const text = kept
+    .join("\n")
+    .replace(/(`+)[^`]*?\1/g, "")
+    .replace(/^\s{0,3}#{1,6}[ \t]/gm, "")
+    .replace(/\]\([^)\s]*#[^)]*\)/g, "]()")
+    .replace(/https?:\/\/[^\s)]*/g, "")
+    .replace(/(^|[^\p{L}\p{N}_])#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})(?![\p{L}\p{N}_\-/])/gu, "$1");
+  const found = new Set();
+  for (const match of text.matchAll(/(^|\s)#([\p{L}_][\p{L}\p{N}_\-/]*)/gmu)) found.add(match[2]);
+  return [...found];
 }

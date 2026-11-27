@@ -17,4 +17,16 @@ eleventyExcludeFromCollections: true
     <lastmod>{{ post | lastModified | isoDay }}</lastmod>
   </url>
 {%- endfor %}
+  <url>
+    <loc>{{ site.blogBase }}tags/</loc>
+{%- if collections.posts.length %}
+    <lastmod>{{ collections.posts | newestDate | isoDay }}</lastmod>
+{%- endif %}
+  </url>
+{%- for t in collections.tagList %}
+  <url>
+    <loc>{{ site.blogBase }}tags/{{ t.slug }}/</loc>
+    <lastmod>{{ t.posts | newestDate | isoDay }}</lastmod>
+  </url>
+{%- endfor %}
 </urlset>

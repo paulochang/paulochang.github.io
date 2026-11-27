@@ -3,7 +3,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import path from "node:path";
 import {
-  resolveLink, rewriteHtmlLinks, rewriteMarkdownLinks, displayDate, isoDate, slugifyText, excerpt,
+  resolveLink, rewriteHtmlLinks, rewriteMarkdownLinks, displayDate, isoDate, slugifyText, excerpt, normalizeTags, findInlineTags, tagSlug, RESERVED_TAG_NAMES,
 } from "./blog-lib.mjs";
 
 const postsDir = "/repo/blog-src/posts";
@@ -110,4 +110,82 @@ test("raw HTML links in Markdown alternates are rewritten", () => {
   const result = rewriteMarkdownLinks(md, ctx, { warn: (m) => warnings.push(m) });
   assert.equal(result, 'See <a href="https://paulochang.com/blog/other/#x">it</a>, no <img src="https://paulochang.com/blog/attachments/Pasted%20image%201.png" alt="s">');
   assert.equal(warnings.length, 1);
+});
+
+test("normalizeTags accepts every input shape", () => {
+  const names = (raw) => normalizeTags(raw).map((t) => t.name);
+  assert.deepEqual(names(["ai", "tooling"]), ["ai", "tooling"]);
+  assert.deepEqual(names("ai"), ["ai"]);
+  assert.deepEqual(names("ai, tooling"), ["ai", "tooling"]);
+  assert.deepEqual(names("ai tooling"), ["ai", "tooling"]);
+  assert.deepEqual(names(undefined), []);
+  assert.deepEqual(names(null), []);
+});
+
+test("normalizeTags strips one leading # and trims", () => {
+  assert.deepEqual(normalizeTags([" #ai "]), [{ name: "ai", slug: "ai" }]);
+  assert.throws(() => normalizeTags(["##ai"]));
+});
+
+test("normalizeTags dedupes case-insensitively and keeps order", () => {
+  assert.deepEqual(normalizeTags(["AI", "tools", "ai"]).map((t) => t.name), ["AI", "tools"]);
+});
+
+test("nested tags get a flat slug", () => {
+  assert.deepEqual(normalizeTags(["area/sub"]), [{ name: "area/sub", slug: "area-sub" }]);
+  assert.equal(tagSlug("area/sub"), "area-sub");
+});
+
+test("normalizeTags rejects all-numeric tags and spaces, naming the file", () => {
+  assert.throws(() => normalizeTags(["2024"], "posts/a.md"), /posts\/a\.md.*2024/);
+  assert.throws(() => normalizeTags(["two words"], "posts/a.md"), /two words/);
+  assert.deepEqual(normalizeTags(["2024-recap"]).map((t) => t.name), ["2024-recap"]);
+});
+
+test("normalizeTags supports Unicode", () => {
+  assert.deepEqual(normalizeTags(["café"]).map((t) => t.name), ["café"]);
+});
+
+test("reserved tag names are listed", () => {
+  assert.deepEqual(RESERVED_TAG_NAMES, ["all", "posts", "blogList", "tagList"]);
+});
+
+test("findInlineTags finds tags in prose, at line start and in Unicode", () => {
+  assert.deepEqual(findInlineTags("Some text #idea and #café/x here."), ["idea", "café/x"]);
+  assert.deepEqual(findInlineTags("#todo here\nmore"), ["todo"]);
+  assert.deepEqual(findInlineTags("#idea #idea"), ["idea"]);
+});
+
+test("findInlineTags strips whole multi-line fenced and indented code blocks", () => {
+  assert.deepEqual(findInlineTags("```js\nline1\n#foo in code\n# comment\n```"), []);
+  assert.deepEqual(findInlineTags("~~~\n#a\n#b\n~~~\nafter #real"), ["real"]);
+  assert.deepEqual(findInlineTags("```\n#a\n# comment\n#id"), []);
+  assert.deepEqual(findInlineTags("~~~\n#a\n#b"), []);
+  assert.deepEqual(findInlineTags("text\n\n    #a\n    # c\n\tmore #b\n\nthen #real"), ["real"]);
+});
+
+test("findInlineTags ignores code, headings, links, URLs and hex colours", () => {
+  assert.deepEqual(findInlineTags("```css\n#nope here\n```\n"), []);
+  assert.deepEqual(findInlineTags("use `#nope` inline"), []);
+  assert.deepEqual(findInlineTags("# Heading\n## Another one\n"), []);
+  assert.deepEqual(findInlineTags("see [x](/a/b/#frag) now"), []);
+  assert.deepEqual(findInlineTags("see https://example.com/a #frag https://example.com/b#frag2"), ["frag"]);
+  assert.deepEqual(findInlineTags("color #fff and #a1b2c3 and #ffffff80 and #abcd"), []);
+  assert.deepEqual(findInlineTags("---\ntitle: x\ntags: [a]\n---\nbody #real"), ["real"]);
+  assert.deepEqual(findInlineTags("#fffx and #abcde"), ["fffx", "abcde"]);
+});
+
+test("normalizeTags rejects tags with an empty slug", () => {
+  for (const bad of ["日本語", "-", "_", "__", "/"]) {
+    assert.throws(() => normalizeTags([bad], "posts/a.md"), /posts\/a\.md.*URL slug/, bad);
+  }
+});
+
+test("normalizeTags rejects non-string input", () => {
+  assert.throws(() => normalizeTags(true, "posts/a.md"), /posts\/a\.md.*must be a list/);
+  assert.throws(() => normalizeTags({ a: 1 }, "posts/a.md"), /must be a list/);
+  assert.throws(() => normalizeTags(["ok", { a: 1 }], "posts/a.md"), /must be a list/);
+  assert.throws(() => normalizeTags([true]), /must be a list/);
+  assert.throws(() => normalizeTags(2024, "posts/a.md"), /invalid tag "2024"/);
+  assert.throws(() => normalizeTags([2024]), /invalid tag "2024"/);
 });

@@ -32,6 +32,11 @@
 {%- if ogType == "article" and postDate %}
   <meta property="article:published_time" content="{{ postDate | isoDate }}">
 {%- endif %}
+{%- if ogType == "article" %}
+{%- for t in postTags %}
+  <meta property="article:tag" content="{{ t.name }}">
+{%- endfor %}
+{%- endif %}
 
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
   <link rel="alternate" type="text/markdown" href="{{ mdHref or (canonical + 'index.md') }}">
@@ -78,6 +83,11 @@ header.post-header #lede{margin-top:1.5rem}
 .post-body>:is(h2,h3,h4,h5,h6)+*{margin-top:.4rem}
 }
 .post-meta{font-size:.9rem;color:var(--ink-soft)}
+.post-tags{display:flex;flex-wrap:wrap;gap:.4em .5em;list-style:none;margin:.6rem 0 0;padding:0;font-family:var(--sans);font-size:.8rem}
+.post-tags a{color:var(--ink-soft);border:1px solid var(--rule);border-radius:1em;padding:.1em .7em;text-decoration:none}
+.post-tags a:hover,.post-tags a:focus-visible{color:var(--ink);border-color:var(--ink-soft)}
+.project-card .post-tags{margin:0 0 .6rem}
+.tag-count{color:var(--ink-soft);font-size:.9rem}
 .draft-label{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--ink-soft);padding:.1em .5em;margin-left:.5em}
 .pager{display:flex;justify-content:space-between;gap:1em;margin-top:3rem;font-size:.9rem}
 .post-back{margin-top:3rem;font-size:.9rem}

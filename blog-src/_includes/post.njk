@@ -11,6 +11,8 @@ navCurrent: post
       <time datetime="{{ postDate | isoDate }}">{{ postDate | displayDate }}</time>
       {%- if updated %}, updated <time datetime="{{ updated | isoDate }}">{{ updated | displayDate }}</time>{% endif %}
     </p>
+    {%- set tagItems = postTags %}
+    {%- include "tag-list.njk" %}
   </header>
 
   <main id="main" class="post" tabindex="-1">

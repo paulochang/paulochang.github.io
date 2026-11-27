@@ -1,0 +1,7 @@
+      <article class="project-card" aria-labelledby="{{ cardId }}">
+        <h3 id="{{ cardId }}"><a href="{{ item.url }}">{{ item.data.title }}</a>{% if item.data.draft %}<span class="draft-label">Draft</span>{% endif %}</h3>
+        <p><small><time datetime="{{ item.date | isoDate }}">{{ item.date | displayDate }}</time></small></p>
+        {%- set tagItems = item.data.postTags %}
+        {%- include "tag-list.njk" %}
+        <p>{{ item.data.metaDescription }}</p>
+      </article>

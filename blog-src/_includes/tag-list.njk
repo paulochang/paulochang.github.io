@@ -1,0 +1,7 @@
+{%- if tagItems and tagItems.length %}
+<ul class="post-tags" aria-label="Tags">
+{%- for t in tagItems %}
+  <li><a href="/blog/tags/{{ t.slug }}/" rel="tag">{{ t.name }}</a></li>
+{%- endfor %}
+</ul>
+{%- endif %}

@@ -1,0 +1,17 @@
+---
+layout: false
+eleventyExcludeFromCollections: true
+pagination:
+  data: collections.tagList
+  size: 1
+  alias: tag
+permalink: "/blog/tags/{{ tag.slug }}/index.md"
+---
+# Tagged: {{ tag.name | safe }} — Paulo Chang
+
+Posts tagged {{ tag.name | safe }}, newest first. All tags: https://paulochang.com/blog/tags/index.md
+{% for post in tag.posts %}
+- [{{ post.data.title | safe }}](https://paulochang.com{{ post.url }}index.md), {{ post.date | displayDate }}{% if post.data.metaDescription %}. {{ post.data.metaDescription | safe }}{% endif %}
+{%- endfor %}
+
+Back to the blog: https://paulochang.com/blog/index.md

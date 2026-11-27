@@ -1,0 +1,31 @@
+---
+layout: base.njk
+eleventyExcludeFromCollections: true
+navCurrent: list
+ogType: website
+pagination:
+  data: collections.tagList
+  size: 1
+  alias: tag
+permalink: "/blog/tags/{{ tag.slug }}/"
+eleventyComputed:
+  title: "Tagged: {{ tag.name }}"
+  description: "Posts tagged {{ tag.name }}"
+  metaDescription: "Posts tagged {{ tag.name }}"
+  mdHref: "https://paulochang.com/blog/tags/{{ tag.slug }}/index.md"
+---
+  <header class="page-header">
+    <h1>Tagged: {{ tag.name }}</h1>
+    <p id="lede">{{ tag.posts.length }} {{ "post" if tag.posts.length == 1 else "posts" }} tagged {{ tag.name }}. <a href="/blog/tags/">All tags</a></p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section aria-labelledby="posts-heading">
+      <h2 id="posts-heading" tabindex="-1" class="visually-hidden">Posts</h2>
+{%- for item in tag.posts %}
+{%- set cardId = "post-" + loop.index %}
+{%- include "post-card.njk" %}
+{% endfor %}
+    </section>
+    <p class="post-back"><a href="/blog/">&larr; All posts</a></p>
+  </main>
